@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="">
+        <meta name='viewport' content='width=device-width, initial-scale=1'>
+        <link rel="icon" href="data:,">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" />
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.5.1.min.js"></script>
+        <script>$vm={};</script>
+        <script src="vm.js"></script>
+    </head>
+    <body style="background-color: #222;color:#fff">
+        
+        <div>
+            <div>
+                <div id="c__ID" style="height:600px"></div>
+            </div>
+            <div>
+                <input id="mt__ID" style="width:100%;color:#fff;background-color: #333;border-color: green; height:20px" ></input>
+            </div>
+            <br>
+            <div style="display:flex;">
+                <span style="font-size:150%;cursor:pointer;margin:auto">
+                    <i id="m__ID" class="fas fa-microphone"></i>
+                    <i id="s__ID" class="fas fa-location-arrow" style="margin-left:30px;cursor:pointer"></i>
+                </span>
+            </div>
+        </div>
+        <!----------------------------------------------->
+        <script>
+            (()=>{
+                const utter = new SpeechSynthesisUtterance();
+                utter.rate = 1.0; // speed: 0.1-10
+                utter.volume = 1.0; // 0-1
+                utter.pitch = 0.5; // 0 (low) - 2 (high)
+                utter.voice = speechSynthesis.getVoices()[0];
+                function speak(text) {
+                    utter.text = text;
+                    speechSynthesis.speak(utter);
+                }            
+                var text="";
+                const SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition;
+                const recognition = new SpeechRecognition();
+                recognition.continuous = true;
+                recognition.interimResults = true;        
+                var final_transcript = '';
+                recognition.onresult = function(event) {
+                    const txt = event.results[event.results.length-1][0].transcript;
+                    var interim_transcript = '';
+                    for (var i = event.resultIndex; i < event.results.length; ++i) {
+                        if (event.results[i].isFinal) {
+                            final_transcript += event.results[i][0].transcript;
+                        } else {
+                            interim_transcript += event.results[i][0].transcript;
+                        }
+                    }
+                    console.log(final_transcript+interim_transcript);
+                    if(on==1) $('#mt__ID').val(final_transcript+interim_transcript);
+                };
+                $('#s__ID').on('click',function(){
+                    on=0;
+                    $('#m__ID').css("color","#fff");
+                    recognition.stop(); 
+                    var q=$('#mt__ID').val();
+                    $('#mt__ID').val('');
+                    $('#c__ID').append("<div>"+q+"</div>");
+                    $vm.request({cmd:'qna',q:q},function(res){
+                        console.log(res);
+                        var answer=res.answer;
+                        var score=res.score;
+                        if(score>0.5){
+                            $('#c__ID').append("<div>"+answer+"</div>");
+                            speak(answer);
+                            final_transcript = '';
+                            $('#mt__ID').val('');
+                        }
+                        else { 
+                            answer="I am not cofident..."
+                            $('#c__ID').append("<div>"+answer+"</div>");
+                            speak(answer);
+                            final_transcript = '';
+                            $('#mt__ID').val('');
+                        }
+                    });
+
+                })
+                var on=0;
+                $('#m__ID').on('click',function(){
+                    if(on==0){
+                        on=1; $('#m__ID').css("color","red");     final_transcript='';  $('#q__ID').text('');  recognition.start(); 
+                    }
+                    else if(
+                        on==1){on=0; $('#m__ID').css("color","#fff");  recognition.stop(); 
+                    }
+                });
+                $('#D__ID').on('load',function(){
+                })
+            })();
+        </script>
+        <script>
+            $vm.api_address="https://01.vmiis.com";
+            if(window.location.hostname=='127.0.0.1' || window.location.hostname=='localhost'){ 
+                $vm.localhost=true;
+                //$vm.api_address="https://01.vmiis.com:442";
+                //$vm.api_address="https://05.vmiis.com";
+                $vm.api_address="http://localhost:8001";
+            }
+            //-----------------------------------------------------------------
+        </script>    
+        <style main style>
+            div{
+                border:0px solid red;
+            }
+            html,body{
+                margin:0;
+                padding:0;
+                height:100%;
+            }
+            #content{
+                height: 100%;
+                display: grid;
+                grid-template-rows: 1fr;
+            }
+            #header{
+                position:fixed;
+                top:0;
+                left:0;
+                width:100%;
+                height:120px;
+                background:rgba(0,0,0,0.0);
+                z-index:10;
+            }
+        </style>
+        <!----------------------------------------------->
+    </body>
+</html>
