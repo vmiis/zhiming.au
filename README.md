@@ -1,1 +1,3 @@
-# zhiming.au
+# Zhiming GPT
+
+http://zhiming.au/
