@@ -67,17 +67,20 @@
                     $vm.request({cmd:'qna',q:q},function(res){
                         console.log(res);
                         var answer=res.answer;
-                        var score=res.score;
+                        var score=res.score.toString().substr(0,4);
+                        var b="<span style='color:#666'>("+score+")</span>";
                         if(score>0.5){
-                            $('#c__ID').append("<div>"+answer+"</div>");
+                            $('#c__ID').append("<div>"+answer+" "+b+"</div>");
                             speak(answer);
                             final_transcript = '';
                             $('#mt__ID').val('');
                         }
                         else { 
-                            answer="I am not cofident..."
-                            $('#c__ID').append("<div>"+answer+"</div>");
-                            speak(answer);
+                            var a="I am not confident enough to provide correct information"
+                            var b="<span style='color:#666'>"+score+" "+answer+" </span>";
+
+                            $('#c__ID').append("<div>"+a+ " &nbsp;&nbsp;&nbsp;"+b+"</div>");
+                            speak(a);
                             final_transcript = '';
                             $('#mt__ID').val('');
                         }
@@ -101,8 +104,8 @@
             $vm.api_address="https://05.vmiis.com";
             if(window.location.hostname=='127.0.0.1' || window.location.hostname=='localhost'){ 
                 $vm.localhost=true;
-                //$vm.api_address="https://05.vmiis.com:442";
-                $vm.api_address="http://localhost:8001";
+                $vm.api_address="https://05.vmiis.com:443";
+                //$vm.api_address="http://localhost:8001";
             }
             //-----------------------------------------------------------------
         </script>    
