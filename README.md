@@ -1,3 +1,3 @@
 # Zhiming GPT
 
-http://zhiming.au/
+https://zhiming.au/
