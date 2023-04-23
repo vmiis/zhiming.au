@@ -9,9 +9,9 @@
     </head>
     <body>
         <div class="parent">
-            <div><input id=q contentEditable="true" style="margin-right:6px;height:26px;width: calc(100% - 100px);display:inline-block"></input><button id=s >Submit</button></div>
+            <div><input id=q contentEditable="true" style="margin-right:6px;height:26px;width: calc(100% - 0px);display:inline-block"></input><!--<button id=s >Submit</button>--></div>
             <div id=a style="padding-top:10px"></div>
-            <div id=p contentEditable="true" style="display:none"></div>
+            <div id=p contentEditable="true" style="height:0px"></div>
         </div>
         <script>
             (()=>{
@@ -55,13 +55,13 @@
                 width:100%;
             }
             .parent {
-                height:calc(100% - 110px);
+                height:calc(100% - 20px);
                 display: grid;
                 grid-template-columns: 1fr;
-                grid-template-rows: 30px repeat(1, 1fr);
+                grid-template-rows: 30px 1fr 0px;
                 grid-column-gap: 0px;
                 grid-row-gap: 0px;
-                padding:50px 200px;
+                padding:10px;
             }
         </style>
     </body>
