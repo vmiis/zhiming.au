@@ -32,8 +32,9 @@
                 if(window.location.hostname=='127.0.0.1' || window.location.hostname=='localhost') server='http://localhost:8001';
 
                 var query=function(){
-                    $('#a').append("<div style='padding:8px 3px 0 6px;color:#999'>Q: "+$('#q').val()+"<div>"); 
-                    var data={cmd:'qna',q:$('#q').val(),p:$('#p').text()}
+                    var q=$('#q').val();
+                    $('#a').append("<div style='padding:8px 3px 0 6px;color:#999'>Q: "+q+"<div>"); 
+                    var data={cmd:'qna',q:q}
                     fetch(server,{
                         method: 'POST',
                         headers: {
@@ -43,8 +44,14 @@
                     })
                     .then(response => response.json())
                     .then(data => {
-                        console.log(data.answer+"/"+data.score+"/"+data.source+"/"+data._ans);
-                        $('#a').append("<div style='padding:6px 3px 0 6px; background:#111'>A: "+data.answer+"<div>");
+                        console.log(data.score+"  |  "+data.source+"  |  "+data.question+"  |  "+data.answer);
+                        var answer=data.answer;
+                        if(data.score<2){
+                            answer="Sorry, I am not confident to provide correct information.";
+                            const chineseRegex = /[\u4e00-\u9fa5]/; 
+                            if(chineseRegex.test(q))  answer="很抱歉，没有合适的信息。";
+                        }
+                        $('#a').append("<div style='padding:6px 3px 0 6px; background:#111'>A: "+answer+"<div>");
                         $('#q').val('');
                         const myDiv = document.getElementById('pp');
                         myDiv.scrollTop = myDiv.scrollHeight;
