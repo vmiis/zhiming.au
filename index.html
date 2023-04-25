@@ -9,12 +9,15 @@
     </head>
     <body>
         <div class="parent">
-            <div id=a style="padding-top:10px;overflow: auto;"></div>
-            <div>
-                <input autocomplete="off" id=q style="padding-left:3px; border: 1px solid #fff; margin-right:6px; width: calc(100% - 80px);display:inline-block"></input>
-                <svg id=s stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-1" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            <div id="pp" style="overflow: auto;">
+                <div id=a style="max-width:600px; margin:auto; padding:10px 0 8px 0; "></div>
             </div>
-            <div id=p contentEditable="true" style="height:0px"></div>
+            <div>
+                <div style="max-width:600px; margin:auto;">
+                    <input autocomplete="off" id=q style="padding-left:3px; border: 1px solid #fff; margin-right:6px; height:30px;width: calc(100% - 50px);display:inline-block"></input>
+                    <svg id=s stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-1" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                </div>
+            </div>
         </div>
         <script>
             (()=>{
@@ -22,7 +25,7 @@
                 if(window.location.hostname=='127.0.0.1' || window.location.hostname=='localhost') server='http://localhost:8001';
 
                 var query=function(){
-                    $('#a').append("<div style='color:#999'>Q: "+$('#q').val()+"<div>"); 
+                    $('#a').append("<div style='padding-top:8px;color:#999'>Q: "+$('#q').val()+"<div>"); 
                     var data={cmd:'qna',q:$('#q').val(),p:$('#p').text()}
                     fetch(server,{
                         method: 'POST',
@@ -37,6 +40,8 @@
                         //$('#a').text(data.answer);
                         $('#a').append("<div style='padding:6px 0 0 3px;background:#111'>A: "+data.answer+"<div>");
                         $('#q').val('');
+                        const myDiv = document.getElementById('pp');
+                        myDiv.scrollTop = myDiv.scrollHeight;
                     })
                     .catch(error => {
                         console.error(error);
@@ -65,8 +70,7 @@
                 padding:3px 0;
             }
             .parent {
-                max-width:600px;
-                margin:auto;
+                font-family: sans-serif;
                 height:calc(100% - 20px);
                 display: grid;
                 grid-template-columns: 1fr;
