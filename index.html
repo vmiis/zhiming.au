@@ -44,7 +44,7 @@
                     })
                     .then(response => response.json())
                     .then(data => {
-                        console.log(data.score+"  |  "+data.source+"  |  "+data.question+"  |  "+data.answer);
+                        console.log(parseFloat(data.score).toFixed(2)+"  |  "+data.source+"  |  "+data.question+"  |  "+data.answer);
                         var answer=data.answer;
                         if(data.score<2){
                             answer="Sorry, I am not confident to provide correct information.";
