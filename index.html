@@ -5,7 +5,8 @@
         <meta name='viewport' content='width=device-width, initial-scale=1'>
         <meta charset="UTF-8">
         <link rel="icon" href="data:,">
-        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.5.1.min.js"></script>
+        <script>$vm={}</script>
+        <script src="vm.js"></script>
     </head>
     <body>
         <div class="parent">
@@ -30,46 +31,40 @@
         </div>
         <script>
             (()=>{
-                var server='https://api.zhiming.au';
-                if(window.location.hostname=='127.0.0.1' || window.location.hostname=='localhost') server='http://localhost:8001';
-
+                $vm.api_address='https://api.zhiming.au';
+                if(window.location.hostname=='127.0.0.1' || window.location.hostname=='localhost') $vm.api_address='http://localhost:8001';
                 var query=function(){
-                    var q=$('#q').val();
-                    $('#a').append("<div style='padding:8px 3px 0 6px;color:#999'>Q: "+q+"<div>"); 
-                    var data={cmd:'qna',q:q}
-                    fetch(server,{
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(data)                        
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log(parseFloat(data.score).toFixed(2)+"  |  "+data.source+"  |  "+data.question+"  |  "+data.answer);
-                        var answer=data.answer;
-                        if(data.score<2){
+                    var q=document.getElementById("q").value;
+                    document.getElementById("a").insertAdjacentHTML('beforeend',"<div style='padding:8px 3px 0 6px;color:#999'>Q: "+q+"<div>");
+                    
+                    var req={cmd:'qna',q:q}
+                    $vm.request(req).then((res)=>{
+                        console.log(res);
+                        console.log(parseFloat(res.score).toFixed(2)+"  |  "+res.source+"  |  "+res.question+"  |  "+res.answer);
+                        var answer=res.answer;
+                        if(res.score<2){
                             answer="Sorry, I am not confident to provide correct information.";
                             const chineseRegex = /[\u4e00-\u9fa5]/; 
                             if(chineseRegex.test(q))  answer="很抱歉，没有合适的信息。";
                         }
-                        $('#a').append("<div style='padding:6px 3px 0 6px; background:#111'>A: "+answer+"<div>");
-                        $('#q').val('');
+                        document.getElementById("a").insertAdjacentHTML('beforeend',"<div style='padding:6px 3px 0 6px; background:#111'>A: "+answer+"<div>");
+                        document.getElementById("q").value='';
                         const myDiv = document.getElementById('pp');
                         myDiv.scrollTop = myDiv.scrollHeight;
                     })
-                    .catch(error => {
-                        console.error(error);
+                    .catch(err => {  
+                        console.log(err);
                     });
                 }
-                q.addEventListener("keyup", function(event) {
-                    if (event.keyCode === 13) {
-                        query();
-                    }
-                })
-                $('#s').on('click',function(){
-                    query();
-                })
+                q.addEventListener("keyup", function(e){ if (e.keyCode === 13) {  query();  }  })
+                s.addEventListener('click',function(e){ query1(); })
+                var query1=function(){
+                    var req={cmd:'insert',table:"demo-contact",data:{"first":"aaa","last":"bbb"} }
+                    $vm.request(req).then((res)=>{
+                        console.log(res);
+                    })
+                }
+
             })();
         </script>
         <style>
