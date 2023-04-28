@@ -57,14 +57,7 @@
                     });
                 }
                 q.addEventListener("keyup", function(e){ if (e.keyCode === 13) {  query();  }  })
-                s.addEventListener('click',function(e){ query1(); })
-                var query1=function(){
-                    var req={cmd:'insert',table:"demo-contact",data:{"first":"aaa","last":"bbb"} }
-                    $vm.request(req).then((res)=>{
-                        console.log(res);
-                    })
-                }
-
+                s.addEventListener('click',function(e){ query(); })
             })();
         </script>
         <style>
