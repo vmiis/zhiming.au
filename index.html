@@ -7,6 +7,7 @@
         <link rel="icon" href="data:,">
         <script>$vm={}</script>
         <script src="vm.js"></script>
+        <link rel="stylesheet" href="vm.css" />
     </head>
     <body>
         <div class="parent">
@@ -32,7 +33,8 @@
                     <datalist id="autolist">
                     </datalist>
                 </div>
-                <div id=p2 style="font-size:80%; max-width:700px; margin:auto; margin-top:2px; height:12px;color:#555;padding-left:3px">
+                <div id=p2 style="font-size:80%; max-width:700px; margin:auto; margin-top:2px; height:12px;color:#888;padding-left:3px">
+                    Current topic: <span id="ctop"></span> <u id=atop style="margin-left:50px;cursor:pointer">Show all topics</u>
                 </div>
             </div>
         </div>
@@ -46,7 +48,7 @@
                     var req={cmd:'qna',q:q,p:p}
                     $vm.request(req).then((res)=>{
                         var qq=q;
-                        if(q=="") qq="What questions can you answer in this topic: \""+res.topic+"\"";
+                        if(q=="") qq="What questions can you answer about the topic \""+res.topic+"\"";
                         a.insertAdjacentHTML('beforeend',"<div class=vm_question ><span class=vm_q>Q: </span>"+qq+"<div>");
                         console.log(parseFloat(res.rank).toFixed(2)+ " | "+parseFloat(res.score).toFixed(2)+"  |  "+res.topic+"  |  "+res.question+"  |  "+res.answer);
                         var answer=res.answer;
@@ -55,15 +57,17 @@
                             const chineseRegex = /[\u4e00-\u9fa5]/; 
                             if(chineseRegex.test(q))  answer="很抱歉，没有合适的信息。";
                         }
-                        var A="<span class=vm_a>A: </span>"; if(q=="") A+="<i class=vm_topic_u>Click here to see all the topics I can talk about.</i>"; 
-                        a.insertAdjacentHTML('beforeend',"<div class=vm_answer>"+A+answer+"<div>");
+                        var A="<span class=vm_a>A: </span>"; if(q=="") A+="<i class=vm_topic_u>View all my topics of conversation by clicking here.</i>"; 
+                        a.insertAdjacentHTML('beforeend',"<div class=vm_answer topic='"+res.topic+"'>"+A+answer+"<div>");
                         const myDiv = document.querySelector('#a').lastElementChild;
                         const myElements = myDiv.querySelectorAll('u');
                         myElements.forEach(element => {
                             element.addEventListener('click', (event) => {
+                                var topic=element.parentNode.parentNode.getAttribute('topic');
                                 event.preventDefault();
                                 event.stopPropagation();
                                 document.getElementById('q').value=element.textContent;
+                                document.getElementById('p').value=topic;
                                 query();
                             });
                         });
@@ -72,6 +76,8 @@
                             element.addEventListener('click', (event) => {
                                 event.preventDefault();
                                 event.stopPropagation();
+                                show_all_topics();
+                                /*
                                 var str="";
                                 for(var i=0;i<autocompleteArray.length;i++){
                                     str+="<u>"+autocompleteArray[i]+"</u><br>";
@@ -92,10 +98,11 @@
                                         query();
                                     });
                                 });
+                                */
                             });
                         });
                         document.getElementById('q').value='';
-                        p2.innerHTML="Topic: "+res.topic;
+                        ctop.innerHTML=res.topic;
                         scroll();    
                         
                     })
@@ -103,9 +110,32 @@
                         console.log(err);
                     });
                 }
+                var show_all_topics=function(){
+                    var str="";
+                    for(var i=0;i<autocompleteArray.length;i++){
+                        str+="<u>"+autocompleteArray[i]+"</u><br>";
+                    }
+                    //console.log(str);
+                    var q2="What topics can you talk about?"
+                    a.insertAdjacentHTML('beforeend',"<div class=vm_question><span class=vm_q>Q: </span>"+q2+"<div>");
+                    a.insertAdjacentHTML('beforeend',"<div class=vm_questions>"+str+"<div>");
+                    scroll();    
+                    
+                    const LD = document.querySelector('#a').lastElementChild;
+                    const myU = LD.querySelectorAll('u');
+                    myU.forEach(element => {
+                        element.addEventListener('click', (event) => {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            document.getElementById('p').value=element.textContent;
+                            query();
+                        });
+                    });
+                }
                 q.addEventListener("keyup", function(e){ if (e.keyCode === 13) {  query();  }  })
                 s.addEventListener('click',function(e){ query(); })
                 q.focus();
+                atop.addEventListener('click',function(e){ show_all_topics(); })
 
                 var scroll=function(){
                     pp.scrollTop = pp.scrollHeight;
@@ -131,69 +161,7 @@
                         });
                     }
                 });
-
-                
-
             })();
         </script>
-        <style>
-            html,body,input,textarea{
-                margin:0;
-                padding:0;
-                height:100%;
-                width:100%;
-                background-color: #242528;
-                color:#e4f5f4;
-            }
-            .parent {
-                font-family:Söhne,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif,Helvetica Neue,Arial,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
-                height:calc(100% - 20px);
-                display: grid;
-                grid-template-columns: 1fr;
-                grid-template-rows: 1fr 80px;
-                grid-column-gap: 0px;
-                grid-row-gap: 0px;
-                padding:10px;
-            }
-            .vm_q{
-                color:red;
-                margin-right:6px;
-            }
-            .vm_a{
-                color:#25ef25;
-                margin-right:6px;
-            }
-            .vm_question{
-                color:#aaa;
-                padding:6px 3px 6px 6px; 
-                background-color:#373b44;
-            }
-            .vm_answer{
-                padding:6px 3px 6px 6px; 
-                /*background-color:#202024;*/
-            }
-            .vm_questions{
-                font-size:70%;
-                column-count: 3;
-                padding:6px 3px 6px 6px; 
-                /*background-color:#111;*/
-            }
-            .vm_questions u{
-                cursor:pointer;
-            }
-            .vm_questions u:hover{
-                color:#fff;
-            }
-            .vm_topic_u{
-                /*margin-left:20px;*/
-                cursor:pointer;
-                font-size:90%;
-                color:#888;
-                text-decoration: underline;
-            }
-            .vm_topic_u:hover{
-                color:#fff;
-            }
-        </style>
     </body>
 </html>
