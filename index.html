@@ -11,10 +11,10 @@
     <body>
         <div class="parent">
             <div id="pp" style="overflow: auto;">
-                <div id=a style="max-width:600px; margin:auto; padding:10px 0 8px 0; ">
+                <div id=a style="max-width:700px; margin:auto; padding:10px 0 8px 0; ">
                     <div id="home" style="padding-top:20px">
                         <div style="text-align: center;"><h2>Zhiming GPT</h2></div>
-                        <div>I am Virtual Zhiming, a frontend AI. I am happy to answer your questions on behalf of backend Zhiming. 
+                        <div class="vm_answer">I am Virtual Zhiming, a frontend AI. I am happy to answer your questions on behalf of backend Zhiming. 
                             My intelligence is highly dependent on the CPU/GPU, RAM, and training. 
                             Currently, I have very limited knowledge because the backend Zhiming has a very limited budget for my growth. 
                             This means that my answers may not always be correct. 
@@ -23,14 +23,16 @@
                 </div>
             </div>
             <div>
-                <div style="max-width:600px; margin:auto;padding-left:3px">
+                <div style="max-width:700px; margin:auto;padding-left:3px">
                     <input placeholder="Ask me a question.  (e.g. Who are you?)" autocomplete="off" id=q style="padding-left:3px; border: 1px solid #fff; margin-right:6px; height:30px;width: calc(100% - 50px);display:inline-block"></input>
                     <svg id=s stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-1" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                 </div>
-                <div style="max-width:600px; margin:auto; margin-top:2px;padding-left:3px">
-                    <input placeholder="Type in topic-related keywords if possible. (e.g. Vitural Zhiming)" autocomplete="off" id=p style="padding-left:3px; border: 1px solid #fff; margin-right:6px; height:30px;width: calc(100% - 50px);display:inline-block"></input>
+                <div style="max-width:700px; margin:auto; margin-top:2px;padding-left:3px">
+                    <input list=autolist placeholder="Type in topic-related keywords. (e.g. Vitural Zhiming)" _autocomplete="off" id=p style="padding-left:3px; border: 1px solid #fff; margin-right:6px; height:30px;width: calc(100% - 50px);display:inline-block"></input>
+                    <datalist id="autolist">
+                    </datalist>
                 </div>
-                <div id=p2 style="font-size:80%; max-width:600px; margin:auto; margin-top:2px; height:12px;color:#555;padding-left:3px">
+                <div id=p2 style="font-size:80%; max-width:700px; margin:auto; margin-top:2px; height:12px;color:#555;padding-left:3px">
                 </div>
             </div>
         </div>
@@ -41,23 +43,61 @@
                 var query=function(){
                     var q=document.getElementById("q").value;
                     var p=document.getElementById("p").value;
-                    a.insertAdjacentHTML('beforeend',"<div style='padding:8px 3px 0 6px;color:#999'>Q: "+q+"<div>");
-                    
                     var req={cmd:'qna',q:q,p:p}
                     $vm.request(req).then((res)=>{
-                        console.log(res);
-                        console.log(parseFloat(res.score).toFixed(2)+"  |  "+res.topic+"  |  "+res.question+"  |  "+res.answer);
+                        var qq=q;
+                        if(q=="") qq="What questions can you answer in this topic: \""+res.topic+"\"";
+                        a.insertAdjacentHTML('beforeend',"<div class=vm_question ><span class=vm_q>Q: </span>"+qq+"<div>");
+                        console.log(parseFloat(res.rank).toFixed(2)+ " | "+parseFloat(res.score).toFixed(2)+"  |  "+res.topic+"  |  "+res.question+"  |  "+res.answer);
                         var answer=res.answer;
                         if(res.score<2){
                             answer="Sorry, I am not confident to provide correct information.";
                             const chineseRegex = /[\u4e00-\u9fa5]/; 
                             if(chineseRegex.test(q))  answer="很抱歉，没有合适的信息。";
                         }
-                        a.insertAdjacentHTML('beforeend',"<div style='padding:6px 3px 0 6px; background:#111'>A: "+answer+"<div>");
+                        var A="<span class=vm_a>A: </span>"; if(q=="") A+="<i class=vm_topic_u>Click here to see all the topics I can talk about.</i>"; 
+                        a.insertAdjacentHTML('beforeend',"<div class=vm_answer>"+A+answer+"<div>");
+                        const myDiv = document.querySelector('#a').lastElementChild;
+                        const myElements = myDiv.querySelectorAll('u');
+                        myElements.forEach(element => {
+                            element.addEventListener('click', (event) => {
+                                event.preventDefault();
+                                event.stopPropagation();
+                                document.getElementById('q').value=element.textContent;
+                                query();
+                            });
+                        });
+                        const myIElements = myDiv.querySelectorAll('i');
+                        myIElements.forEach(element => {
+                            element.addEventListener('click', (event) => {
+                                event.preventDefault();
+                                event.stopPropagation();
+                                var str="";
+                                for(var i=0;i<autocompleteArray.length;i++){
+                                    str+="<u>"+autocompleteArray[i]+"</u><br>";
+                                }
+                                console.log(str);
+                                var q2="What topics can you talk about?"
+                                a.insertAdjacentHTML('beforeend',"<div class=vm_question><span class=vm_q>Q: </span>"+q2+"<div>");
+                                a.insertAdjacentHTML('beforeend',"<div class=vm_questions>"+str+"<div>");
+                                scroll();    
+                                
+                                const LD = document.querySelector('#a').lastElementChild;
+                                const myU = LD.querySelectorAll('u');
+                                myU.forEach(element => {
+                                    element.addEventListener('click', (event) => {
+                                        event.preventDefault();
+                                        event.stopPropagation();
+                                        document.getElementById('p').value=element.textContent;
+                                        query();
+                                    });
+                                });
+                            });
+                        });
                         document.getElementById('q').value='';
                         p2.innerHTML="Topic: "+res.topic;
-                        //const myDiv = document.getElementById('pp');  myDiv.scrollTop = myDiv.scrollHeight;
-                        pp.scrollTop = pp.scrollHeight;
+                        scroll();    
+                        
                     })
                     .catch(err => {  
                         console.log(err);
@@ -66,6 +106,34 @@
                 q.addEventListener("keyup", function(e){ if (e.keyCode === 13) {  query();  }  })
                 s.addEventListener('click',function(e){ query(); })
                 q.focus();
+
+                var scroll=function(){
+                    pp.scrollTop = pp.scrollHeight;
+                }
+                var autocompleteArray = [
+                    "Virtual Zhiming", "Woolcock", "Woolcock IT", "虚拟志明", "哲学 生命 意识"
+                ];
+                var inputControl = document.getElementById("p");
+                inputControl.addEventListener("input", function() {
+                var currentValue = inputControl.value;
+                    var datalist = document.getElementById("autolist");
+                    while (datalist.firstChild) {
+                        datalist.removeChild(datalist.firstChild);
+                    }
+                    var filteredArray = autocompleteArray.filter(function(item) {
+                        return item.toLowerCase().includes(currentValue.toLowerCase());
+                    });
+                    if (filteredArray.length > 0) {
+                        filteredArray.forEach(function(item) {
+                            var option = document.createElement("option");
+                            option.value = item;
+                            datalist.appendChild(option);
+                        });
+                    }
+                });
+
+                
+
             })();
         </script>
         <style>
@@ -74,14 +142,11 @@
                 padding:0;
                 height:100%;
                 width:100%;
-                background-color: #222;
-                color:#fff;
-            }
-            #a div{
-                padding:3px 0;
+                background-color: #242528;
+                color:#e4f5f4;
             }
             .parent {
-                font-family: sans-serif;
+                font-family:Söhne,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif,Helvetica Neue,Arial,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
                 height:calc(100% - 20px);
                 display: grid;
                 grid-template-columns: 1fr;
@@ -89,6 +154,45 @@
                 grid-column-gap: 0px;
                 grid-row-gap: 0px;
                 padding:10px;
+            }
+            .vm_q{
+                color:red;
+                margin-right:6px;
+            }
+            .vm_a{
+                color:#25ef25;
+                margin-right:6px;
+            }
+            .vm_question{
+                color:#aaa;
+                padding:6px 3px 6px 6px; 
+                background-color:#373b44;
+            }
+            .vm_answer{
+                padding:6px 3px 6px 6px; 
+                /*background-color:#202024;*/
+            }
+            .vm_questions{
+                font-size:70%;
+                column-count: 3;
+                padding:6px 3px 6px 6px; 
+                /*background-color:#111;*/
+            }
+            .vm_questions u{
+                cursor:pointer;
+            }
+            .vm_questions u:hover{
+                color:#fff;
+            }
+            .vm_topic_u{
+                /*margin-left:20px;*/
+                cursor:pointer;
+                font-size:90%;
+                color:#888;
+                text-decoration: underline;
+            }
+            .vm_topic_u:hover{
+                color:#fff;
             }
         </style>
     </body>
