@@ -57,7 +57,7 @@
                             const chineseRegex = /[\u4e00-\u9fa5]/; 
                             if(chineseRegex.test(q))  answer="很抱歉，没有合适的信息。";
                         }
-                        var A="<span class=vm_a>A: </span>"; if(q=="") A+="<i class=vm_topic_u>View all my topics of conversation by clicking here.</i>"; 
+                        var A="<span class=vm_a>A: </span>"; //if(q=="") A+="<i class=vm_topic_u>View all my topics of conversation by clicking here.</i>"; 
                         a.insertAdjacentHTML('beforeend',"<div class=vm_answer topic='"+res.topic+"'>"+A+answer+"<div>");
                         const myDiv = document.querySelector('#a').lastElementChild;
                         const myElements = myDiv.querySelectorAll('u');
@@ -71,36 +71,16 @@
                                 query();
                             });
                         });
+                        /*
                         const myIElements = myDiv.querySelectorAll('i');
                         myIElements.forEach(element => {
                             element.addEventListener('click', (event) => {
                                 event.preventDefault();
                                 event.stopPropagation();
                                 show_all_topics();
-                                /*
-                                var str="";
-                                for(var i=0;i<autocompleteArray.length;i++){
-                                    str+="<u>"+autocompleteArray[i]+"</u><br>";
-                                }
-                                console.log(str);
-                                var q2="What topics can you talk about?"
-                                a.insertAdjacentHTML('beforeend',"<div class=vm_question><span class=vm_q>Q: </span>"+q2+"<div>");
-                                a.insertAdjacentHTML('beforeend',"<div class=vm_questions>"+str+"<div>");
-                                scroll();    
-                                
-                                const LD = document.querySelector('#a').lastElementChild;
-                                const myU = LD.querySelectorAll('u');
-                                myU.forEach(element => {
-                                    element.addEventListener('click', (event) => {
-                                        event.preventDefault();
-                                        event.stopPropagation();
-                                        document.getElementById('p').value=element.textContent;
-                                        query();
-                                    });
-                                });
-                                */
                             });
                         });
+                        */
                         document.getElementById('q').value='';
                         ctop.innerHTML=res.topic;
                         scroll();    
@@ -111,6 +91,7 @@
                     });
                 }
                 var show_all_topics=function(){
+                    var A="<span class=vm_a style='margin-left:6px;' >A: </span>";
                     var str="";
                     for(var i=0;i<autocompleteArray.length;i++){
                         str+="<u>"+autocompleteArray[i]+"</u><br>";
@@ -118,7 +99,7 @@
                     //console.log(str);
                     var q2="What topics can you talk about?"
                     a.insertAdjacentHTML('beforeend',"<div class=vm_question><span class=vm_q>Q: </span>"+q2+"<div>");
-                    a.insertAdjacentHTML('beforeend',"<div class=vm_questions>"+str+"<div>");
+                    a.insertAdjacentHTML('beforeend',A+"<div class=vm_questions>"+str+"<div>");
                     scroll();    
                     
                     const LD = document.querySelector('#a').lastElementChild;
