@@ -1,16 +1,1 @@
-$vm.request=function(req){
-    return new Promise((resolve, reject) => {
-        fetch($vm.api_address,{
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(req)                        
-        })
-        .then(response => response.json())
-        .then(data => {
-            resolve(data);
-        })
-        .catch(error => {
-            reject(error);
-        });
-    })
-}
+$vm.request=function(req){return new Promise((resolve,reject)=>{fetch($vm.api_address,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(req)}).then(response=>response.json()).then(data=>{resolve(data)}).catch(error=>{reject(error)})})},$vm.wiki_search=function(ss){return new Promise((resolve,reject)=>{fetch("https://en.wikipedia.org/w/api.php?action=query&srlimit=1&format=json&origin=*&list=search&srsearch="+ss).then(response=>response.json()).then(data=>{resolve(data)}).catch(error=>{reject(error)})})},$vm.wiki_title=function(title){return new Promise((resolve,reject)=>{fetch("https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exsentences=1&exintro&explaintext&redirects=1&origin=*&titles="+title).then(response=>response.json()).then(data=>{resolve(data)}).catch(error=>{reject(error)})})},$vm.wiki_query=function(q){return new Promise((resolve,reject)=>{$vm.wiki_search(q).then(data=>{var pageid;1==data.query.search.length?(pageid=data.query.search[0].pageid,data=data.query.search[0].title,$vm.wiki_title(data).then(data=>{data=data.query.pages[pageid].extract;resolve(data)}).catch(error=>{reject(error)})):resolve("")}).catch(error=>{reject(error)})})};

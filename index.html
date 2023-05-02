@@ -6,16 +6,18 @@
         <meta charset="UTF-8">
         <link rel="icon" href="data:,">
         <script>$vm={}</script>
-        <script src="vm.js?v=0.02"></script>
-        <link rel="stylesheet" href="vm.css?v=0.02" />
+        <script src="vm.js?v=0.03"></script>
+        <script src="vm2.js?v=0.03"></script>
+        <script src="vm3.js?v=0.02"></script>
+        <link rel="stylesheet" href="vm.css?v=0.03" />
     </head>
     <body>
-        <div class="parent">
-            <div id="pp" style="overflow: auto;">
-                <div id=a style="max-width:700px; margin:auto; padding:10px 0 8px 0; ">
-                    <div id="home" style="padding-top:20px">
+        <div class="vm-wrapper">
+            <div id="vm_scroll">
+                <div id=vm_contents>
+                    <div style="padding-top:20px">
                         <div style="text-align: center;"><h2>Zhiming GPT</h2></div>
-                        <div class="vm_answer">I am Virtual Zhiming, a frontend AI. I am happy to answer your questions on behalf of backend Zhiming. 
+                        <div class="vm-answer">I am Virtual Zhiming, a frontend AI. I am happy to answer your questions on behalf of backend Zhiming. 
                             My intelligence is highly dependent on the CPU/GPU, RAM, and training. 
                             Currently, I have very limited knowledge because the backend Zhiming has a very limited budget for my growth. 
                             This means that my answers may not always be correct. 
@@ -24,166 +26,34 @@
                 </div>
             </div>
             <div>
-                <div style="max-width:700px; margin:auto;padding-left:3px">
-                    <input placeholder="Ask me a question.  (e.g. Who are you?)" autocomplete="off" id=q style="padding-left:3px; border: 1px solid #fff; margin-right:6px; height:30px;width: calc(100% - 50px);display:inline-block"></input>
-                    <svg id=s stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-1" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                <div class=vm-wrap-quest >
+                    <input id=vm_ask placeholder="Ask me a question.  (e.g. Who are you?)" autocomplete="off"></input>
+                    <svg id=vm_submit stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-1" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                 </div>
-                <div style="max-width:700px; margin:auto; margin-top:2px;padding-left:3px">
-                    <input list=autolist placeholder="Type in topic-related keywords. (e.g. Vitural Zhiming)" _autocomplete="off" id=p style="padding-left:3px; border: 1px solid #fff; margin-right:6px; height:30px;width: calc(100% - 50px);display:inline-block"></input>
-                    <datalist id="autolist">
-                    </datalist>
+                <div class="vm-wrap-topic">
+                    <input id=vm_topic list=vm_autolist placeholder="Type in topic-related keywords. (e.g. Vitural Zhiming)" style="padding-left:3px; border: 1px solid #fff; margin-right:6px; height:30px;width: calc(100% - 50px);display:inline-block"></input>
+                    <datalist id="vm_autolist"></datalist>
                 </div>
-                <div id=p2 style="font-size:80%; max-width:700px; margin:auto; margin-top:2px; height:12px;color:#888;padding-left:3px">
-                    Current topic: <span id="ctop"></span> <u id=atop style="margin-left:50px;margin-right:150px;cursor:pointer">Show all topics</u> <u style="display:none" id="btn_test">Test</u>
+                <div class=vm-bottom-bar>
+                    Current topic: <span id="vm_c_topic"></span> <u id=vm_topics style="margin-left:50px;margin-right:150px;cursor:pointer">Show all topics</u> <u style="display:none" id="btn_test">Test</u>
                 </div>
             </div>
         </div>
+        <!--
         <div class="content_ww" id="content_ww"> </div>
         <div class=content_w id=content_w>
             <div id="content" ></div>
             <div style="padding:20px 0 0 20px"><u id="btn_r" style="color:#000">Close</u></div>
         </div>
+        -->
         </body>
         <script>
             (()=>{
-                $vm.api_address='https://api.zhiming.au';
-                if(window.location.hostname=='127.0.0.1' || window.location.hostname=='localhost') $vm.api_address='http://localhost:8001';
-                var query=function(){
-                    var q=document.getElementById("q").value;
-                    var p=document.getElementById("p").value;
-                    var req={cmd:'qna',q:q,p:p}
-                    $vm.request(req).then((res)=>{
-                        var qq=q;
-                        if(q=="") qq="What questions can you answer about the topic \""+res.topic+"\"";
-                        a.insertAdjacentHTML('beforeend',"<div class=vm_question ><span class=vm_q>Q: </span>"+qq+"<div>");
-                        console.log(parseFloat(res.rank).toFixed(2)+ " | "+parseFloat(res.score).toFixed(2)+"  |  "+res.topic+"  |  "+res.question+"  |  "+res.answer);
-                        var answer=res.answer;
-                        var topic=res.topic;
-                        if(res.score!=0){
-                            show_answer(topic,answer);
-                        }
-                        else{
-                            var ss=q;
-                            var url="https://en.wikipedia.org/w/api.php?action=query&srlimit=1&format=json&origin=*&list=search&srsearch="+ss;
-                            fetch(url).then(response => response.json())
-                            .then( (data) =>{ 
-                                if(data.query.search.length==1){
-                                    console.log(data);
-                                    var pageid=data.query.search[0].pageid;
-                                    var answer=data.query.search[0].title;
-                                    var url="https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exsentences=1&exintro&explaintext&redirects=1&origin=*&titles="+answer;
-                                    fetch(url).then(response => response.json())
-                                    .then( (data) =>{
-                                        console.log(data); 
-                                        var extract=data.query.pages[pageid].extract;
-                                        
-                                        var p=document.getElementById("p").value;
-                                        var T="";
-                                        if(p!="") T="<i style='font-size:80%'>( I do not have an answer regarding the topic '"+p+"'. However, I will try to find an answer on a generic topic. )</i><br>";
-                                        
-                                        show_answer("Generic",T+extract);
-                                    })
-                                    .catch(error => {
-                                        reject(error);
-                                    });
-                                }
-                                else show_sorry("",q);
-                            })
-                            .catch(error => {
-                                reject(error);
-                            });
-                        }
-                    })
-                    .catch(error => {
-                        reject(error);
-                    });
-                }
-                //------------------------------------------------
-                var show_answer=function(topic, answer){
-                    var A="<span class=vm_a>A: </span>"; 
-                    a.insertAdjacentHTML('beforeend',"<div class=vm_answer topic='"+topic+"'>"+A+answer+"<div>");
-                    const myDiv = document.querySelector('#a').lastElementChild;
-                    const myElements = myDiv.querySelectorAll('u');
-                    myElements.forEach(element => {
-                        element.addEventListener('click', (event) => {
-                            var tt=element.parentNode.parentNode.getAttribute('topic');
-                            event.preventDefault();
-                            event.stopPropagation();
-                            document.getElementById('q').value=element.textContent;
-                            document.getElementById('p').value=tt;
-                            query();
-                        });
-                    });
-                    document.getElementById('q').value='';
-                    if(topic!="") ctop.innerHTML=topic;
-                    scroll();
-                }
-                //------------------------------------------------
-                var show_sorry=function(topic, q){
-                    var answer="Sorry, I am not confident to provide correct information.";
-                    const chineseRegex = /[\u4e00-\u9fa5]/; 
-                    if(chineseRegex.test(q))  answer="很抱歉，没有合适的信息。";
-                    show_answer("",answer);
-                }
-                //------------------------------------------------
-                var show_all_topics=function(){
-                    var A="<span class=vm_a style='margin-left:6px;' >A: </span>";
-                    var str="";
-                    for(var i=0;i<autocompleteArray.length;i++){
-                        str+="<u>"+autocompleteArray[i]+"</u><br>";
-                    }
-                    //console.log(str);
-                    var q2="What topics can you talk about?"
-                    a.insertAdjacentHTML('beforeend',"<div class=vm_question><span class=vm_q>Q: </span>"+q2+"<div>");
-                    a.insertAdjacentHTML('beforeend',A+"<div class=vm_questions>"+str+"<div>");
-                    scroll();    
-                    
-                    const LD = document.querySelector('#a').lastElementChild;
-                    const myU = LD.querySelectorAll('u');
-                    myU.forEach(element => {
-                        element.addEventListener('click', (event) => {
-                            event.preventDefault();
-                            event.stopPropagation();
-                            document.getElementById('p').value=element.textContent;
-                            query();
-                        });
-                    });
-                }
-                q.addEventListener("keyup", function(e){ if (e.keyCode === 13) {  query();  }  })
-                s.addEventListener('click',function(e){ query(); })
-                q.focus();
-                atop.addEventListener('click',function(e){ show_all_topics(); })
-
-                var scroll=function(){
-                    pp.scrollTop = pp.scrollHeight;
-                }
+                $vm.api_address='https://api.zhiming.au'; if(window.location.hostname=='127.0.0.1' || window.location.hostname=='localhost') $vm.api_address='http://localhost:8001';
                 var autocompleteArray = [
                     "Virtual Zhiming", "Woolcock", "Woolcock IT", "虚拟志明", "哲学 生命 意识"
                 ];
-                var inputControl = document.getElementById("p");
-                inputControl.addEventListener("input", function() {
-                var currentValue = inputControl.value;
-                    var datalist = document.getElementById("autolist");
-                    while (datalist.firstChild) {
-                        datalist.removeChild(datalist.firstChild);
-                    }
-                    var filteredArray = autocompleteArray.filter(function(item) {
-                        return item.toLowerCase().includes(currentValue.toLowerCase());
-                    });
-                    if (filteredArray.length > 0) {
-                        filteredArray.forEach(function(item) {
-                            var option = document.createElement("option");
-                            option.value = item;
-                            datalist.appendChild(option);
-                        });
-                    }
-                });
-                btn_r.addEventListener('click',function(e){ 
-                    content_w.style.bottom="1000px";
-                    content_ww.style.bottom="1000px";
-                })
-                btn_test.addEventListener('click',function(e){ 
-                })
+                init(autocompleteArray);
             })();
         </script>
     </body>
