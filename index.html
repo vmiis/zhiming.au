@@ -6,8 +6,8 @@
         <meta charset="UTF-8">
         <link rel="icon" href="data:,">
         <script>$vm={}</script>
-        <script src="vm.js?v=0.01"></script>
-        <link rel="stylesheet" href="vm.css?v=0.01" />
+        <script src="vm.js?v=0.02"></script>
+        <link rel="stylesheet" href="vm.css?v=0.02" />
     </head>
     <body>
         <div class="parent">
@@ -34,10 +34,16 @@
                     </datalist>
                 </div>
                 <div id=p2 style="font-size:80%; max-width:700px; margin:auto; margin-top:2px; height:12px;color:#888;padding-left:3px">
-                    Current topic: <span id="ctop"></span> <u id=atop style="margin-left:50px;cursor:pointer">Show all topics</u>
+                    Current topic: <span id="ctop"></span> <u id=atop style="margin-left:50px;margin-right:150px;cursor:pointer">Show all topics</u> <u style="display:none" id="btn_test">Test</u>
                 </div>
             </div>
         </div>
+        <div class="content_ww" id="content_ww"> </div>
+        <div class=content_w id=content_w>
+            <div id="content" ></div>
+            <div style="padding:20px 0 0 20px"><u id="btn_r" style="color:#000">Close</u></div>
+        </div>
+        </body>
         <script>
             (()=>{
                 $vm.api_address='https://api.zhiming.au';
@@ -52,44 +58,74 @@
                         a.insertAdjacentHTML('beforeend',"<div class=vm_question ><span class=vm_q>Q: </span>"+qq+"<div>");
                         console.log(parseFloat(res.rank).toFixed(2)+ " | "+parseFloat(res.score).toFixed(2)+"  |  "+res.topic+"  |  "+res.question+"  |  "+res.answer);
                         var answer=res.answer;
-                        if(res.score<2){
-                            answer="Sorry, I am not confident to provide correct information.";
-                            const chineseRegex = /[\u4e00-\u9fa5]/; 
-                            if(chineseRegex.test(q))  answer="很抱歉，没有合适的信息。";
+                        var topic=res.topic;
+                        if(res.score!=0){
+                            show_answer(topic,answer);
                         }
-                        var A="<span class=vm_a>A: </span>"; //if(q=="") A+="<i class=vm_topic_u>View all my topics of conversation by clicking here.</i>"; 
-                        a.insertAdjacentHTML('beforeend',"<div class=vm_answer topic='"+res.topic+"'>"+A+answer+"<div>");
-                        const myDiv = document.querySelector('#a').lastElementChild;
-                        const myElements = myDiv.querySelectorAll('u');
-                        myElements.forEach(element => {
-                            element.addEventListener('click', (event) => {
-                                var topic=element.parentNode.parentNode.getAttribute('topic');
-                                event.preventDefault();
-                                event.stopPropagation();
-                                document.getElementById('q').value=element.textContent;
-                                document.getElementById('p').value=topic;
-                                query();
+                        else{
+                            var ss=q;
+                            var url="https://en.wikipedia.org/w/api.php?action=query&srlimit=1&format=json&origin=*&list=search&srsearch="+ss;
+                            fetch(url).then(response => response.json())
+                            .then( (data) =>{ 
+                                if(data.query.search.length==1){
+                                    console.log(data);
+                                    var pageid=data.query.search[0].pageid;
+                                    var answer=data.query.search[0].title;
+                                    var url="https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exsentences=1&exintro&explaintext&redirects=1&origin=*&titles="+answer;
+                                    fetch(url).then(response => response.json())
+                                    .then( (data) =>{
+                                        console.log(data); 
+                                        var extract=data.query.pages[pageid].extract;
+                                        
+                                        var p=document.getElementById("p").value;
+                                        var T="";
+                                        if(p!="") T="<i style='font-size:80%'>( I do not have an answer regarding the topic '"+p+"'. However, I will try to find an answer on a generic topic. )</i><br>";
+                                        
+                                        show_answer("Generic",T+extract);
+                                    })
+                                    .catch(error => {
+                                        reject(error);
+                                    });
+                                }
+                                else show_sorry("",q);
+                            })
+                            .catch(error => {
+                                reject(error);
                             });
-                        });
-                        /*
-                        const myIElements = myDiv.querySelectorAll('i');
-                        myIElements.forEach(element => {
-                            element.addEventListener('click', (event) => {
-                                event.preventDefault();
-                                event.stopPropagation();
-                                show_all_topics();
-                            });
-                        });
-                        */
-                        document.getElementById('q').value='';
-                        ctop.innerHTML=res.topic;
-                        scroll();    
-                        
+                        }
                     })
-                    .catch(err => {  
-                        console.log(err);
+                    .catch(error => {
+                        reject(error);
                     });
                 }
+                //------------------------------------------------
+                var show_answer=function(topic, answer){
+                    var A="<span class=vm_a>A: </span>"; 
+                    a.insertAdjacentHTML('beforeend',"<div class=vm_answer topic='"+topic+"'>"+A+answer+"<div>");
+                    const myDiv = document.querySelector('#a').lastElementChild;
+                    const myElements = myDiv.querySelectorAll('u');
+                    myElements.forEach(element => {
+                        element.addEventListener('click', (event) => {
+                            var tt=element.parentNode.parentNode.getAttribute('topic');
+                            event.preventDefault();
+                            event.stopPropagation();
+                            document.getElementById('q').value=element.textContent;
+                            document.getElementById('p').value=tt;
+                            query();
+                        });
+                    });
+                    document.getElementById('q').value='';
+                    if(topic!="") ctop.innerHTML=topic;
+                    scroll();
+                }
+                //------------------------------------------------
+                var show_sorry=function(topic, q){
+                    var answer="Sorry, I am not confident to provide correct information.";
+                    const chineseRegex = /[\u4e00-\u9fa5]/; 
+                    if(chineseRegex.test(q))  answer="很抱歉，没有合适的信息。";
+                    show_answer("",answer);
+                }
+                //------------------------------------------------
                 var show_all_topics=function(){
                     var A="<span class=vm_a style='margin-left:6px;' >A: </span>";
                     var str="";
@@ -142,6 +178,12 @@
                         });
                     }
                 });
+                btn_r.addEventListener('click',function(e){ 
+                    content_w.style.bottom="1000px";
+                    content_ww.style.bottom="1000px";
+                })
+                btn_test.addEventListener('click',function(e){ 
+                })
             })();
         </script>
     </body>
