@@ -6,18 +6,19 @@
         <meta charset="UTF-8">
         <link rel="icon" href="data:,">
         <script>$vm={}</script>
-        <script src="vm.js?v=0.03"></script>
-        <script src="vm2.js?v=0.03"></script>
+        <script src="vm.js?v=0.05"></script>
+        <script src="vm2.js?v=0.05"></script>
         <script src="vm3.js?v=0.02"></script>
-        <link rel="stylesheet" href="vm.css?v=0.03" />
+        <link rel="stylesheet" href="vm.css?v=0.05" />
     </head>
     <body>
         <div class="vm-wrapper">
+            <div class="vm-top-bar"><u id="vm_sign_in">Sign In</u><label id="vm_sign_name">Name</label><u id="vm_sign_out">Sign Out</u></div>
             <div id="vm_scroll">
                 <div id=vm_contents>
                     <div style="padding-top:20px">
-                        <div style="text-align: center;"><h2>Zhiming GPT</h2></div>
-                        <div class="vm-answer">I am Virtual Zhiming, a frontend AI. I am happy to answer your questions on behalf of backend Zhiming. 
+                        <div style="text-align: center;"><h2>Virtual Zhiming</h2></div>
+                        <div style="padding:6px" >I am Virtual Zhiming, a frontend AI. I am happy to answer your questions on behalf of backend Zhiming. 
                             My intelligence is highly dependent on the CPU/GPU, RAM, and training. 
                             Currently, I have very limited knowledge because the backend Zhiming has a very limited budget for my growth. 
                             This means that my answers may not always be correct. 
@@ -25,36 +26,29 @@
                     </div>
                 </div>
             </div>
-            <div>
+            <div style="border-bottom: 1px solid #8ca19f;margin-bottom:5px"></div>
+            <div style="padding-right: 10px;">
                 <div class=vm-wrap-quest >
                     <input id=vm_ask placeholder="Ask me a question.  (e.g. Who are you?)" autocomplete="off"></input>
-                    <svg id=vm_submit stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-1" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                    <svg style='margin-right:10px' id=vm_submit stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-1" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                 </div>
                 <div class="vm-wrap-topic">
-                    <input id=vm_topic list=vm_autolist placeholder="Type in topic-related keywords. (e.g. Vitural Zhiming)" style="padding-left:3px; border: 1px solid #fff; margin-right:6px; height:30px;width: calc(100% - 50px);display:inline-block"></input>
+                    <input id=vm_topic list=vm_autolist placeholder="Type in topic-related keywords. (e.g. Vitural Zhiming)"></input>
                     <datalist id="vm_autolist"></datalist>
                 </div>
                 <div class=vm-bottom-bar>
-                    Current topic: <span id="vm_c_topic"></span> <u id=vm_topics style="margin-left:50px;margin-right:150px;cursor:pointer">Show all topics</u> <u style="display:none" id="btn_test">Test</u>
+                    Current topic: <span id="vm_c_topic"></span> <u id=vm_topics>Show all topics</u> <u id="vm_train_me">Training me</u> <u style="display:none" id="btn_test">Test</u>
                 </div>
             </div>
         </div>
-        <!--
-        <div class="content_ww" id="content_ww"> </div>
-        <div class=content_w id=content_w>
-            <div id="content" ></div>
-            <div style="padding:20px 0 0 20px"><u id="btn_r" style="color:#000">Close</u></div>
-        </div>
-        -->
         </body>
         <script>
             (()=>{
                 $vm.api_address='https://api.zhiming.au'; if(window.location.hostname=='127.0.0.1' || window.location.hostname=='localhost') $vm.api_address='http://localhost:8001';
-                var autocompleteArray = [
-                    "Virtual Zhiming", "Woolcock", "Woolcock IT", "虚拟志明", "哲学 生命 意识"
-                ];
-                init(autocompleteArray);
+                init();
             })();
         </script>
+        <style>
+        </style>
     </body>
 </html>
