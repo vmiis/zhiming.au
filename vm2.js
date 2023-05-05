@@ -36,9 +36,19 @@ var train=function(){
         s2.style.display='none';
     })
 }
+//------------------------------------------------
 var query=function(){
     var q=document.getElementById("vm_ask").value;
     var p=document.getElementById("vm_topic").value;
+    if(p==""){
+        var ss=q.split('  |  ');
+        if(ss.length==2){
+            q=ss[0];
+            p=ss[1];
+        }
+    }
+    while (vm_autolist_question.firstChild){ vm_autolist_question.removeChild(vm_autolist_question.firstChild); }
+    while (vm_autolist_topic.firstChild) {  vm_autolist_topic.removeChild(vm_autolist_topic.firstChild); }
     var req={cmd:'qna',q:q,p:p}
     $vm.request(req).then((res)=>{
         var qq=q;
@@ -55,7 +65,7 @@ var query=function(){
             $vm.wiki_query(q).then( (data)=>{
                 if(data!=""){
                     var p=document.getElementById("vm_topic").value;
-                    var T="";if(p!="") T="<i style='font-size:80%'>( I do not have an answer regarding the topic '"+p+"'. However, I will try to find an answer on a generic topic. )</i><br>";
+                    var T="";if(p!="") T="<i style='color:#aaa;font-size:80%'>( I do not have an answer regarding the topic '"+p+"'. However, I will try to find an answer on a generic topic. )</i><br>";
                     show_answer("Generic",T+data);
                 }
                 else{ 
@@ -131,30 +141,78 @@ var show_all_topics=function(autocompleteArray){
 //------------------------------------------------
 var scroll=function(){
     vm_scroll.scrollTop = vm_scroll.scrollHeight;
+    vm_ask.focus();
 }
 //------------------------------------------------
-var set_autolist=function(autolist){
-    var inputControl = document.getElementById("vm_topic");
-    inputControl.addEventListener("input", function() {
-        var currentValue = inputControl.value;
-        var datalist = document.getElementById("vm_autolist");
-        while (datalist.firstChild) {
-            datalist.removeChild(datalist.firstChild);
+var set_autolist_topic=function(autolist){
+    vm_topic.addEventListener("input", function() {
+        var currentValue = vm_topic.value.toLowerCase();
+        var cvs=currentValue.split(' ');
+        while (vm_autolist_topic.firstChild) {  vm_autolist_topic.removeChild(vm_autolist_topic.firstChild); }
+        var list=[];
+        for(var i=0;i<autolist.length;i++){
+            if(list.length>1) break;
+            for(var j=0;j<cvs.length;j++){
+                if(cvs[j].length>0 && autolist[i].toLowerCase().includes(cvs[j].trim())){
+                    list.push(autolist[i]);
+                    break;
+                }
+            }
         }
-        var filteredArray = autolist.filter(function(item) {
-            return item.toLowerCase().includes(currentValue.toLowerCase());
-        });
-        if (filteredArray.length > 0) {
-            filteredArray.forEach(function(item) {
+        if (list.length > 0) {
+            list.forEach(function(item) {
                 var option = document.createElement("option");
                 option.value = item;
-                datalist.appendChild(option);
+                vm_autolist_topic.appendChild(option);
             });
         }
     });
 }
 //------------------------------------------------
-var init2=function(autolist){
+var set_autolist_question=function(autolist){
+    vm_ask.addEventListener("input", function() {
+        var currentValue = vm_ask.value.toLowerCase();
+        var cvs=currentValue.split(' ');
+        var currentTopic = vm_topic.value.toLowerCase();
+        while (vm_autolist_question.firstChild){ vm_autolist_question.removeChild(vm_autolist_question.firstChild); }
+        var list=[];
+        //console.log(list)
+        //console.log(cvs)
+        for(var i=0;i<autolist.length;i++){
+            if(list.length>1) break;
+            if(currentTopic=="" || autolist[i][0].toLowerCase()==currentTopic){
+                for(var j=0;j<autolist[i][1].length;j++){
+                    if(list.length>1) break;
+                    var Ki=0;
+                    for(var k=0;k<cvs.length;k++){
+                        if(autolist[i][1][j].toLowerCase().includes(cvs[k].trim())) Ki++;
+                    }
+                    if(Ki==cvs.length){
+                        if(currentTopic=="")  list.push(autolist[i][1][j]+"  |  "+autolist[i][0]);
+                        else list.push(autolist[i][1][j]);
+                    }
+                }
+            }
+        }
+        //console.log(list)
+        if (list.length > 0) {
+            list.forEach(function(item) {
+                var option = document.createElement("option");
+                option.value = item;
+                vm_autolist_question.appendChild(option);
+            });
+        }
+    });
+}
+//------------------------------------------------
+var init2=function(list1,list2){
+    var topic_list=list1.split(',').sort();
+    var ss=list2.split('||');
+    var question_list=[];
+    for(var i=0;i<ss.length;i++){
+        var tt=ss[i].split('~~');
+        question_list.push([tt[0],tt[1].split('^^')]);
+    }
     vm_sign_in.addEventListener("click", function(e){ 
         document.getElementById('vm_ask').value="How to login?";
         document.getElementById('vm_topic').value="login"; 
@@ -166,42 +224,45 @@ var init2=function(autolist){
     vm_ask.addEventListener("keyup", function(e){ if (e.keyCode === 13) {  query();  }  })
     vm_ask.focus();
     vm_submit.addEventListener('click',function(e){ query(); })
-    set_autolist(autolist);
-    vm_topics.addEventListener('click',function(e){ show_all_topics(autolist); })
+    set_autolist_topic(topic_list);
+    set_autolist_question(question_list);
+    vm_topics.addEventListener('click',function(e){ show_all_topics(topic_list); })
     vm_train_me.addEventListener('click',function(e){  train(); })
     $vm.show_user();
 }
 //------------------------------------------------
 var init=function(){
-    var topic_mtime=localStorage.getItem("zhiming.au.topic_mtime");
+    var list_mtime=localStorage.getItem("zhiming.au.list_mtime");
     var topic_list=localStorage.getItem("zhiming.au.topic_list");
-    var req={cmd:'topic-list',datetime:1}
+    var question_list=localStorage.getItem("zhiming.au.question_list");
+    var req={cmd:'ai-list',datetime:1}
     var q=0;
     $vm.request(req).then((res)=>{
         mtime=res.mtime;
         var dt1=new Date(mtime);
-        if(topic_mtime==null){ localStorage.setItem("zhiming.au.topic_mtime",mtime); q=1;}
+        if(list_mtime==null){ localStorage.setItem("zhiming.au.list_mtime",mtime); q=1;}
         else{
-            var dt2=new Date(topic_mtime);
-            if(dt1>dt2 ){ localStorage.setItem("zhiming.au.topic_mtime",mtime); q=1;}
+            var dt2=new Date(list_mtime);
+            if(dt1>dt2 ){ localStorage.setItem("zhiming.au.list_mtime",mtime); q=1;}
         }
         if(q==1){
-            var req={cmd:'topic-list'}
+            var req={cmd:'ai-list'}
             $vm.request(req).then((res)=>{
-                localStorage.setItem("zhiming.au.topic_list",res.list);
-                var autolist=res.list.split(',');
-                for(var i=0;i<autolist.length;i++) autolist[i]=autolist[i].trim();
-                console.log(2);
-                console.log(autolist);
-                init2(autolist);
+                console.log('New list');
+                localStorage.setItem("zhiming.au.topic_list",res.topic_list);
+                var list1=res.topic_list;
+                //console.log(list1);
+                localStorage.setItem("zhiming.au.question_list",res.question_list);
+                var list2=res.question_list;
+                //console.log(list2);
+                init2(list1,list2);
             })
         }
         else{
-            var autolist=topic_list.split(',');
-            for(var i=0;i<autolist.length;i++) autolist[i]=autolist[i].trim();
-            console.log(1);
-            console.log(autolist);
-            init2(autolist);
+            console.log('No new list');
+            //console.log(topic_list);
+            //console.log(question_list);
+            init2(topic_list,question_list);
         }
     })
 }
