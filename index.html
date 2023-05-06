@@ -6,14 +6,14 @@
         <meta charset="UTF-8">
         <link rel="icon" href="data:,">
         <script>$vm={}</script>
-        <script src="vm.js?v=20230505"></script>
-        <script src="vm2.js?v=20230505"></script>
-        <script src="vm3.js?v=20230505"></script>
-        <link rel="stylesheet" href="vm.css?v=20230505" />
+        <script src="vm.js?v=20230507"></script>
+        <script src="vm2.js?v=20230507"></script>
+        <script src="vm3.js?v=20230507"></script>
+        <link rel="stylesheet" href="vm.css?v=20230507" />
     </head>
     <body>
         <div class="vm-wrapper">
-            <div class="vm-top-bar"><u id="vm_sign_in">Sign In</u><label id="vm_sign_name">Name</label><u id="vm_sign_out">Sign Out</u></div>
+            <div class="vm-top-bar"><u style='display:none' id=vm_topics>Show all topics</u> <u style='display:none' id="vm_train_me">Training me</u> <u style="display:none" id="btn_test">Test</u><u id="vm_sign_in">Sign In</u><label id="vm_sign_name">Name</label><u id="vm_sign_out">Sign Out</u></div>
             <div id="vm_scroll">
                 <div id=vm_contents>
                     <div style="padding-top:20px">
@@ -29,16 +29,18 @@
             <div style="border-bottom: 1px solid #8ca19f;margin-bottom:5px"></div>
             <div style="padding-right: 10px;">
                 <div class=vm-wrap-quest >
-                    <input id=vm_ask list=vm_autolist_question placeholder="Ask me a question.  (e.g. Who are you?)" autocomplete="off"></input>
+                    <input id=vm_ask list=vm_autolist_question placeholder="Ask me a question.  (e.g. Who are you?)" _autocomplete="off"></input>
                     <datalist id="vm_autolist_question"></datalist>
                     <svg style='margin-right:10px' id=vm_submit stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-1" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                 </div>
-                <div class="vm-wrap-topic">
-                    <input id=vm_topic list=vm_autolist_topic placeholder="Type in topic-related keywords. (e.g. Vitural Zhiming)"></input>
-                    <datalist id="vm_autolist_topic"></datalist>
-                </div>
-                <div class=vm-bottom-bar>
-                    Current topic: <span id="vm_c_topic"></span> <u id=vm_topics>Show all topics</u> <u id="vm_train_me">Training me</u> <u style="display:none" id="btn_test">Test</u>
+                <div style="display:none">
+                    <div class="vm-wrap-topic">
+                        <input id=vm_topic list=vm_autolist_topic placeholder="Type in topic-related keywords. (e.g. Vitural Zhiming)"></input>
+                        <datalist id="vm_autolist_topic"></datalist>
+                    </div>
+                    <div class=vm-bottom-bar>
+                        Current topic: <span id="vm_c_topic"></span> 
+                    </div>
                 </div>
             </div>
         </div>

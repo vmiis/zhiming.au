@@ -12,7 +12,7 @@ html,body,input,textarea{
     height:calc(100% - 20px);
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 20px 1fr 8px 80px;
+    grid-template-rows: 20px 1fr 8px 30px;
     grid-column-gap: 0px;
     grid-row-gap: 0px;
 }
@@ -33,6 +33,12 @@ html,body,input,textarea{
     text-align: right;
     color:#888;
     font-size: 80%;
+}
+.vm-top-bar u{
+    margin-right:10px;
+}
+.vm-top-bar u:hover{
+    color:#fff;
 }
 #vm_sign_out{
     margin-left:15px;
