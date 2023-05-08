@@ -108,7 +108,7 @@ html,body,input,textarea{
 .vm-questions{
     margin-top:-20px;
     font-size:70%;
-    column-count: 3;
+    column-count: 2;
     padding:0px 3px 0px 6px; 
 }
 .vm-bottom-bar{
@@ -148,7 +148,7 @@ html,body,input,textarea{
     color:#25ef25;
     content: "A: ";
     margin-left:-30px;
-    margin-right:10px;
+    margin-right:12px;
 }
 
 /*

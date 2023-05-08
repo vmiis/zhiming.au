@@ -20,7 +20,6 @@ var train=function(){
         s.style.display='none';
         l.style.display='inline-block';
         s2.style.display='inline-block';
-
         var req={cmd:'train',q:q.value,a:a.value}
         console.log("training request send");
         $vm.request(req).then((res)=>{
@@ -221,12 +220,14 @@ var init2=function(list1,list2){
     }
     vm_sign_in.addEventListener("click", function(e){ 
         document.getElementById('vm_ask').value="How to login?";
-        document.getElementById('vm_topic').value="login"; 
+        //document.getElementById('vm_topic').value="login"; 
+        vm_qq={};
+        vm_qq["How to login?"]="login";
         query();
-        })
+    })
         vm_sign_out.addEventListener("click", function(e){
         $vm.auth_signout();
-        })
+    })
     vm_ask.addEventListener("keyup", function(e){ if (e.keyCode === 13) {  query();  }  })
     vm_ask.focus();
     vm_submit.addEventListener('click',function(e){ query(); })
