@@ -38,18 +38,18 @@ var train=function(){
 //------------------------------------------------
 var query=function(){
     var q=document.getElementById("vm_ask").value;
-    if(q=="") return;
-    //var p=document.getElementById("vm_topic").value;
+    var t=document.getElementById("vm_topic").value;
+    if(q=="" && t=="") return;
     var q2=q.replace(/\"[^"]*\"/g, '');
-    var p=vm_qq[q2];//document.getElementById("vm_topic").value;
+    var p=vm_qq[q2];
     if(p==undefined) p="";
+    if(p=="" && t!="") p=t;
     while (vm_autolist_question.firstChild){ vm_autolist_question.removeChild(vm_autolist_question.firstChild); }
     while (vm_autolist_topic.firstChild) {  vm_autolist_topic.removeChild(vm_autolist_topic.firstChild); }
     var req={cmd:'qna',q:q,p:p}
     $vm.request(req).then((res)=>{
         var qq=q;
         if(q=="") qq="What questions can you answer about the topic \""+res.topic+"\"";
-        //vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-question ><span class=vm-q>Q: </span>"+qq+"<div>");
         vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-question >"+qq+"<div>");
         console.log(parseFloat(res.rank).toFixed(2)+ " | "+parseFloat(res.score).toFixed(2)+"  |  "+res.topic+"  |  "+res.question+"  |  "+res.answer);
         var answer=res.answer;
@@ -74,8 +74,20 @@ var query=function(){
 }
 //------------------------------------------------
 var show_answer=function(topic, answer){
-    var A="";//"<span class=vm-a>A: </span>"; 
-    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer topic='"+topic+"'>"+A+answer+"<div>");
+    if(answer.includes("@CODE@")){
+        var aa=answer.split("@CODE@");
+        if(aa[0]=="web"){
+            var code=aa[1];
+            $vm.div_web(vm_contents,code,topic);
+            return;
+        } 
+    }
+
+    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer topic='"+topic+"'>"+answer+"<div>");
+    var div=vm_contents.lastElementChild.querySelector('div[vm]');
+    if(div!=null){
+        $vm.div_render(div);
+    }
     var us=vm_contents.lastElementChild.querySelectorAll('u');
     us.forEach(el => {
         el.addEventListener('click', (e) => {
@@ -92,7 +104,6 @@ var show_answer=function(topic, answer){
                     e.preventDefault();
                     e.stopPropagation();
                     document.getElementById('vm_ask').value=el.textContent;
-                    //document.getElementById('vm_topic').value=topic;
                     vm_qq={};
                     vm_qq[el.textContent]=topic;
                     query();
@@ -112,15 +123,12 @@ var show_sorry=function(q){
 }
 //------------------------------------------------
 var show_all_topics=function(autocompleteArray){
-    //var A="<span class=vm-a style='margin-left:6px;' >A: </span>";
     var A="";
     var str="";
     for(var i=0;i<autocompleteArray.length;i++){
         str+="<u>"+autocompleteArray[i]+"</u><br>";
     }
-    //console.log(str);
     var q2="What topics can you talk about?"
-    //vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-question><span class=vm-q>Q: </span>"+q2+"<div>");
     vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-question>"+q2+"<div>");
     vm_contents.insertAdjacentHTML('beforeend',A+"<div class=vm-answer><div class=vm-questions>"+str+"<div></div>");
     scroll();    
@@ -157,13 +165,11 @@ var set_autolist_topic=function(autolist){
                 }
             }
         }
-        //if (list.length > 0) {
-            list.forEach(function(item) {
-                var option = document.createElement("option");
-                option.value = item;
-                vm_autolist_topic.appendChild(option);
-            });
-        //}
+        list.forEach(function(item) {
+            var option = document.createElement("option");
+            option.value = item;
+            vm_autolist_topic.appendChild(option);
+        });
     });
 }
 //------------------------------------------------
@@ -176,8 +182,6 @@ var set_autolist_question=function(autolist){
         var currentTopic = vm_topic.value.toLowerCase();
         while (vm_autolist_question.firstChild){ vm_autolist_question.removeChild(vm_autolist_question.firstChild); }
         var list=[];
-        //console.log(list)
-        //console.log(cvs)
         for(var i=0;i<autolist.length;i++){
             if(list.length>9) break;
             if(currentTopic=="" || autolist[i][0].toLowerCase()==currentTopic){
@@ -188,25 +192,20 @@ var set_autolist_question=function(autolist){
                         if(autolist[i][1][j].toLowerCase().includes(cvs[k].trim())) Ki++;
                     }
                     if(Ki==cvs.length){
-                        //if(currentTopic=="")  
                         list.push(autolist[i][1][j]+"  |  "+autolist[i][0]);
-                        //else list.push(autolist[i][1][j]);
                     }
                 }
             }
         }
-        //console.log(list)
-        //if (list.length > 0) {
-            vm_qq={};
-            list.forEach(function(item) {
-                var option = document.createElement("option");
-                var ss=item.split('  |  ');
-                option.value=ss[0];
-                var a2=ss[0].replace(/\"[^"]*\"/g, '');
-                vm_qq[a2]=ss[1];
-                vm_autolist_question.appendChild(option);
-            });
-        //}
+        vm_qq={};
+        list.forEach(function(item) {
+            var option = document.createElement("option");
+            var ss=item.split('  |  ');
+            option.value=ss[0];
+            var a2=ss[0].replace(/\"[^"]*\"/g, '');
+            vm_qq[a2]=ss[1];
+            vm_autolist_question.appendChild(option);
+        });
     });
 }
 //------------------------------------------------
@@ -220,7 +219,6 @@ var init2=function(list1,list2){
     }
     vm_sign_in.addEventListener("click", function(e){ 
         document.getElementById('vm_ask').value="How to login?";
-        //document.getElementById('vm_topic').value="login"; 
         vm_qq={};
         vm_qq["How to login?"]="login";
         query();
@@ -231,7 +229,15 @@ var init2=function(list1,list2){
     vm_ask.addEventListener("keyup", function(e){ if (e.keyCode === 13) {  query();  }  })
     vm_ask.focus();
     vm_submit.addEventListener('click',function(e){ query(); })
-    //set_autolist_topic(topic_list);
+    vm_topic_submit.addEventListener('click',function(e){ 
+        document.getElementById('vm_ask').value='';
+        query(); 
+    })
+    vm_topic.addEventListener("keyup", function(e){ if (e.keyCode === 13) {  
+        document.getElementById('vm_ask').value='';
+        query();  
+    }})
+    set_autolist_topic(topic_list);
     set_autolist_question(question_list);
     vm_topics.addEventListener('click',function(e){ show_all_topics(topic_list); })
     vm_train_me.addEventListener('click',function(e){  train(); })
@@ -258,17 +264,13 @@ var init=function(){
                 console.log('New list');
                 localStorage.setItem("zhiming.au.topic_list",res.topic_list);
                 var list1=res.topic_list;
-                //console.log(list1);
                 localStorage.setItem("zhiming.au.question_list",res.question_list);
                 var list2=res.question_list;
-                //console.log(list2);
                 init2(list1,list2);
             })
         }
         else{
             console.log('No new list');
-            //console.log(topic_list);
-            //console.log(question_list);
             init2(topic_list,question_list);
         }
     })

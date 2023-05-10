@@ -6,10 +6,7 @@
         <meta charset="UTF-8">
         <link rel="icon" href="data:,">
         <script>$vm={}</script>
-        <script src="vm.js?v=20230508"></script>
-        <script src="vm2.js?v=20230508"></script>
-        <script src="vm3.js?v=20230508"></script>
-        <link rel="stylesheet" href="vm.css?v=20230508" />
+        <link rel="stylesheet" href="vm.css?v=20230511" />
     </head>
     <body>
         <div class="vm-wrapper">
@@ -22,7 +19,7 @@
                             My intelligence is highly dependent on the CPU/GPU, RAM, and training. 
                             Currently, I have very limited knowledge because the backend Zhiming has a very limited budget for my growth. 
                             This means that my answers may not always be correct. 
-                            I am constantly learning and improving, and I hope to provide more accurate information in the future.</div>
+                            I am constantly learning and improving, and I hope to provide more accurate information in the future.<br><br></div>
                     </div>
                 </div>
             </div>
@@ -33,24 +30,24 @@
                     <datalist id="vm_autolist_question"></datalist>
                     <svg style='margin-right:10px' id=vm_submit stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-1" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                 </div>
+                <div class="vm-wrap-topic">
+                    <input id=vm_topic list=vm_autolist_topic placeholder="Type in topic-related keywords. (e.g. Vitural Zhiming)"></input>
+                    <datalist id="vm_autolist_topic"></datalist>
+                    <svg style='margin-right:10px' id=vm_topic_submit stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-1" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                </div>
                 <div style="display:none">
-                    <div class="vm-wrap-topic">
-                        <input id=vm_topic list=vm_autolist_topic placeholder="Type in topic-related keywords. (e.g. Vitural Zhiming)"></input>
-                        <datalist id="vm_autolist_topic"></datalist>
-                    </div>
                     <div class=vm-bottom-bar>
                         Current topic: <span id="vm_c_topic"></span> 
                     </div>
                 </div>
             </div>
         </div>
-        </body>
-        <script>
-            (()=>{
-                $vm.api_address='https://api.zhiming.au'; if(window.location.hostname=='127.0.0.1' || window.location.hostname=='localhost') $vm.api_address='http://localhost:8001';
-                init();
-            })();
-        </script>
+        <script src="vm.js?v=20230511"></script>
+        <script src="vm2.js?v=20230511"></script>
+        <script src="vm3.js?v=20230511"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
+        <link href="https://unpkg.com/tabulator-tables@5.4.4/dist/css/tabulator.min.css" rel="stylesheet">
+        <script type="text/javascript" src="https://unpkg.com/tabulator-tables@5.4.4/dist/js/tabulator.min.js"></script>
         <style>
         </style>
     </body>

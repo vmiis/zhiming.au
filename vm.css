@@ -12,7 +12,7 @@ html,body,input,textarea{
     height:calc(100% - 20px);
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 20px 1fr 8px 30px;
+    grid-template-rows: 20px 1fr 8px 60px;
     grid-column-gap: 0px;
     grid-row-gap: 0px;
 }
@@ -107,9 +107,17 @@ html,body,input,textarea{
 }
 .vm-questions{
     margin-top:-20px;
-    font-size:70%;
+    font-size:80%;
     column-count: 2;
-    padding:0px 3px 0px 6px; 
+    padding:0px 3px 0px 0px; 
+}
+.vm-items{
+    margin-top:-20px;
+    padding:0px 3px 0px 0px; 
+}
+.vm-answer-div{
+    margin-top:-20px;
+    padding:0px 3px 0px 0px; 
 }
 .vm-bottom-bar{
     font-size:80%; 
