@@ -81,6 +81,11 @@ var show_answer=function(topic, answer){
             $vm.div_web(vm_contents,code,topic);
             return;
         } 
+        else if(aa[0]=="abc"){
+            var code=aa[1];
+            $vm.div_abc(vm_contents,code,topic);
+            return;
+        } 
     }
 
     vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer topic='"+topic+"'>"+answer+"<div>");
@@ -147,7 +152,7 @@ var show_all_topics=function(autocompleteArray){
 //------------------------------------------------
 var scroll=function(){
     vm_scroll.scrollTop = vm_scroll.scrollHeight;
-    vm_ask.focus();
+    if (window.innerWidth >900) vm_ask.focus();
 }
 //------------------------------------------------
 var set_autolist_topic=function(autolist){
@@ -274,5 +279,92 @@ var init=function(){
             init2(topic_list,question_list);
         }
     })
+}
+//------------------------------------------------
+$vm.abc_cursor_control=function(paper) {
+    var self = this;
+
+    self.onReady = function() {
+    };
+    self.onStart = function() {
+        var svg = paper.querySelector("svg");
+        var cursor = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        cursor.setAttribute("class", "abcjs-cursor");
+        cursor.setAttributeNS(null, 'x1', 0);
+        cursor.setAttributeNS(null, 'y1', 0);
+        cursor.setAttributeNS(null, 'x2', 0);
+        cursor.setAttributeNS(null, 'y2', 0);
+        svg.appendChild(cursor);
+
+    };
+    self.beatSubdivisions = 2;
+    self.onBeat = function(beatNumber, totalBeats, totalTime) {
+    };
+    self.onEvent = function(ev) {
+        if (ev.measureStart && ev.left === null)
+            return; // this was the second part of a tie across a measure line. Just ignore it.
+
+        var lastSelection = paper.querySelectorAll("svg .highlight");
+        for (var k = 0; k < lastSelection.length; k++)
+            lastSelection[k].classList.remove("highlight");
+
+        for (var i = 0; i < ev.elements.length; i++ ) {
+            var note = ev.elements[i];
+            for (var j = 0; j < note.length; j++) {
+                note[j].classList.add("highlight");
+            }
+        }
+
+        var cursor = paper.querySelector("svg .abcjs-cursor");
+        if (cursor) {
+            cursor.setAttribute("x1", ev.left - 2);
+            cursor.setAttribute("x2", ev.left - 2);
+            cursor.setAttribute("y1", ev.top);
+            cursor.setAttribute("y2", ev.top + ev.height);
+        }
+    };
+    self.onFinished = function() {
+        var els = paper.querySelectorAll("svg .highlight");
+        for (var i = 0; i < els.length; i++ ) {
+            els[i].classList.remove("highlight");
+        }
+        var cursor = paper.querySelector("svg .abcjs-cursor");
+        if (cursor) {
+            cursor.setAttribute("x1", 0);
+            cursor.setAttribute("x2", 0);
+            cursor.setAttribute("y1", 0);
+            cursor.setAttribute("y2", 0);
+        }
+    };
+}
+//------------------------------------------------
+$vm.abc_load=function(paper,midi,abc){
+    var abcOptions = {
+        add_classes: true,
+        responsive: "resize"
+    };
+    var cursorControl = new $vm.abc_cursor_control(paper);
+    var synthControl = new ABCJS.synth.SynthController();
+    synthControl.load(midi, cursorControl, {displayLoop: true, displayRestart: true, displayPlay: true, displayProgress: true, displayWarp: true,
+        midiTranspose:0,
+        chordsOff:true,
+        soundFontUrl:"https://gleitz.github.io/midi-js-soundfonts/FatBoy/",
+        soundFontVolumeMultiplier:5
+    });
+    function setTune(userAction) {
+        synthControl.disable(true);
+        var visualObj = ABCJS.renderAbc(paper, abc, abcOptions)[0];
+
+        var midiBuffer = new ABCJS.synth.CreateSynth();
+        midiBuffer.init({
+            visualObj: visualObj,
+        }).then(function (response) {
+            if (synthControl) {
+                synthControl.setTune(visualObj, userAction).then(function (response) {
+                }).catch(function (error) { console.warn("Audio problem:", error); });
+            }
+        }).catch(function (error) { console.warn("Audio problem:", error); });
+    }
+    setTune(false);
 }
 //------------------------------------------------

@@ -43,7 +43,7 @@ $vm.get_text=function(txt,s1,s2){
 }
 //--------------------------------------------
 $vm.div_web=function(vm_contents,code,topic){
-    var answer="<div class=vm-answer-div><web>";
+    var answer="<div class=vm-answer-div></div>";
     vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer topic='"+topic+"'>"+answer+"<div>");
     var div=vm_contents.lastElementChild.querySelector('div');
     var json=JSON.parse(code);
@@ -78,9 +78,40 @@ $vm.div_web=function(vm_contents,code,topic){
     });
 }
 //--------------------------------------------
-$vm.div_test=function(div){
-}
-//--------------------------------------------
 $vm.api_address='https://api.zhiming.au'; if(window.location.hostname=='127.0.0.1' || window.location.hostname=='localhost') $vm.api_address='http://localhost:8001';
 init();
+//--------------------------------------------
+$vm.div_abc=function(vm_contents,abc){
+    var answer="<div class=vm-answer-div><div class='vm-paper'></div><div class='vm-midi'></div></div>";
+    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer>"+answer+"<div>");
+    var div=vm_contents.lastElementChild.querySelector('div');
+    var paper=div.querySelector("div[class='vm-paper']");
+    var midi=div.querySelector("div[class='vm-midi']");
+    var abcOptions = {
+        add_classes: true,
+        responsive: "resize"
+    };
+    var visualObj=ABCJS.renderAbc(paper, abc, abcOptions);
+    var controlOptions = {
+        displayRestart: true,
+        displayPlay: true,
+        displayProgress: true,
+        displayClock: true
+    };
+    var synthControl = new ABCJS.synth.SynthController();
+    synthControl.load(midi, null, controlOptions);
+    synthControl.disable(true);
+    var midiBuffer = new ABCJS.synth.CreateSynth();
+    midiBuffer.init({
+        visualObj: visualObj[0],
+        options: {
+            soundFontUrl:"https://gleitz.github.io/midi-js-soundfonts/FatBoy/",
+        }
+    }).then(function () {
+        synthControl.setTune(visualObj[0], true).then(function (response) {
+        document.querySelector(".abcjs-inline-audio").classList.remove("disabled");
+        })
+    });
+    scroll();   
+}
 //--------------------------------------------
