@@ -111,6 +111,12 @@ html,body,input,textarea{
     column-count: 2;
     padding:0px 3px 0px 0px; 
 }
+@media screen and (max-width: 900px) {
+    .vm-questions{
+        column-count: 1;
+    }
+}
+
 .vm-items{
     margin-top:-20px;
     padding:0px 3px 0px 0px; 

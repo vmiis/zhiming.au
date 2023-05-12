@@ -81,9 +81,9 @@ var show_answer=function(topic, answer){
             $vm.div_web(vm_contents,code,topic);
             return;
         } 
-        else if(aa[0]=="abc"){
+        else if(aa[0]=="abc" || aa[0]=="abc2"){
             var code=aa[1];
-            $vm.div_abc(vm_contents,code,topic);
+            $vm.div_abc(vm_contents,code,aa[0]);
             return;
         } 
     }

@@ -81,8 +81,10 @@ $vm.div_web=function(vm_contents,code,topic){
 $vm.api_address='https://api.zhiming.au'; if(window.location.hostname=='127.0.0.1' || window.location.hostname=='localhost') $vm.api_address='http://localhost:8001';
 init();
 //--------------------------------------------
-$vm.div_abc=function(vm_contents,abc){
-    var answer="<div class=vm-answer-div><div class='vm-paper'></div><div class='vm-midi'></div></div>";
+$vm.div_abc=function(vm_contents,abc,aa0){
+    var note="<span style='font-size:12px;color:#666'>Intended for melody prompts. The left hand improvises accompanying melodies, while the right hand inserts improvised notes.</span><br><br>";
+    if(aa0=="abc2") note="";
+    var answer="<div class=vm-answer-div><div class='vm-paper'></div>"+note+"<div class='vm-midi'></div></div>";
     vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer>"+answer+"<div>");
     var div=vm_contents.lastElementChild.querySelector('div');
     var paper=div.querySelector("div[class='vm-paper']");
