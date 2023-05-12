@@ -73,21 +73,58 @@ var query=function(){
     .catch(error => { console.log(error);});
 }
 //------------------------------------------------
+$vm.div_woolcock_profile_search=function(vm_contents,topic){
+    var html="<div class=vm-wps>";
+    html+="";
+    html+="<input placeholder='Name' style='width:150px'>";
+    html+="<button class=vm-wps-submit>Submit</button>";
+    html+="</div>";
+    vm_contents.insertAdjacentHTML('beforeend',html);
+    scroll();
+    var div=vm_contents.lastElementChild;
+    var n=div.querySelectorAll('input')[0];
+    var s=div.querySelectorAll('button')[0];
+    s.addEventListener('click',function(e){ 
+        var q="I would like to see someone's profile in Woolcock"+" "+n.value;
+        var req={cmd:'qna',q:q,p:topic}
+        $vm.request(req).then((res)=>{
+            show_answer(topic,res.answer);
+        })
+        .catch(error => { console.log(error);});
+    })
+    vm_ask.value="";
+    n.focus();
+}
+//------------------------------------------------
+$vm.div_woolcock_profile_display=function(vm_contents,answer,topic){
+    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer>"+answer+"<div>");
+    const vmDivs = document.querySelectorAll('div.vm-wps');
+    vmDivs.forEach(vmDiv => vmDiv.remove());    
+    $vm.div_woolcock_profile_search(vm_contents,topic);
+}
+//------------------------------------------------
 var show_answer=function(topic, answer){
     if(answer.includes("@CODE@")){
         var aa=answer.split("@CODE@");
-        if(aa[0]=="web"){
-            var code=aa[1];
-            $vm.div_web(vm_contents,code,topic);
-            return;
-        } 
-        else if(aa[0]=="abc" || aa[0]=="abc2"){
-            var code=aa[1];
-            $vm.div_abc(vm_contents,code,aa[0]);
-            return;
-        } 
+        switch(aa[0]){
+            case "web":
+                var code=aa[1];
+                $vm.div_web(vm_contents,code,topic);
+                break;
+            case "abc":
+            case "abc2":
+                var code=aa[1];
+                $vm.div_abc(vm_contents,code,aa[0]);
+                break;
+            case "woolcock_profile_search":
+                $vm.div_woolcock_profile_search(vm_contents,topic);
+                break;
+            case "woolcock_profile_display":
+                $vm.div_woolcock_profile_display(vm_contents,answer,topic);
+                break;
+            }
+        return;
     }
-
     vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer topic='"+topic+"'>"+answer+"<div>");
     var div=vm_contents.lastElementChild.querySelector('div[vm]');
     if(div!=null){
@@ -214,14 +251,18 @@ var set_autolist_question=function(autolist){
     });
 }
 //------------------------------------------------
+$vm.number_of_topics=0;
+$vm.number_of_questions=0;
 var init2=function(list1,list2){
     var topic_list=list1.split(',').sort();
+    $vm.number_of_topics=topic_list.length;
     var ss=list2.split('||');
     var question_list=[];
     for(var i=0;i<ss.length;i++){
         var tt=ss[i].split('~~');
         question_list.push([tt[0],tt[1].split('^^')]);
     }
+    $vm.number_of_questions=question_list.length;
     vm_sign_in.addEventListener("click", function(e){ 
         document.getElementById('vm_ask').value="How to login?";
         vm_qq={};
@@ -247,6 +288,13 @@ var init2=function(list1,list2){
     vm_topics.addEventListener('click',function(e){ show_all_topics(topic_list); })
     vm_train_me.addEventListener('click',function(e){  train(); })
     $vm.show_user();
+    
+    vm_num_topic.innerText=topic_list.length;
+    var I=0;
+    for(var i=0;i<question_list.length;i++){
+        I+=question_list[i][1].length;
+    }
+    vm_num_ques.innerText=I;
 }
 //------------------------------------------------
 var init=function(){
