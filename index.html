@@ -6,7 +6,7 @@
         <meta charset="UTF-8">
         <link rel="icon" href="data:,">
         <script>$vm={}</script>
-        <link rel="stylesheet" href="vm.css?v=20230513" />
+        <link rel="stylesheet" href="vm.css?v=20230514" />
     </head>
     <body>
         <div class="vm-wrapper">
@@ -27,25 +27,28 @@
             <div style="border-bottom: 1px solid #8ca19f;margin-bottom:5px"></div>
             <div style="padding-right: 10px;">
                 <div class=vm-wrap-quest >
-                    <input id=vm_ask list=vm_autolist_question placeholder="Ask me a question.  (e.g. Who are you?)" _autocomplete="off"></input>
+                    <input id=vm_ask list=vm_autolist_question placeholder="Ask me a question.  (e.g. Who are you?)" autocomplete="off"></input>
                     <datalist id="vm_autolist_question"></datalist>
                     <svg style='margin-right:10px' id=vm_submit stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-1" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                 </div>
                 <div class="vm-wrap-topic">
-                    <input id=vm_topic list=vm_autolist_topic placeholder="Type in topic-related keywords. (e.g. Vitural Zhiming)"></input>
+                    <input id=vm_topic list=vm_autolist_topic placeholder="Type in topic-related keywords. (e.g. Vitural Zhiming)" autocomplete="off"></input>
                     <datalist id="vm_autolist_topic"></datalist>
                     <svg style='margin-right:10px' id=vm_topic_submit stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-1" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                 </div>
+                <!--
                 <div style="display:none">
                     <div class=vm-bottom-bar>
                         Current topic: <span id="vm_c_topic"></span> 
                     </div>
                 </div>
+            -->
             </div>
         </div>
-        <script src="vm.js?v=20230513"></script>
-        <script src="vm2.js?v=20230513_1"></script>
-        <script src="vm3.js?v=20230513"></script>
+        <script src="vm.js?v=20230514"></script>
+        <script src="vm1.js?v=20230514"></script>
+        <script src="vm2.js?v=20230514"></script>
+        <script src="vm3.js?v=20230514"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
         <link href="https://unpkg.com/tabulator-tables@5.4.4/dist/css/tabulator.min.css" rel="stylesheet">
         <script type="text/javascript" src="https://unpkg.com/tabulator-tables@5.4.4/dist/js/tabulator.min.js"></script>

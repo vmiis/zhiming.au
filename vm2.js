@@ -73,88 +73,30 @@ var query=function(){
     .catch(error => { console.log(error);});
 }
 //------------------------------------------------
-$vm.div_woolcock_profile_search=function(vm_contents,topic){
-    var html="<div class=vm-wps>";
-    html+="";
-    html+="<input placeholder='Name' style='width:150px'>";
-    html+="<button class=vm-wps-submit>Submit</button>";
-    html+="</div>";
-    vm_contents.insertAdjacentHTML('beforeend',html);
-    scroll();
-    var div=vm_contents.lastElementChild;
-    var n=div.querySelectorAll('input')[0];
-    var s=div.querySelectorAll('button')[0];
-    s.addEventListener('click',function(e){ 
-        var q="I would like to see someone's profile in Woolcock"+" "+n.value;
-        var req={cmd:'qna',q:q,p:topic}
-        $vm.request(req).then((res)=>{
-            show_answer(topic,res.answer);
-        })
-        .catch(error => { console.log(error);});
-    })
-    vm_ask.value="";
-    n.focus();
-}
-//------------------------------------------------
-$vm.div_woolcock_profile_display=function(vm_contents,answer,topic){
-    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer>"+answer+"<div>");
-    const vmDivs = document.querySelectorAll('div.vm-wps');
-    vmDivs.forEach(vmDiv => vmDiv.remove());    
-    $vm.div_woolcock_profile_search(vm_contents,topic);
-}
-//------------------------------------------------
 var show_answer=function(topic, answer){
-    if(answer.includes("@CODE@")){
-        var aa=answer.split("@CODE@");
-        switch(aa[0]){
-            case "web":
-                var code=aa[1];
-                $vm.div_web(vm_contents,code,topic);
-                break;
-            case "abc":
-            case "abc2":
-                var code=aa[1];
-                $vm.div_abc(vm_contents,code,aa[0]);
-                break;
-            case "woolcock_profile_search":
-                $vm.div_woolcock_profile_search(vm_contents,topic);
-                break;
-            case "woolcock_profile_display":
-                $vm.div_woolcock_profile_display(vm_contents,answer,topic);
-                break;
+    var aa=["",""]; if(answer.toString().includes("@CODE@")) aa=answer.split("@CODE@");
+    switch(aa[0]){
+        case "chart":                   $vm.chart(vm_contents,aa[1],topic);                 break;
+        case "table":                   $vm.table(vm_contents,aa[1],topic);                 break;
+        case "train":                   $vm.train(vm_contents,aa[1],topic);                 break;
+        case "login":                   $vm.login(vm_contents,aa[1],topic);                 break;
+        case "questions":               $vm.questions_list(vm_contents,aa[1],topic);        break;
+        case "web":                     $vm.web_contents(vm_contents,aa[1],topic);          break;
+        case "abc":
+        case "abc2":                    $vm.abc_notation(vm_contents,aa[1],aa[0]);          break;
+        case "woolcock_profile_req":    $vm.woolcock_profile_req(vm_contents,topic);        break;
+        case "woolcock_profile_res":    $vm.woolcock_profile_res(vm_contents,aa[1],topic);  break;
+        case "today_weather_req":       $vm.today_weather_req(vm_contents,topic);           break;
+        case "today_weather_res":       $vm.today_weather_res(vm_contents,aa[1],topic);     break;
+        default:
+            vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer topic='"+topic+"'>"+answer+"<div>");
+            var div=vm_contents.lastElementChild.querySelector('div[vm]');
+            if(div!=null){
+                $vm.div_render(div);
             }
-        return;
+            document.getElementById('vm_ask').value='';
+            scroll();
     }
-    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer topic='"+topic+"'>"+answer+"<div>");
-    var div=vm_contents.lastElementChild.querySelector('div[vm]');
-    if(div!=null){
-        $vm.div_render(div);
-    }
-    var us=vm_contents.lastElementChild.querySelectorAll('u');
-    us.forEach(el => {
-        el.addEventListener('click', (e) => {
-            var tg=el.getAttribute('tg');
-            switch(tg){
-                case 'auth': 
-                    $vm.auth_signin(el.textContent);
-                    break;
-                case 'train': 
-                    train();
-                    break;
-                default:
-                    var topic=el.parentNode.parentNode.getAttribute('topic');
-                    e.preventDefault();
-                    e.stopPropagation();
-                    document.getElementById('vm_ask').value=el.textContent;
-                    vm_qq={};
-                    vm_qq[el.textContent]=topic;
-                    query();
-            }
-        });
-    });
-    document.getElementById('vm_ask').value='';
-    if(topic!="") vm_c_topic.innerHTML=topic;
-    scroll();
 }
 //------------------------------------------------
 var show_sorry=function(q){
