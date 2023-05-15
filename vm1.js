@@ -230,7 +230,7 @@ $vm.table=function(vm_contents,tConfig,topic){
     scroll();
 }
 //------------------------------------------------
-$vm.data_to_grid_01=function(header,data){
+$vm.data_to_grid_01=function(field,header,data){
     var txt="<tr><th></th><th>ID</th>";
     header.forEach((hh)=>{
         txt+="<th>"+hh+"</th>"
@@ -239,8 +239,9 @@ $vm.data_to_grid_01=function(header,data){
     var d="";
     data.forEach((dd)=>{
         d+="<tr><td><u>View</u></td><td>"+dd.UID+"</td>";
-        header.forEach((hh)=>{
-            d+="<td>"+dd.Data[hh]+"</td>"
+        field.forEach((hh)=>{
+            if(hh=="UID") d+="<td>"+dd.UID+"</td>"
+            else d+="<td>"+dd.Data[hh]+"</td>"
         })
         d+="<td>"+dd.Submit_date.split('T')[0] +"</td><td>"+dd.Submitted_by+"</td></tr>";
     })
@@ -248,18 +249,20 @@ $vm.data_to_grid_01=function(header,data){
 }
 //------------------------------------------------
 $vm.grid=function(vm_contents,A,topic){
-    var a=eval(A);
-    var db=a[0];
-    var table=a[1];
-    var header=a[2];
+    var a=JSON.parse(A);
+    var db=a.db;
+    table=a.table;
+    var field=a.field.slice();     field.forEach((item,i)=>{field[i]=item.split('|')[0]});
+    var header=a.field.slice();    header.forEach((item,i)=>{header[i]=item.split('|').pop()});
+    var query=a.query;
     vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div class=vm-grid></div><div>");
     var div=vm_contents.lastElementChild.querySelector('div');
     var data=[]
     var bar="<input placeholder=keyword style='width:180px; border:1px solid #666; height:20px; padding-left:6px' /> <button>Searh</button> <label style='margin-left:30px'></label><br>";
-    div.innerHTML=bar+"<table>"+$vm.data_to_grid_01(header,data)+"</table>";
+    div.innerHTML=bar+"<table>"+$vm.data_to_grid_01(field,header,data)+"</table>";
     var inputE=div.querySelector('input');
     var qq=function(){
-        var req={cmd:'find',db:db,table:table,limit:20,search:inputE.value}
+        var req={cmd:'find',db:db,table:table,query:query,limit:20,search:inputE.value}
         $vm.request(req)
         .then((r)=>{
             if(r.status=='np'){
@@ -267,15 +270,15 @@ $vm.grid=function(vm_contents,A,topic){
             }
             else{
                 var d=r.result;
-                var t=$vm.data_to_grid_01(header,d);
+                var t=$vm.data_to_grid_01(field,header,d);
                 div.querySelector('table').innerHTML=t;
-                div.querySelector('label').innerText=d.length+"/"+r.count;
+                div.querySelector('label').innerText=d.length+"/"+r.count+"  ("+table+")";
                 var us=div.querySelectorAll('u');
                 us.forEach((el,i) => {
                     el.addEventListener('click', (e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        console.log(d[i].Data)
+                        //console.log(d[i].Data)
 
                         var options = {
                             collapsed: true,

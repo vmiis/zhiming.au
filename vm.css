@@ -229,6 +229,7 @@ html,body,input,textarea{
     text-align: right;
 }
 #vm_json_renderer{
+    padding: 10px;
     height:100%;
     /*background-color:rgb(24,24,24);*/
     font-size: 16px;
