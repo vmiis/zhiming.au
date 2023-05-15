@@ -230,3 +230,79 @@ $vm.table=function(vm_contents,tConfig,topic){
     scroll();
 }
 //------------------------------------------------
+$vm.data_to_grid_01=function(header,data){
+    var txt="<tr><th></th><th>ID</th>";
+    header.forEach((hh)=>{
+        txt+="<th>"+hh+"</th>"
+    })
+    txt+="<th>Submit date</th><th>Submitted by</th></tr>";
+    var d="";
+    data.forEach((dd)=>{
+        d+="<tr><td><u>View</u></td><td>"+dd.UID+"</td>";
+        header.forEach((hh)=>{
+            d+="<td>"+dd.Data[hh]+"</td>"
+        })
+        d+="<td>"+dd.Submit_date.split('T')[0] +"</td><td>"+dd.Submitted_by+"</td></tr>";
+    })
+    return (txt+d)
+}
+//------------------------------------------------
+$vm.grid=function(vm_contents,A,topic){
+    var a=eval(A);
+    var db=a[0];
+    var table=a[1];
+    var header=a[2];
+    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div class=vm-grid></div><div>");
+    var div=vm_contents.lastElementChild.querySelector('div');
+    var data=[]
+    var bar="<input placeholder=keyword style='width:180px; border:1px solid #666; height:20px; padding-left:6px' /> <button>Searh</button> <label style='margin-left:30px'></label><br>";
+    div.innerHTML=bar+"<table>"+$vm.data_to_grid_01(header,data)+"</table>";
+    var inputE=div.querySelector('input');
+    var qq=function(){
+        var req={cmd:'find',db:db,table:table,limit:20,search:inputE.value}
+        $vm.request(req)
+        .then((r)=>{
+            if(r.status=='np'){
+                div.querySelector('label').innerText="No permissions.";
+            }
+            else{
+                var d=r.result;
+                var t=$vm.data_to_grid_01(header,d);
+                div.querySelector('table').innerHTML=t;
+                div.querySelector('label').innerText=d.length+"/"+r.count;
+                var us=div.querySelectorAll('u');
+                us.forEach((el,i) => {
+                    el.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log(d[i].Data)
+
+                        var options = {
+                            collapsed: true,
+                            rootCollapsable: false,
+                        };
+                        /*
+                        var data={}
+                        data.abc=123;
+                        data.efg=[123,236];
+                        */
+                        document.getElementById('vm_popup').innerHTML="<div id='vm_json_renderer'></div>";
+                        new JsonViewer({
+                            value: d[i].Data,
+                            theme:'light'
+                        }).render('#vm_json_renderer')
+                        $vm.open_popup();
+                    });
+                });
+            }
+            scroll();
+        })
+        .catch((e)=>{})
+    }
+    div.querySelector('button').addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); qq(); });
+    div.querySelector('input').addEventListener("keyup", function(e){ if (e.keyCode === 13) {  qq();  }  })
+    qq();
+    document.getElementById('vm_ask').value='';
+    scroll();
+}
+//------------------------------------------------

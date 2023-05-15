@@ -76,6 +76,7 @@ var query=function(){
 var show_answer=function(topic, answer){
     var aa=["",""]; if(answer.toString().includes("@CODE@")) aa=answer.split("@CODE@");
     switch(aa[0]){
+        case "grid":                    $vm.grid(vm_contents,aa[1],topic);                  break;
         case "chart":                   $vm.chart(vm_contents,aa[1],topic);                 break;
         case "table":                   $vm.table(vm_contents,aa[1],topic);                 break;
         case "train":                   $vm.train(vm_contents,aa[1],topic);                 break;
@@ -357,4 +358,8 @@ $vm.abc_load=function(paper,midi,abc){
     }
     setTune(false);
 }
+//------------------------------------------------
+$vm.open_popup=function(){    document.getElementById('vm_popup_p').style.top="50%";}
+$vm.close_popup=function(){    document.getElementById('vm_popup_p').style.top="100000px";}
+document.getElementById('vm_close_popup').addEventListener('click',function(){    $vm.close_popup(); })
 //------------------------------------------------

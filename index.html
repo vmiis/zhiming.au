@@ -36,14 +36,11 @@
                     <datalist id="vm_autolist_topic"></datalist>
                     <svg style='margin-right:10px' id=vm_topic_submit stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-1" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                 </div>
-                <!--
-                <div style="display:none">
-                    <div class=vm-bottom-bar>
-                        Current topic: <span id="vm_c_topic"></span> 
-                    </div>
-                </div>
-            -->
             </div>
+        </div>
+        <div id=vm_popup_p class=vm_popup>
+            <div id="vm_popup"></div>
+            <div id="vm_popup_bar"><button id="vm_close_popup">Close</button></div>
         </div>
         <script src="vm.js?v=20230514"></script>
         <script src="vm1.js?v=20230514"></script>
@@ -53,5 +50,6 @@
         <link href="https://unpkg.com/tabulator-tables@5.4.4/dist/css/tabulator.min.css" rel="stylesheet">
         <script type="text/javascript" src="https://unpkg.com/tabulator-tables@5.4.4/dist/js/tabulator.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/abcjs/6.2.2/abcjs-basic-min.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@textea/json-viewer@3"></script>
     </body>
 </html>
