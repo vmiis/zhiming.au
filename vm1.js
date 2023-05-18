@@ -212,6 +212,7 @@ $vm.chart=function(vm_contents,tConfig,topic){
     var config=JSON.parse(tConfig);
     vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div><canvas></canvas></div><div>");
     var div=vm_contents.lastElementChild.querySelector('div');
+    div.style["margin-top"]="-20px";
     var canvas=div.querySelector('canvas');
     new Chart(canvas,config);
     document.getElementById('vm_ask').value='';
@@ -222,6 +223,7 @@ $vm.table=function(vm_contents,tConfig,topic){
     var config=JSON.parse(tConfig);
     vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div></div><div>");
     var div=vm_contents.lastElementChild.querySelector('div');
+    div.style["margin-top"]="-20px";
     new Tabulator(div, {
         columns:config[0],
         data:config[1], 
@@ -310,7 +312,7 @@ $vm.grid=function(vm_contents,A,topic){
 }
 //------------------------------------------------
 $vm.img=function(vm_contents,src,topic){
-    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div><img style='margin-top:-20px;max-width: 100%; height: auto;' src="+src+"></img></div><div>");
+    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div><img style='margin-top:-20px;width: 100%; height: auto;' src="+src+"></img></div><div>");
     document.getElementById('vm_ask').value='';
     scroll();
 }

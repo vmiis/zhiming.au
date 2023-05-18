@@ -34,9 +34,11 @@ var train=function(){
     })
 }
 //------------------------------------------------
-var query=function(){
+var query=function(qq,tt){
     var q=document.getElementById("vm_ask").value;
     var t=document.getElementById("vm_topic").value;
+    if(qq!=undefined) q=qq;
+    if(tt!=undefined) t=tt;
     if(q=="" && t=="") return;
     var q2=q.replace(/\"[^"]*\"/g, '');
     var p=vm_qq[q2];
@@ -236,6 +238,20 @@ var init2=function(list1,list2){
         I+=question_list[i][1].length;
     }
     vm_num_ques.innerText=I;
+
+    var a=window.location.href.split('?'); 
+    if(a.length==2){
+        var qt=a[1].split('@')
+        if(qt.length==2){
+            var q=decodeURIComponent(qt[0]);
+            var t=decodeURIComponent(qt[1]);
+            query(q,t);
+        }
+        else if(qt.length==1){
+            var q=decodeURIComponent(qt[0]);
+            query(q);
+        }
+    }
 }
 //------------------------------------------------
 var init=function(){
