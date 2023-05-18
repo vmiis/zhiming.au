@@ -25,8 +25,6 @@ $vm.div_test=function(div){
 //--------------------------------------------
 $vm.div_render=function(div){
     var vm=div.getAttribute('vm');
-    console.log("--------------")
-    console.log(vm)
     switch(vm){
         case "chart": eval(div.innerHTML); break;
         case "table": eval(div.innerHTML); break;

@@ -21,9 +21,7 @@ var train=function(){
         l.style.display='inline-block';
         s2.style.display='inline-block';
         var req={cmd:'train',q:q.value,a:a.value}
-        console.log("training request send");
         $vm.request(req).then((res)=>{
-            console.log("training respobse:"+res.qna);
         })
         .catch(error => { console.log(error);});
     })
@@ -51,7 +49,6 @@ var query=function(){
         var qq=q;
         if(q=="") qq="What questions can you answer about the topic \""+res.topic+"\"";
         vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-question >"+qq+"<div>");
-        console.log(parseFloat(res.rank).toFixed(2)+ " | "+parseFloat(res.score).toFixed(2)+"  |  "+res.topic+"  |  "+res.question+"  |  "+res.answer);
         var answer=res.answer;
         var topic=res.topic;
         if(res.score!=0){
@@ -257,7 +254,6 @@ var init=function(){
         if(q==1){
             var req={cmd:'ai-list'}
             $vm.request(req).then((res)=>{
-                console.log('New list');
                 localStorage.setItem("zhiming.au.topic_list",res.topic_list);
                 var list1=res.topic_list;
                 localStorage.setItem("zhiming.au.question_list",res.question_list);
@@ -266,7 +262,6 @@ var init=function(){
             })
         }
         else{
-            console.log('No new list');
             init2(topic_list,question_list);
         }
     })

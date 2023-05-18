@@ -9,6 +9,7 @@ $vm.today_weather_req=function(vm_contents,topic){
     var submit=div.querySelectorAll('button')[0];
     var qq=function(){
         var q="What is today's weather?"+" "+input.value;
+        var topic=vm_topic.value;
         var req={cmd:'qna',q:q,p:topic}
         $vm.request(req).then((res)=>{ show_answer(topic,res.answer); })
         .catch(error => { console.log(error);});
@@ -45,7 +46,8 @@ $vm.woolcock_profile_req=function(vm_contents,topic){
     var input=div.querySelectorAll('input')[0];
     var submit=div.querySelectorAll('button')[0];
     var qq=function(){
-        var q="I would like to see someone's profile in Woolcock"+" "+input.value;
+        var q="Woolcock staff profile"+" "+input.value;
+        var topic=vm_topic.value;
         var req={cmd:'qna',q:q,p:topic}
         $vm.request(req).then((res)=>{
             show_answer(topic,res.answer);
@@ -144,14 +146,13 @@ $vm.web_contents=function(vm_contents,param,topic){
 //--------------------------------------------
 $vm.questions_list=function(vm_contents,param,topic){
     var p=JSON.parse(param);
-    console.log(p)    
     p[1].sort();
     var questions="<div class=vm-questions>";
     var I=0;
     if(p[0]=="virtual zhiming") I=7;
     for(var i=I;i<p[1].length;i++){
         var line=p[1][i];
-        if(line.length>6){
+        if(line.length>1){
             questions+="<u class=vm-column-item topic='"+topic+"'><li>"+line+"</li></u><br>";
         }
     }
@@ -278,7 +279,6 @@ $vm.grid=function(vm_contents,A,topic){
                     el.addEventListener('click', (e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        //console.log(d[i].Data)
 
                         var options = {
                             collapsed: true,
