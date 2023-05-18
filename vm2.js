@@ -73,6 +73,7 @@ var query=function(){
 var show_answer=function(topic, answer){
     var aa=["",""]; if(answer.toString().includes("@CODE@")) aa=answer.split("@CODE@");
     switch(aa[0]){
+        case "img":                     $vm.img(vm_contents,aa[1],topic);                   break;
         case "grid":                    $vm.grid(vm_contents,aa[1],topic);                  break;
         case "chart":                   $vm.chart(vm_contents,aa[1],topic);                 break;
         case "table":                   $vm.table(vm_contents,aa[1],topic);                 break;

@@ -309,3 +309,9 @@ $vm.grid=function(vm_contents,A,topic){
     scroll();
 }
 //------------------------------------------------
+$vm.img=function(vm_contents,src,topic){
+    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div><img style='margin-top:-20px;max-width: 100%; height: auto;' src="+src+"></img></div><div>");
+    document.getElementById('vm_ask').value='';
+    scroll();
+}
+//------------------------------------------------
