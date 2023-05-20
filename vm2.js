@@ -87,6 +87,7 @@ var show_answer=function(topic, answer){
         case "abc2":                    $vm.abc_notation(vm_contents,aa[1],aa[0]);          break;
         case "woolcock_profile_req":    $vm.woolcock_profile_req(vm_contents,topic);        break;
         case "woolcock_profile_res":    $vm.woolcock_profile_res(vm_contents,aa[1],topic);  break;
+        case "w_people_profile":        $vm.w_people_profile(vm_contents,aa[1]);        break;
         case "today_weather_req":       $vm.today_weather_req(vm_contents,topic);           break;
         case "today_weather_res":       $vm.today_weather_res(vm_contents,aa[1],topic);     break;
         default:
@@ -212,8 +213,12 @@ var init2=function(list1,list2){
         vm_qq["How to login?"]="login";
         query();
     })
-        vm_sign_out.addEventListener("click", function(e){
+    vm_sign_out.addEventListener("click", function(e){
         $vm.auth_signout();
+    })
+    vm_ask.addEventListener("change", function(e){ 
+        var options = document.querySelector('#vm_autolist_question').options;
+        if(options.length==1 && options[0].value==document.getElementById('vm_ask').value) query();  
     })
     vm_ask.addEventListener("keyup", function(e){ if (e.keyCode === 13) {  query();  }  })
     vm_ask.focus();

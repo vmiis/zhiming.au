@@ -107,7 +107,6 @@ html,body,input,textarea{
 }
 .vm-questions{
     margin-top:-20px;
-    /*font-size:80%;*/
     column-count: 2;
     padding:0px 3px 0px 0px; 
 }

@@ -77,6 +77,15 @@ $vm.woolcock_profile_res=function(vm_contents,answer,topic){
     $vm.woolcock_profile_req(vm_contents,topic);
 }
 //------------------------------------------------
+$vm.w_people_profile=function(vm_contents,answer,topic){
+    console.log(answer)
+    var data=JSON.parse(answer);
+    var html="<img style='height: 150px; width: auto; float: left; margin-right:10px;' src=https://woolcock.org.au"+data[3]+"></img>"+data[0]+"<br>"+data[1]+"<br>"+data[2]+"<br>";
+    var answer="<div class=vm-answer><div style='min-height:150px'>"+html+"</div></div></div>";
+    vm_contents.insertAdjacentHTML('beforeend',answer);
+    scroll();
+}
+//------------------------------------------------
 $vm.abc_notation=function(vm_contents,abc,aa0){
     var note="<span style='font-size:12px;color:#666'>Intended for melody prompts. The left hand improvises accompanying melodies, while the right hand inserts improvised notes.</span><br><br>";
     if(aa0=="abc2") note="";
@@ -147,7 +156,7 @@ $vm.web_contents=function(vm_contents,param,topic){
 $vm.questions_list=function(vm_contents,param,topic){
     var p=JSON.parse(param);
     p[1].sort();
-    var questions="<div class=vm-questions>";
+    var questions="<div class=vm-questions><ul style=padding-left:16px;margin-top:0px>";
     var I=0;
     if(p[0]=="virtual zhiming") I=7;
     for(var i=I;i<p[1].length;i++){
@@ -156,7 +165,7 @@ $vm.questions_list=function(vm_contents,param,topic){
             questions+="<u class=vm-column-item topic='"+topic+"'><li>"+line+"</li></u><br>";
         }
     }
-    questions+="<div>"
+    questions+="</ul><div>"
     vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer topic='"+topic+"'>"+questions+"<div>");
     var us=vm_contents.lastElementChild.querySelectorAll('u');
     us.forEach(el => {
