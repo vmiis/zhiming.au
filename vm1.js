@@ -321,7 +321,12 @@ $vm.grid=function(vm_contents,A,topic){
 }
 //------------------------------------------------
 $vm.img=function(vm_contents,src,topic){
-    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div><img style='margin-top:-20px;width: 100%; height: auto;' src="+src+"></img></div><div>");
+    var srcs=src.split('|');
+    var txt="";
+    for(var i=0;i<srcs.length;i++){
+        txt+="<img rel='noopener noreferrer' style='margin-top:-20px;width: 100%; height: auto;' src="+srcs[i]+"></img>"
+    }
+    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div>"+txt+"</div><div>");
     document.getElementById('vm_ask').value='';
     scroll();
 }

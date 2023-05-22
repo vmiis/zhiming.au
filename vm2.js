@@ -46,7 +46,10 @@ var query=function(qq,tt){
     if(p=="" && t!="") p=t;
     while (vm_autolist_question.firstChild){ vm_autolist_question.removeChild(vm_autolist_question.firstChild); }
     while (vm_autolist_topic.firstChild) {  vm_autolist_topic.removeChild(vm_autolist_topic.firstChild); }
-    var req={cmd:'qna',q:q,p:p}
+    var i=-1;
+    var qs=$vm.ai_list[t];
+    if(qs!=undefined) i=qs.indexOf(q);
+    var req={cmd:'qna',q:q,p:p,i:i}
     $vm.request(req).then((res)=>{
         var qq=q;
         if(q=="") qq="What questions can you answer about the topic \""+res.topic+"\"";
@@ -136,17 +139,17 @@ var scroll=function(){
     if (window.innerWidth >900) vm_ask.focus();
 }
 //------------------------------------------------
-var set_autolist_topic=function(autolist){
+var set_autolist_topic=function(){
     vm_topic.addEventListener("input", function() {
         var currentValue = vm_topic.value.toLowerCase();
         var cvs=currentValue.split(' ');
         while (vm_autolist_topic.firstChild) {  vm_autolist_topic.removeChild(vm_autolist_topic.firstChild); }
         var list=[];
-        for(var i=0;i<autolist.length;i++){
+        for(var i=0;i<$vm.topic_list.length;i++){
             if(list.length>9) break;
             for(var j=0;j<cvs.length;j++){
-                if(cvs[j].length>0 && autolist[i].toLowerCase().includes(cvs[j].trim())){
-                    list.push(autolist[i]);
+                if(cvs[j].length>0 && $vm.topic_list[i].toLowerCase().includes(cvs[j].trim())){
+                    list.push($vm.topic_list[i]);
                     break;
                 }
             }
@@ -160,7 +163,7 @@ var set_autolist_topic=function(autolist){
 }
 //------------------------------------------------
 var vm_qq={};
-var set_autolist_question=function(autolist){
+var set_autolist_question=function(){
     vm_ask.addEventListener("input", function() {
         var currentValue = vm_ask.value.toLowerCase();
         var currentValue=currentValue.replace(/\"[^"]*\"/g, '');
@@ -168,20 +171,35 @@ var set_autolist_question=function(autolist){
         var currentTopic = vm_topic.value.toLowerCase();
         while (vm_autolist_question.firstChild){ vm_autolist_question.removeChild(vm_autolist_question.firstChild); }
         var list=[];
-        for(var i=0;i<autolist.length;i++){
-            if(list.length>9) break;
-            if(currentTopic=="" || autolist[i][0].toLowerCase()==currentTopic){
-                for(var j=0;j<autolist[i][1].length;j++){
-                    if(list.length>9) break;
+        if(currentTopic==""){
+            $vm.topic_list.forEach(a=>{
+                if(list.length>9) return;
+                $vm.ai_list[a].forEach(b=>{
+                    if(list.length>9) return;
                     var Ki=0;
                     for(var k=0;k<cvs.length;k++){
-                        if(autolist[i][1][j].toLowerCase().includes(cvs[k].trim())) Ki++;
+                        if(b.toLowerCase().includes(cvs[k].trim())) Ki++;
                     }
                     if(Ki==cvs.length){
-                        list.push(autolist[i][1][j]+"  |  "+autolist[i][0]);
+                        list.push(b+"  |  "+a);
+                    }
+                })
+            })
+        }
+        else if($vm.ai_list[currentTopic]!=undefined){
+            $vm.ai_list[currentTopic].forEach((b,ii)=>{
+                if(list.length>9) return;
+                var Ki=0;
+                for(var k=0;k<cvs.length;k++){
+                    if(currentTopic=="virtual zhiming" && ii<5){ } 
+                    else{
+                        if(b.toLowerCase().includes(cvs[k].trim())) Ki++;
                     }
                 }
-            }
+                if(Ki==cvs.length){
+                    list.push(b+"  |  "+currentTopic);
+                }
+            })
         }
         vm_qq={};
         list.forEach(function(item) {
@@ -195,18 +213,18 @@ var set_autolist_question=function(autolist){
     });
 }
 //------------------------------------------------
-$vm.number_of_topics=0;
-$vm.number_of_questions=0;
-var init2=function(list1,list2){
-    var topic_list=list1.split(',').sort();
-    $vm.number_of_topics=topic_list.length;
-    var ss=list2.split('||');
-    var question_list=[];
-    for(var i=0;i<ss.length;i++){
-        var tt=ss[i].split('~~');
-        question_list.push([tt[0],tt[1].split('^^')]);
+var init2=function(){
+    $vm.topic_list=[];
+    var n1=0,n2=0;
+    for (var key in $vm.ai_list) {
+        if ($vm.ai_list.hasOwnProperty(key)) {
+            n1++;
+            n2+=$vm.ai_list[key].length;
+            $vm.topic_list.push(key);
+        }
     }
-    $vm.number_of_questions=question_list.length;
+    vm_num_topic.innerText=n1;
+    vm_num_ques.innerText=n2;
     vm_sign_in.addEventListener("click", function(e){ 
         document.getElementById('vm_ask').value="How to login?";
         vm_qq={};
@@ -216,34 +234,24 @@ var init2=function(list1,list2){
     vm_sign_out.addEventListener("click", function(e){
         $vm.auth_signout();
     })
-    vm_ask.addEventListener("change", function(e){ 
-        var options = document.querySelector('#vm_autolist_question').options;
-        if(options.length==1 && options[0].value==document.getElementById('vm_ask').value) query();  
-    })
-    vm_ask.addEventListener("keyup", function(e){ if (e.keyCode === 13) {  query();  }  })
+    //---------------------------------------------
     vm_ask.focus();
     vm_submit.addEventListener('click',function(e){ query(); })
     vm_topic_submit.addEventListener('click',function(e){ 
         document.getElementById('vm_ask').value='';
         query(); 
     })
+    //---------------------------------------------
+    vm_ask.addEventListener("keyup", function(e){ if (e.keyCode === 13) {  query();  }  })
+    //---------------------------------------------
     vm_topic.addEventListener("keyup", function(e){ if (e.keyCode === 13) {  
         document.getElementById('vm_ask').value='';
         query();  
     }})
-    set_autolist_topic(topic_list);
-    set_autolist_question(question_list);
+    //---------------------------------------------
     vm_topics.addEventListener('click',function(e){ show_all_topics(topic_list); })
     vm_train_me.addEventListener('click',function(e){  train(); })
     $vm.show_user();
-    
-    vm_num_topic.innerText=topic_list.length;
-    var I=0;
-    for(var i=0;i<question_list.length;i++){
-        I+=question_list[i][1].length;
-    }
-    vm_num_ques.innerText=I;
-
     var a=window.location.href.split('?'); 
     if(a.length==2){
         var qt=a[1].split('@')
@@ -259,33 +267,28 @@ var init2=function(list1,list2){
     }
 }
 //------------------------------------------------
+$vm.ai_list={};
 var init=function(){
-    var list_mtime=localStorage.getItem("zhiming.au.list_mtime");
-    var topic_list=localStorage.getItem("zhiming.au.topic_list");
-    var question_list=localStorage.getItem("zhiming.au.question_list");
-    var req={cmd:'ai-list',datetime:1}
-    var q=0;
+    set_autolist_topic();
+    set_autolist_question();
+    var list_mtime=localStorage.getItem("zhiming.au.topic-question-list-mtime"); if(list_mtime==null) list_mtime=0;
+    var list=localStorage.getItem("zhiming.au.topic-question-list");
+    var old_list={}; if(list!=null) old_list=JSON.parse(list); $vm.ai_list=old_list;
+    console.log($vm.ai_list)
+    var req={cmd:'ai-list',datetime:list_mtime}
     $vm.request(req).then((res)=>{
-        mtime=res.mtime;
-        var dt1=new Date(mtime);
-        if(list_mtime==null){ localStorage.setItem("zhiming.au.list_mtime",mtime); q=1;}
-        else{
-            var dt2=new Date(list_mtime);
-            if(dt1>dt2 ){ localStorage.setItem("zhiming.au.list_mtime",mtime); q=1;}
+        var newL=0;
+        $vm.ai_list={};
+        res.list.forEach(a=>{
+            if(a.contents!=""){ $vm.ai_list[a.name]=a.contents; newL=1; }
+            else $vm.ai_list[a.name]=old_list[a.name];
+        })
+        if(newL==1){
+            localStorage.setItem("zhiming.au.topic-question-list",JSON.stringify($vm.ai_list));
+            localStorage.setItem("zhiming.au.topic-question-list-mtime",new Date().toISOString());
+            console.log($vm.ai_list)
         }
-        if(q==1){
-            var req={cmd:'ai-list'}
-            $vm.request(req).then((res)=>{
-                localStorage.setItem("zhiming.au.topic_list",res.topic_list);
-                var list1=res.topic_list;
-                localStorage.setItem("zhiming.au.question_list",res.question_list);
-                var list2=res.question_list;
-                init2(list1,list2);
-            })
-        }
-        else{
-            init2(topic_list,question_list);
-        }
+        init2();
     })
 }
 //------------------------------------------------
