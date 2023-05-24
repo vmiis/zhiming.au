@@ -52,17 +52,17 @@ var query=function(qq,tt){
     var req={cmd:'qna',q:q,p:p,i:i}
     $vm.request(req).then((res)=>{
         var qq=q;
-        if(q=="") qq="What questions can you answer about the topic \""+res.topic+"\"";
+        //if(q=="") qq="What questions can you answer about the topic \""+p+"\"";
         vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-question >"+qq+"<div>");
         var answer=res.answer;
-        var topic=res.topic;
-        if(res.score!=0){
-            show_answer(topic,answer);
+        //var topic=res.topic;
+        if(res.score>0.8){
+            show_answer(p,answer);
         }
         else{
             $vm.wiki_query(q).then( (data)=>{
                 if(data!=""){
-                    var p=document.getElementById("vm_topic").value;
+                    //var p=document.getElementById("vm_topic").value;
                     var T="";if(p!="") T="<i style='color:#aaa;font-size:80%'>( I do not have an answer regarding the topic '"+p+"'. However, I will try to find an answer on a generic topic. )</i><br>";
                     show_answer("Generic",T+data);
                 }
@@ -223,12 +223,12 @@ var init2=function(){
             $vm.topic_list.push(key);
         }
     }
-    vm_num_topic.innerText=n1;
+    //vm_num_topic.innerText=n1;
     vm_num_ques.innerText=n2;
     vm_sign_in.addEventListener("click", function(e){ 
         document.getElementById('vm_ask').value="How to login?";
         vm_qq={};
-        vm_qq["How to login?"]="login";
+        vm_qq["How to login?"]="Login";
         query();
     })
     vm_sign_out.addEventListener("click", function(e){
@@ -274,7 +274,7 @@ var init=function(){
     var list_mtime=localStorage.getItem("zhiming.au.topic-question-list-mtime"); if(list_mtime==null) list_mtime=0;
     var list=localStorage.getItem("zhiming.au.topic-question-list");
     var old_list={}; if(list!=null) old_list=JSON.parse(list); $vm.ai_list=old_list;
-    console.log($vm.ai_list)
+    //console.log($vm.ai_list)
     var req={cmd:'ai-list',datetime:list_mtime}
     $vm.request(req).then((res)=>{
         var newL=0;
@@ -286,7 +286,7 @@ var init=function(){
         if(newL==1){
             localStorage.setItem("zhiming.au.topic-question-list",JSON.stringify($vm.ai_list));
             localStorage.setItem("zhiming.au.topic-question-list-mtime",new Date().toISOString());
-            console.log($vm.ai_list)
+            //console.log($vm.ai_list)
         }
         init2();
     })

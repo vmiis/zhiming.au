@@ -7,15 +7,15 @@ $vm.today_weather_req=function(vm_contents,topic){
     var div=vm_contents.lastElementChild;
     var input=div.querySelectorAll('input')[0];
     var submit=div.querySelectorAll('button')[0];
-    var qq=function(){
-        var q="What is today's weather?"+" "+input.value;
-        var topic=vm_topic.value;
-        var req={cmd:'qna',q:q,p:topic}
-        $vm.request(req).then((res)=>{ show_answer(topic,res.answer); })
+    var qq=function(tp){
+        var q="What is today's weather?"+"|"+input.value;
+        //var topic=vm_topic.value;
+        var req={cmd:'qna',q:q,p:tp}
+        $vm.request(req).then((res)=>{ show_answer(tp,res.answer); })
         .catch(error => { console.log(error);});
     }
-    submit.addEventListener('click',function(e){ qq(); })
-    input.addEventListener("keyup", function(e){ if (e.keyCode === 13) {  qq();  }  })
+    submit.addEventListener('click',function(e){ qq(topic); })
+    input.addEventListener("keyup", function(e){ if (e.keyCode === 13) {  qq(topic);  }  })
     input.focus();
     vm_ask.value="";
 }
@@ -46,8 +46,7 @@ $vm.woolcock_profile_req=function(vm_contents,topic){
     var input=div.querySelectorAll('input')[0];
     var submit=div.querySelectorAll('button')[0];
     var qq=function(){
-        var q="Woolcock staff profile"+" "+input.value;
-        var topic=vm_topic.value;
+        var q="Woolcock staff profile"+"|"+input.value;
         var req={cmd:'qna',q:q,p:topic}
         $vm.request(req).then((res)=>{
             show_answer(topic,res.answer);
@@ -71,7 +70,7 @@ $vm.woolcock_profile_res=function(vm_contents,answer,topic){
         text+="Office Location: "+data[i].officeLocation+"<br>";
         text+="<br>"
     }
-    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer>"+text+"<div>");
+    if(data.length!=0) vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer>"+text+"<div>");
     const vmDivs = document.querySelectorAll('div.vm-wps');
     vmDivs.forEach(vmDiv => vmDiv.remove());    
     $vm.woolcock_profile_req(vm_contents,topic);
@@ -156,21 +155,20 @@ $vm.web_contents=function(vm_contents,param,topic){
 $vm.questions_list=function(vm_contents,param,topic){
     var p=JSON.parse(param);
     p[1].sort();
-    var questions="<div class=vm-questions><ul style=padding-left:16px;margin-top:0px>";
+    var questions="";
     var I=0;
     if(p[0]=="virtual zhiming") I=7;
     for(var i=I;i<p[1].length;i++){
         var line=p[1][i];
         if(line.length>1){
-            questions+="<u class=vm-column-item topic='"+topic+"'><li>"+line+"</li></u><br>";
+            questions+="<li><u>"+line+"</u></li>";
         }
     }
-    questions+="</ul><div>"
-    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer topic='"+topic+"'>"+questions+"<div>");
-    var us=vm_contents.lastElementChild.querySelectorAll('u');
+    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div class=vm-questions><ul style='padding-left:16px;margin-top:0px' topic='"+topic+"'>"+questions+"</ul></div></div>");
+    var us=vm_contents.lastElementChild.querySelectorAll('li');
     us.forEach(el => {
         el.addEventListener('click', (e) => {
-            var topic=el.parentNode.parentNode.getAttribute('topic');
+            var topic=el.parentNode.getAttribute('topic');
             e.preventDefault();
             e.stopPropagation();
             document.getElementById('vm_ask').value=el.textContent;
