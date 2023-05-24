@@ -329,3 +329,37 @@ $vm.img=function(vm_contents,src,topic){
     scroll();
 }
 //------------------------------------------------
+$vm.audio=function(vm_contents,src,topic){
+    var txt=`
+    <audio controls style='width:100%;height:30px;margin-top:-30px'>
+        <source src="`+src+`" type="audio/mpeg">
+    </audio>
+    `;
+    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer>"+txt+"<div>");
+    document.getElementById('vm_ask').value='';
+    scroll();
+}
+//------------------------------------------------
+$vm.multi=function(vm_contents,ans,topic){
+    var aa=JSON.parse(ans);
+    var txt="";
+    txt+=aa[0][0].toFixed(5)+" <u>"+aa[1][0]+"</u><br>";
+    txt+=aa[0][1].toFixed(5)+" <u>"+aa[1][1]+"</u><br>";
+    txt+=aa[0][2].toFixed(5)+" <u>"+aa[1][2]+"</u><br>";
+    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer>"+txt+"<div>");
+    var us=vm_contents.lastElementChild.querySelectorAll('u');
+    us.forEach(el => {
+        el.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('vm_ask').value=el.textContent;
+            vm_qq={};
+            //vm_qq[el.textContent]=topic;
+            query();
+        });
+    });
+    
+    document.getElementById('vm_ask').value='';
+    scroll();
+}
+//------------------------------------------------

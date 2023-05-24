@@ -56,7 +56,7 @@ var query=function(qq,tt){
         vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-question >"+qq+"<div>");
         var answer=res.answer;
         //var topic=res.topic;
-        if(res.score>0.8){
+        if(res.score>0.8 || res.score==-1){
             show_answer(p,answer);
         }
         else{
@@ -78,6 +78,8 @@ var query=function(qq,tt){
 var show_answer=function(topic, answer){
     var aa=["",""]; if(answer.toString().includes("@CODE@")) aa=answer.split("@CODE@");
     switch(aa[0]){
+        case "multi":                   $vm.multi(vm_contents,aa[1],topic);                 break;
+        case "audio":                   $vm.audio(vm_contents,aa[1],topic);                 break;
         case "img":                     $vm.img(vm_contents,aa[1],topic);                   break;
         case "grid":                    $vm.grid(vm_contents,aa[1],topic);                  break;
         case "chart":                   $vm.chart(vm_contents,aa[1],topic);                 break;
@@ -224,7 +226,7 @@ var init2=function(){
         }
     }
     //vm_num_topic.innerText=n1;
-    vm_num_ques.innerText=n2;
+    //vm_num_ques.innerText=n2;
     vm_sign_in.addEventListener("click", function(e){ 
         document.getElementById('vm_ask').value="How to login?";
         vm_qq={};
