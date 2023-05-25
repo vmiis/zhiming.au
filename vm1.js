@@ -314,6 +314,20 @@ $vm.img=function(vm_contents,src,topic){
     scroll();
 }
 //------------------------------------------------
+$vm.imgdata=function(vm_contents,src,topic){
+    /*
+    var srcs=src.split('|');
+    var txt="";
+    for(var i=0;i<srcs.length;i++){
+        txt+="<img rel='noopener noreferrer' style='margin-top:-20px;width: 100%; height: auto;' src="+srcs[i]+"></img>"
+    }
+    */
+   var txt="<img rel='noopener noreferrer' style='margin-top:-20px;width: 100%; height: auto;' src="+src+"></img>"
+    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div>"+txt+"</div><div>");
+    document.getElementById('vm_ask').value='';
+    scroll();
+}
+//------------------------------------------------
 $vm.audio=function(vm_contents,src,topic){
     var txt=`
     <audio controls style='width:100%;height:30px;margin-top:-30px'>

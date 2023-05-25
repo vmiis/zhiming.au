@@ -139,6 +139,7 @@ var show_answer=function(topic, answer){
         case "multi":                   $vm.multi(vm_contents,aa[1],topic);                 break;
         case "audio":                   $vm.audio(vm_contents,aa[1],topic);                 break;
         case "img":                     $vm.img(vm_contents,aa[1],topic);                   break;
+        case "imgdata":                 $vm.imgdata(vm_contents,aa[1],topic);               break;
         case "grid":                    $vm.grid(vm_contents,aa[1],topic);                  break;
         case "chart":                   $vm.chart(vm_contents,aa[1],topic);                 break;
         case "table":                   $vm.table(vm_contents,aa[1],topic);                 break;
@@ -162,6 +163,33 @@ var show_answer=function(topic, answer){
             document.getElementById('vm_ask').value='';
             scroll();
     }
+    var div=vm_contents.lastElementChild;
+    div.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        if (event.ctrlKey) {
+            if(vm_contents.style.margin=="auto"){
+                console.log(111)
+                div.style.position="absolute";
+                div.style.top=0;
+                div.style.top=0;
+                div.style.width="100%";
+                div.style.height="100%";
+                div.style.background="#242528";
+                vm_contents.style.margin="0px";
+            }
+            else{
+                console.log(222)
+                div.style.position='';
+                div.style.top=0;
+                div.style.top=0;
+                div.style.width="100%";
+                div.style.height="100%";
+                div.style.background='';
+                vm_contents.style.margin="auto";
+            }
+        }
+    })
 }
 //------------------------------------------------
 var show_sorry=function(q){
@@ -275,16 +303,11 @@ var set_autolist_question=function(){
 //------------------------------------------------
 var init2=function(){
     $vm.topic_list=[];
-    var n1=0,n2=0;
     for (var key in $vm.ai_list) {
         if ($vm.ai_list.hasOwnProperty(key)) {
-            n1++;
-            n2+=$vm.ai_list[key].length;
             $vm.topic_list.push(key);
         }
     }
-    //vm_num_topic.innerText=n1;
-    //vm_num_ques.innerText=n2;
     vm_sign_in.addEventListener("click", function(e){ 
         document.getElementById('vm_ask').value="How to login?";
         vm_qq={};
@@ -310,7 +333,6 @@ var init2=function(){
     }})
     //---------------------------------------------
     vm_topics.addEventListener('click',function(e){ show_all_topics(topic_list); })
-    //vm_train_me.addEventListener('click',function(e){  train(); })
     $vm.show_user();
     var a=window.location.href.split('?'); 
     if(a.length==2){
@@ -334,7 +356,6 @@ var init=function(){
     var list_mtime=localStorage.getItem("zhiming.au.topic-question-list-mtime"); if(list_mtime==null) list_mtime=0;
     var list=localStorage.getItem("zhiming.au.topic-question-list");
     var old_list={}; if(list!=null) old_list=JSON.parse(list); $vm.ai_list=old_list;
-    //console.log($vm.ai_list)
     var req={cmd:'ai-list',datetime:list_mtime}
     $vm.request(req).then((res)=>{
         var newL=0;
@@ -442,4 +463,12 @@ $vm.abc_load=function(paper,midi,abc){
 $vm.open_popup=function(){    document.getElementById('vm_popup_p').style.top="50%";}
 $vm.close_popup=function(){    document.getElementById('vm_popup_p').style.top="100000px";}
 document.getElementById('vm_close_popup').addEventListener('click',function(){    $vm.close_popup(); })
+//------------------------------------------------
+$vm.youtub=function(vm_contents,id,topic){
+    var src="https://www.youtube.com/embed/"+id+"6jSLH9CDPPQ/?autoplay=1&rel=0&enablejsapi=1";
+    var txt="<iframe src="+src+" width='100%' height=393px frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>"
+    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div>"+txt+"</div><div>");
+    document.getElementById('vm_ask').value='';
+    scroll();
+}
 //------------------------------------------------
