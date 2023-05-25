@@ -1,5 +1,5 @@
 //--------------------------------------------------------------
-var train=function(){
+$vm.train=function(){
     var html="<div class=vm-train>";
     html+="";
     html+="<input placeholder='Question'>";
@@ -32,6 +32,26 @@ var train=function(){
         l.style.display='none';
         s2.style.display='none';
     })
+}
+//------------------------------------------------
+$vm.recent=function(vm_contents,text,topic){
+//console.log(text);    
+    var lines=text.split("\r\n")
+    var txt="";
+    for(var i=0;i<lines.length;i++){
+        txt+="<u>"+lines[i]+"</u><br>"    
+    }
+    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer>"+txt+"<div>");
+    var us=vm_contents.lastElementChild.querySelectorAll('u');
+    us.forEach(el => {
+        el.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            query(el.textContent,"_recent");
+        });
+    });
+    document.getElementById('vm_ask').value='';
+    scroll();
 }
 //------------------------------------------------
 var query=function(qq,tt){
@@ -75,9 +95,47 @@ var query=function(qq,tt){
     .catch(error => { console.log(error);});
 }
 //------------------------------------------------
+$vm.multi=function(vm_contents,ans,topic){
+    var q0=document.getElementById('vm_ask').value;
+    var aa=JSON.parse(ans);
+    var txt="";
+    txt+=aa[0][0].toFixed(5)+"&nbsp &nbsp <u>"+aa[1][0]+"</u><br>";
+    txt+=aa[0][1].toFixed(5)+"&nbsp &nbsp <u>"+aa[1][1]+"</u><br>";
+    txt+=aa[0][2].toFixed(5)+"&nbsp &nbsp <u>"+aa[1][2]+"</u><br>";
+    txt+="<br>";
+    txt+="<u>Ask Wikipedia</u>"
+    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer>"+txt+"<div>");
+    var us=vm_contents.lastElementChild.querySelectorAll('u');
+    us.forEach((el,i) => {
+        el.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if(i<3){
+                document.getElementById('vm_ask').value=el.textContent;
+                vm_qq={};
+                query();
+            }
+            else{
+                $vm.wiki_query(q0).then( (data)=>{
+                    if(data!=""){
+                        show_answer("Generic",data);
+                    }
+                    else{ 
+                        show_sorry(q0);
+                    }
+                }).catch(error => { console.log(error)});
+            }
+        });
+    });
+    
+    document.getElementById('vm_ask').value='';
+    scroll();
+}
+//------------------------------------------------
 var show_answer=function(topic, answer){
     var aa=["",""]; if(answer.toString().includes("@CODE@")) aa=answer.split("@CODE@");
     switch(aa[0]){
+        case "recent":                  $vm.recent(vm_contents,aa[1],topic);                break;
         case "multi":                   $vm.multi(vm_contents,aa[1],topic);                 break;
         case "audio":                   $vm.audio(vm_contents,aa[1],topic);                 break;
         case "img":                     $vm.img(vm_contents,aa[1],topic);                   break;
@@ -252,7 +310,7 @@ var init2=function(){
     }})
     //---------------------------------------------
     vm_topics.addEventListener('click',function(e){ show_all_topics(topic_list); })
-    vm_train_me.addEventListener('click',function(e){  train(); })
+    //vm_train_me.addEventListener('click',function(e){  train(); })
     $vm.show_user();
     var a=window.location.href.split('?'); 
     if(a.length==2){
