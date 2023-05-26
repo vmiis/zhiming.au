@@ -341,6 +341,7 @@ var init2=function(){
         if(qt.length==2){
             var q=decodeURIComponent(qt[0]);
             var t=decodeURIComponent(qt[1]);
+            if(q=="") q=t;
             query(q,t);
         }
         else if(qt.length==1){
