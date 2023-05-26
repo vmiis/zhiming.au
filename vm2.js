@@ -353,22 +353,25 @@ $vm.ai_list={};
 var init=function(){
     set_autolist_topic();
     set_autolist_question();
-    var list_mtime=localStorage.getItem("zhiming.au.topic-question-list-mtime"); if(list_mtime==null) list_mtime=0;
     var list=localStorage.getItem("zhiming.au.topic-question-list");
     var old_list={}; if(list!=null) old_list=JSON.parse(list); $vm.ai_list=old_list;
-    var req={cmd:'ai-list',datetime:list_mtime}
+    var mtime={}
+    for(key in old_list){
+        var mt=localStorage.getItem("zhiming.au.mtime"+key);
+        if(mt!=null) mtime[key]=mt;
+    }
+    var req={cmd:'ai-list',datetime:mtime}
     $vm.request(req).then((res)=>{
-        var newL=0;
+        //console.log(res);
         $vm.ai_list={};
         res.list.forEach(a=>{
-            if(a.contents!=""){ $vm.ai_list[a.name]=a.contents; newL=1; }
+            if(a.contents!=""){ 
+                $vm.ai_list[a.name]=a.contents; 
+                localStorage.setItem("zhiming.au.mtime"+a.name, new Date().toISOString());
+            }
             else $vm.ai_list[a.name]=old_list[a.name];
         })
-        if(newL==1){
-            localStorage.setItem("zhiming.au.topic-question-list",JSON.stringify($vm.ai_list));
-            localStorage.setItem("zhiming.au.topic-question-list-mtime",new Date().toISOString());
-            //console.log($vm.ai_list)
-        }
+        localStorage.setItem("zhiming.au.topic-question-list",JSON.stringify($vm.ai_list));
         init2();
     })
 }
