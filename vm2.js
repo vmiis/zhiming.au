@@ -135,6 +135,7 @@ $vm.multi=function(vm_contents,ans,topic){
 var show_answer=function(topic, answer){
     var aa=["",""]; if(answer.toString().includes("@CODE@")) aa=answer.split("@CODE@");
     switch(aa[0]){
+        case "youtube":                 $vm.youtube(vm_contents,aa[1],topic);               break;
         case "recent":                  $vm.recent(vm_contents,aa[1],topic);                break;
         case "multi":                   $vm.multi(vm_contents,aa[1],topic);                 break;
         case "audio":                   $vm.audio(vm_contents,aa[1],topic);                 break;
@@ -467,8 +468,8 @@ $vm.open_popup=function(){    document.getElementById('vm_popup_p').style.top="5
 $vm.close_popup=function(){    document.getElementById('vm_popup_p').style.top="100000px";}
 document.getElementById('vm_close_popup').addEventListener('click',function(){    $vm.close_popup(); })
 //------------------------------------------------
-$vm.youtub=function(vm_contents,id,topic){
-    var src="https://www.youtube.com/embed/"+id+"6jSLH9CDPPQ/?autoplay=1&rel=0&enablejsapi=1";
+$vm.youtube=function(vm_contents,id,topic){
+    var src="https://www.youtube.com/embed/"+id+"/?autoplay=1&rel=0&enablejsapi=1";
     var txt="<iframe src="+src+" width='100%' height=393px frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>"
     vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div>"+txt+"</div><div>");
     document.getElementById('vm_ask').value='';
