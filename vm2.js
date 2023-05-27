@@ -139,6 +139,7 @@ var show_answer=function(topic, answer){
         case "recent":                  $vm.recent(vm_contents,aa[1],topic);                break;
         case "multi":                   $vm.multi(vm_contents,aa[1],topic);                 break;
         case "audio":                   $vm.audio(vm_contents,aa[1],topic);                 break;
+        case "audio163":                $vm.audio163(vm_contents,aa[1],topic);                 break;
         case "img":                     $vm.img(vm_contents,aa[1],topic);                   break;
         case "imgdata":                 $vm.imgdata(vm_contents,aa[1],topic);               break;
         case "grid":                    $vm.grid(vm_contents,aa[1],topic);                  break;
@@ -477,3 +478,12 @@ $vm.youtube=function(vm_contents,id,topic){
     scroll();
 }
 //------------------------------------------------
+$vm.audio163=function(vm_contents,id,topic){
+    var src="//music.163.com/outchain/player?type=2&amp;id="+id+"&amp;auto=1&amp;height=32"
+    var txt="<iframe sandbox='allow-same-origin allow-scripts' loading='lazy' src="+src+" width='100%' height=52 frameborder='no' broder='0' marginwidth='0' marginheight='0'></iframe>"
+    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div style='margin: -30px -12px 0 -16px;' >"+txt+"</div><div>");
+    document.getElementById('vm_ask').value='';
+    scroll();
+}
+//------------------------------------------------
+
