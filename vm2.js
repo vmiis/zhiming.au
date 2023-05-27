@@ -479,8 +479,8 @@ $vm.youtube=function(vm_contents,id,topic){
 }
 //------------------------------------------------
 $vm.audio163=function(vm_contents,id,topic){
-    var src="//music.163.com/outchain/player?type=2&amp;id="+id+"&amp;auto=1&amp;height=32"
-    var txt="<iframe sandbox='allow-same-origin allow-scripts' loading='lazy' src="+src+" width='100%' height=52 frameborder='no' broder='0' marginwidth='0' marginheight='0'></iframe>"
+    var src="//music.163.com/outchain/player?type=2&amp;id="+id+"&amp;height=32"
+    var txt="<iframe _sandbox='allow-same-origin allow-scripts' loading='lazy' src="+src+" width='100%' height=52 frameborder='no' broder='0' marginwidth='0' marginheight='0'></iframe>"
     vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div style='margin: -30px -12px 0 -16px;' >"+txt+"</div><div>");
     document.getElementById('vm_ask').value='';
     scroll();
