@@ -73,8 +73,8 @@ var query=function(qq,tt){
     $vm.request(req).then((res)=>{
         var qq=q;
         //if(q=="") qq="What questions can you answer about the topic \""+p+"\"";
-        vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-question >"+qq+"<div>");
         var answer=res.answer;
+        if(answer.startsWith("questions@CODE@")!=true) vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-question >"+qq+"<div>");
         //var topic=res.topic;
         if(res.score>0.8 || res.score==-1){
             show_answer(p,answer);
@@ -261,7 +261,7 @@ var set_autolist_question=function(){
         var currentTopic = vm_topic.value.toLowerCase();
         while (vm_autolist_question.firstChild){ vm_autolist_question.removeChild(vm_autolist_question.firstChild); }
         var list=[];
-        if(currentTopic==""){
+        //if(currentTopic==""){
             $vm.topic_list.forEach(a=>{
                 if(list.length>9) return;
                 $vm.ai_list[a].forEach(b=>{
@@ -275,7 +275,8 @@ var set_autolist_question=function(){
                     }
                 })
             })
-        }
+        //}
+        /*
         else if($vm.ai_list[currentTopic]!=undefined){
             $vm.ai_list[currentTopic].forEach((b,ii)=>{
                 if(list.length>9) return;
@@ -291,6 +292,7 @@ var set_autolist_question=function(){
                 }
             })
         }
+        */
         vm_qq={};
         list.forEach(function(item) {
             var option = document.createElement("option");
@@ -321,21 +323,25 @@ var init2=function(){
     })
     //---------------------------------------------
     vm_ask.focus();
-    vm_submit.addEventListener('click',function(e){ query(); })
-    vm_topic_submit.addEventListener('click',function(e){ 
-        document.getElementById('vm_ask').value='';
-        query(); 
-    })
-    //---------------------------------------------
     vm_ask.addEventListener("keyup", function(e){ if (e.keyCode === 13) {  query();  }  })
+    vm_submit.addEventListener('click',function(e){ query(); })
     //---------------------------------------------
     vm_topic.addEventListener("keyup", function(e){ if (e.keyCode === 13) {  
         document.getElementById('vm_ask').value='';
-        query();  
+        var t=document.getElementById('vm_topic').value;
+        document.getElementById('vm_topic').value="";
+        query(t,t);  
     }})
+    vm_topic_submit.addEventListener('click',function(e){ 
+        document.getElementById('vm_ask').value='';
+        var t=document.getElementById('vm_topic').value;
+        document.getElementById('vm_topic').value="";
+        query(t,t); 
+    })
     //---------------------------------------------
     vm_topics.addEventListener('click',function(e){ show_all_topics(topic_list); })
     $vm.show_user();
+    //---------------------------------------------
     var a=window.location.href.split('?'); 
     if(a.length==2){
         var qt=a[1].split('@')
@@ -352,8 +358,23 @@ var init2=function(){
     }
 }
 //------------------------------------------------
+var re_caculate_height=function(){
+    console.log(window.height);
+    var e1=document.getElementById("vm_scroll");
+    var e2=document.getElementById("vm_hr");
+    console.log(e1.offsetTop);
+    console.log(e2.offsetTop);
+    vm_scroll.style.height=(e2.offsetTop-e1.offsetTop)+"px";
+    vm_nav.style.height=(e2.offsetTop-e1.offsetTop)+"px";
+}
+//------------------------------------------------
+window.addEventListener("resize", function() {
+    re_caculate_height();
+});
+//------------------------------------------------
 $vm.ai_list={};
-var init=function(){
+var init=function(){  
+    re_caculate_height();
     set_autolist_topic();
     set_autolist_question();
     var list=localStorage.getItem("zhiming.au.topic-question-list");
@@ -468,7 +489,7 @@ $vm.abc_load=function(paper,midi,abc){
 //------------------------------------------------
 $vm.open_popup=function(){    document.getElementById('vm_popup_p').style.top="50%";}
 $vm.close_popup=function(){    document.getElementById('vm_popup_p').style.top="100000px";}
-document.getElementById('vm_close_popup').addEventListener('click',function(){    $vm.close_popup(); })
+//document.getElementById('vm_close_popup').addEventListener('click',function(){    $vm.close_popup(); })
 //------------------------------------------------
 $vm.youtube=function(vm_contents,id,topic){
     var src="https://www.youtube.com/embed/"+id+"/?autoplay=1&rel=0&enablejsapi=1";

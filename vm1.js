@@ -157,15 +157,17 @@ $vm.questions_list=function(vm_contents,param,topic){
     p[1].sort();
     var questions="";
     var I=0;
-    if(p[0]=="virtual zhiming") I=7;
+    if(p[0]=="Virtual Zhiming") I=7;
     for(var i=I;i<p[1].length;i++){
         var line=p[1][i];
         if(line.length>1){
             questions+="<li><u>"+line+"</u></li>";
         }
     }
-    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div class=vm-questions><ul style='padding-left:16px;margin-top:0px' topic='"+topic+"'>"+questions+"</ul></div></div>");
-    var us=vm_contents.lastElementChild.querySelectorAll('li');
+    var ccc=vm_nav;
+    if (window.innerWidth <900) ccc=vm_contents;
+    ccc.insertAdjacentHTML('beforeend',"<div class=vm-answer><div class=vm-questions><ul style='padding-left:16px;margin-top:0px' topic='"+topic+"'>"+questions+"</ul></div></div>");
+    var us=ccc.lastElementChild.querySelectorAll('li');
     us.forEach(el => {
         el.addEventListener('click', (e) => {
             var topic=el.parentNode.getAttribute('topic');
@@ -178,6 +180,7 @@ $vm.questions_list=function(vm_contents,param,topic){
         });
     });
     document.getElementById('vm_ask').value='';
+    vm_nav.scrollTop = vm_nav.scrollHeight;
     scroll();
 }
 //------------------------------------------------

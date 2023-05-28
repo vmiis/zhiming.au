@@ -6,43 +6,50 @@
         <meta charset="UTF-8">
         <link rel="icon" href="data:,">
         <script>$vm={}</script>
-        <link rel="stylesheet" href="vm.css?v=20230526" />
+        <link rel="stylesheet" href="vm.css?v=20230528" />
     </head>
     <body>
-        <div class="vm-wrapper">
-            <div class="vm-top-bar"><u style='display:none' id=vm_topics>Show all topics</u> <u style='display:none' id="vm_train_me">Training me</u> <u style="display:none" id="btn_test">Test</u><u id="vm_sign_in">Sign In</u><label id="vm_sign_name">Name</label><u id="vm_sign_out">Sign Out</u></div>
-            <div id="vm_scroll">
-                <div id=vm_contents style="margin:auto">
-                    <div id=vm_vz style="padding-top:20px">
-                        <div style="text-align: center;"><h2>Virtual Zhiming</h2></div>
-                        <div style="padding:6px" >
-                            I am Virtual Zhiming, a frontend AI, serving as the assistant to backend Zhiming. My intelligence is highly dependent on the CPU/GPU, RAM, and training. Currently, my knowledge is quite limited when it comes to understanding natural language. This is because the backend Zhiming has a restricted budget for my development, which means that I may not always comprehend things correctly. However, I am continuously learning and improving, and I hope to grow rapidly.
-                            <br><br>
+        <div id=vm_main class="vm-wrapper">
+            <div class="vm-left">
+                <div id=vm_nav></div>
+            </div>
+            <div class="vm-right">
+                <div class="vm-top-bar"><u style='display:none' id=vm_topics>Show all topics</u> <u style='display:none' id="vm_train_me">Training me</u> <u style="display:none" id="btn_test">Test</u><u id="vm_sign_in">Sign In</u><label id="vm_sign_name">Name</label><u id="vm_sign_out">Sign Out</u></div>
+                <div id="vm_scroll">
+                    <div id=vm_contents style="_margin:auto">
+                        <div id=vm_vz style="padding-top:20px">
+                            <div style="text-align: center;"><h2>Virtual Zhiming</h2></div>
+                            <div style="padding:6px" >
+                                I am Virtual Zhiming, a frontend AI, serving as the assistant to backend Zhiming. My intelligence is highly dependent on the CPU/GPU, RAM, and training. Currently, my knowledge is quite limited when it comes to understanding natural language. This is because the backend Zhiming has a restricted budget for my development, which means that I may not always comprehend things correctly. However, I am continuously learning and improving, and I hope to grow rapidly.
+                                <br><br>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div style="border-bottom: 1px solid #8ca19f;margin-bottom:5px"></div>
-            <div style="padding-right: 10px;">
-                <div class=vm-wrap-quest >
-                    <input id=vm_ask list=vm_autolist_question placeholder="Ask me a question.  (e.g. Who are you?)" autocomplete="off"></input>
-                    <datalist id="vm_autolist_question"></datalist>
-                    <svg style='margin-right:10px' id=vm_submit stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-1" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-                </div>
-                <div class="vm-wrap-topic" style="display:none">
-                    <input id=vm_topic list=vm_autolist_topic placeholder="Type in topic-related keywords. (e.g. Vitural Zhiming)" autocomplete="off"></input>
-                    <datalist id="vm_autolist_topic"></datalist>
-                    <svg style='margin-right:10px' id=vm_topic_submit stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-1" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                <div id=vm_hr style="max-width:700px;border-bottom: 1px solid #8ca19f;margin-bottom:5px"></div>
+                <div style="padding-right: 10px;">
+                    <div class=vm-wrap-quest >
+                        <input id=vm_ask list=vm_autolist_question placeholder="Ask me a question.  (e.g. Who are you?)" autocomplete="off"></input>
+                        <datalist id="vm_autolist_question"></datalist>
+                        <svg style='margin-right:10px' id=vm_submit stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-1" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                    </div>
+                    <div class="vm-wrap-topic">
+                        <input id=vm_topic list=vm_autolist_topic placeholder="Type in topic-related keywords. (e.g. Vitural Zhiming)" autocomplete="off"></input>
+                        <datalist id="vm_autolist_topic"></datalist>
+                        <svg style='margin-right:10px' id=vm_topic_submit stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-1" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                    </div>
                 </div>
             </div>
         </div>
+        <!--
         <div id=vm_popup_p class=vm_popup>
             <div id="vm_popup"></div>
             <div id="vm_popup_bar"><button id="vm_close_popup">Close</button></div>
         </div>
+        -->
         <script src="vm.js?v=20230526"></script>
-        <script src="vm1.js?v=20230526"></script>
-        <script src="vm2.js?v=20230528_1"></script>
+        <script src="vm1.js?v=20230528"></script>
+        <script src="vm2.js?v=20230528_2"></script>
         <script src="vm3.js?v=20230526"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
         <link href="https://unpkg.com/tabulator-tables@5.4.4/dist/css/tabulator.min.css" rel="stylesheet">

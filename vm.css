@@ -8,13 +8,31 @@ html,body,input,textarea{
 }
 .vm-wrapper {
     font-family:Söhne,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif,Helvetica Neue,Arial,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
-    padding:10px;
-    height:calc(100% - 20px);
+    _padding:10px;
+    height:100%;
+    _height:calc(100% - 20px);
     display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 20px 1fr 8px 30px;
+    grid-template-columns: 350px 1fr;
+    grid-template-rows: 1fr;
     grid-column-gap: 0px;
     grid-row-gap: 0px;
+}
+.vm-right{
+    font-family:Söhne,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif,Helvetica Neue,Arial,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
+    padding:10px;
+    _height:calc(100% - 20px);
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 20px 1fr 8px 60px;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+}
+.vm-left{
+    padding:30px 10px 10px 10px;
+}
+#vm_nav{
+    height:500px;
+    overflow: auto;
 }
 .vm-train textarea{
     margin-top:2px;
@@ -52,12 +70,12 @@ html,body,input,textarea{
 }
 #vm_contents{
     max-width:700px; 
-    margin:auto; 
+    _margin:auto; 
     padding:10px 0 8px 0;
 }
 .vm-wrap-quest{
     max-width:700px; 
-    margin:auto;
+    _margin:auto;
     padding-left:3px;
     display: flex;
     align-items: center;
@@ -65,7 +83,7 @@ html,body,input,textarea{
 }
 .vm-wrap-topic{
     max-width:700px; 
-    margin:auto; 
+    _margin:auto; 
     margin-top:2px;
     padding-left:3px;
     display: flex;
@@ -107,12 +125,21 @@ html,body,input,textarea{
 }
 .vm-questions{
     margin-top:-20px;
-    column-count: 2;
+    _column-count: 2;
     padding:0px 3px 0px 0px; 
 }
 @media screen and (max-width: 900px) {
     .vm-questions{
         column-count: 1;
+    }
+    .vm-wrapper{
+        font-family:Söhne,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif,Helvetica Neue,Arial,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
+        height:100%;
+        display: grid;
+        grid-template-columns: 0px 1fr;
+        grid-template-rows: 1fr;
+        grid-column-gap: 0px;
+        grid-row-gap: 0px;
     }
 }
 .vm-input{
