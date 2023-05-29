@@ -246,6 +246,66 @@ $vm.data_to_grid_01=function(field,header,data){
     return (txt+d)
 }
 //------------------------------------------------
+$vm.grid_render=function(db,table,query,header,field){
+    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div class=vm-grid></div><div>");
+    var div=vm_contents.lastElementChild.querySelector('div');
+    var data=[]
+    var bar="<input placeholder=keyword style='width:180px; border:1px solid #666; height:20px; padding-left:6px' /> <button>Searh</button> <label style='margin-left:30px'></label><br>";
+    div.innerHTML=bar+"<table>"+$vm.data_to_grid_01(field,header,data)+"</table>";
+    var inputE=div.querySelector('input');
+    var qq=function(){
+        var req={cmd:'find',db:db,table:table,query:query,limit:20,search:inputE.value}
+        $vm.request(req)
+        .then((r)=>{
+            if(r.status=='np'){
+                div.querySelector('label').innerText="No permissions.";
+            }
+            else{
+                var d=r.result;
+                var t=$vm.data_to_grid_01(field,header,d);
+                div.querySelector('table').innerHTML=t;
+                div.querySelector('label').innerText=d.length+"/"+r.count+"  ("+table+")";
+                var us=div.querySelectorAll('u');
+                us.forEach((el,i) => {
+                    el.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        var options = {
+                            collapsed: true,
+                            rootCollapsable: false,
+                        };
+                        document.getElementById('vm_popup').innerHTML="<div id='vm_json_renderer'></div>";
+                        new JsonViewer({
+                            value: d[i].Data,
+                            theme:'light'
+                        }).render('#vm_json_renderer')
+                        $vm.open_popup();
+                    });
+                });
+            }
+            scroll();
+        })
+        .catch((e)=>{})
+    }
+    div.querySelector('button').addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); qq(); });
+    div.querySelector('input').addEventListener("keyup", function(e){ if (e.keyCode === 13) {  qq();  }  })
+    qq();
+    document.getElementById('vm_ask').value='';
+    scroll();
+};
+//------------------------------------------------
+$vm.grid01=function(vm_contents,A,topic){
+    var ss=A.split("~~");
+    var db=ss[0];
+    var table=ss[1];
+    var fds=ss[2].split(',');
+    var field=[];   fds.forEach((item,i)=>{field.push(item.split('|')[0])});
+    var header=[];  fds.forEach((item,i)=>{header.push(item.split('|').pop())});
+    var query=JSON.parse(ss[3]);
+    $vm.grid_render(db,table,query,header,field);
+}
+//------------------------------------------------
 $vm.grid=function(vm_contents,A,topic){
     var a=JSON.parse(A);
     var db=a.db;
@@ -281,11 +341,6 @@ $vm.grid=function(vm_contents,A,topic){
                             collapsed: true,
                             rootCollapsable: false,
                         };
-                        /*
-                        var data={}
-                        data.abc=123;
-                        data.efg=[123,236];
-                        */
                         document.getElementById('vm_popup').innerHTML="<div id='vm_json_renderer'></div>";
                         new JsonViewer({
                             value: d[i].Data,

@@ -139,10 +139,11 @@ var show_answer=function(topic, answer){
         case "recent":                  $vm.recent(vm_contents,aa[1],topic);                break;
         case "multi":                   $vm.multi(vm_contents,aa[1],topic);                 break;
         case "audio":                   $vm.audio(vm_contents,aa[1],topic);                 break;
-        case "audio163":                $vm.audio163(vm_contents,aa[1],topic);                 break;
+        case "audio163":                $vm.audio163(vm_contents,aa[1],topic);              break;
         case "img":                     $vm.img(vm_contents,aa[1],topic);                   break;
         case "imgdata":                 $vm.imgdata(vm_contents,aa[1],topic);               break;
         case "grid":                    $vm.grid(vm_contents,aa[1],topic);                  break;
+        case "grid01":                  $vm.grid01(vm_contents,aa[1],topic);                break;
         case "chart":                   $vm.chart(vm_contents,aa[1],topic);                 break;
         case "table":                   $vm.table(vm_contents,aa[1],topic);                 break;
         case "train":                   $vm.train(vm_contents,aa[1],topic);                 break;
@@ -157,7 +158,7 @@ var show_answer=function(topic, answer){
         case "today_weather_req":       $vm.today_weather_req(vm_contents,topic);           break;
         case "today_weather_res":       $vm.today_weather_res(vm_contents,aa[1],topic);     break;
         default:
-            vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer topic='"+topic+"'>"+answer+"<div>");
+            vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer topic='"+topic+"'><div style='padding-left:6px;margin-top:-20px'>"+answer+"</div><div>");
             var div=vm_contents.lastElementChild.querySelector('div[vm]');
             if(div!=null){
                 $vm.div_render(div);
@@ -170,25 +171,26 @@ var show_answer=function(topic, answer){
         event.preventDefault();
         event.stopPropagation();
         if (event.ctrlKey) {
-            if(vm_contents.style.margin=="auto"){
-                console.log(111)
-                div.style.position="absolute";
+            if(div.style.position==""){
+                //console.log(111)
+                div.style.position="fixed";
                 div.style.top=0;
-                div.style.top=0;
+                div.style.left=0;
+                div.style.padding=0;
                 div.style.width="100%";
                 div.style.height="100%";
                 div.style.background="#242528";
-                vm_contents.style.margin="0px";
             }
             else{
-                console.log(222)
+                //console.log(222)
                 div.style.position='';
+                /*
                 div.style.top=0;
-                div.style.top=0;
+                div.style.left=0;
                 div.style.width="100%";
                 div.style.height="100%";
                 div.style.background='';
-                vm_contents.style.margin="auto";
+                */
             }
         }
     })
@@ -359,11 +361,11 @@ var init2=function(){
 }
 //------------------------------------------------
 var re_caculate_height=function(){
-    console.log(window.height);
+    //console.log(window.height);
     var e1=document.getElementById("vm_scroll");
-    var e2=document.getElementById("vm_hr");
-    console.log(e1.offsetTop);
-    console.log(e2.offsetTop);
+    var e2=document.getElementById("vm_ask");
+    //console.log(e1.offsetTop);
+    //console.log(e2.offsetTop);
     vm_scroll.style.height=(e2.offsetTop-e1.offsetTop)+"px";
     vm_nav.style.height=(e2.offsetTop-e1.offsetTop)+"px";
 }
@@ -489,7 +491,7 @@ $vm.abc_load=function(paper,midi,abc){
 //------------------------------------------------
 $vm.open_popup=function(){    document.getElementById('vm_popup_p').style.top="50%";}
 $vm.close_popup=function(){    document.getElementById('vm_popup_p').style.top="100000px";}
-//document.getElementById('vm_close_popup').addEventListener('click',function(){    $vm.close_popup(); })
+document.getElementById('vm_close_popup').addEventListener('click',function(){    $vm.close_popup(); })
 //------------------------------------------------
 $vm.youtube=function(vm_contents,id,topic){
     var src="https://www.youtube.com/embed/"+id+"/?autoplay=1&rel=0&enablejsapi=1";
