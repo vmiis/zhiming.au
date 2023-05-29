@@ -190,7 +190,7 @@ $vm.login=function(vm_contents,tList,topic){
     for(var i=0;i<list.length;i++){
         text+="<u>"+list[i]+"</u><br>"
     }
-    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer>"+text+"<div>");
+    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div style='padding-left:6px;margin-top:-20px'>"+text+"</div><div>");
     var us=vm_contents.lastElementChild.querySelectorAll('u');
     us.forEach(el => {
         el.addEventListener('click', (e) => {

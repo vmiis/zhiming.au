@@ -26,7 +26,7 @@ html,body,input,textarea{
     _height:calc(100% - 20px);
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 20px 1fr 60px;
+    grid-template-rows: 20px 1fr 63px;
     grid-column-gap: 0px;
     grid-row-gap: 0px;
 }

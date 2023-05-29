@@ -72,10 +72,10 @@ var query=function(qq,tt){
     var req={cmd:'qna',q:q,p:p,i:i}
     $vm.request(req).then((res)=>{
         var qq=q;
-        //if(q=="") qq="What questions can you answer about the topic \""+p+"\"";
         var answer=res.answer;
+        show_answer(qq,p,answer);
+        /*
         if(answer.startsWith("questions@CODE@")!=true) vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-question >"+qq+"<div>");
-        //var topic=res.topic;
         if(res.score>0.8 || res.score==-1){
             show_answer(p,answer);
         }
@@ -91,50 +91,29 @@ var query=function(qq,tt){
                 }
             }).catch(error => { console.log(error)});
         }
+        */
     })
     .catch(error => { console.log(error);});
 }
 //------------------------------------------------
-$vm.multi=function(vm_contents,ans,topic){
-    var q0=document.getElementById('vm_ask').value;
-    var aa=JSON.parse(ans);
-    var txt="";
-    txt+=aa[0][0].toFixed(5)+"&nbsp &nbsp <u>"+aa[1][0]+"</u><br>";
-    txt+=aa[0][1].toFixed(5)+"&nbsp &nbsp <u>"+aa[1][1]+"</u><br>";
-    txt+=aa[0][2].toFixed(5)+"&nbsp &nbsp <u>"+aa[1][2]+"</u><br>";
-    txt+="<br>";
-    txt+="<u>Ask Wikipedia</u>"
-    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer>"+txt+"<div>");
-    var us=vm_contents.lastElementChild.querySelectorAll('u');
-    us.forEach((el,i) => {
-        el.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            if(i<3){
-                document.getElementById('vm_ask').value=el.textContent;
-                vm_qq={};
-                query();
-            }
-            else{
-                $vm.wiki_query(q0).then( (data)=>{
-                    if(data!=""){
-                        show_answer("Generic",data);
-                    }
-                    else{ 
-                        show_sorry(q0);
-                    }
-                }).catch(error => { console.log(error)});
-            }
-        });
-    });
-    
+$vm.text=function(vm_contents,answer,topic){
+    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer topic='"+topic+"'><div style='padding-left:6px;margin-top:-20px'>"+answer+"</div><div>");
+    /*
+    var div=vm_contents.lastElementChild.querySelector('div[vm]');
+    if(div!=null){
+        $vm.div_render(div);
+    }
+    */
     document.getElementById('vm_ask').value='';
     scroll();
 }
 //------------------------------------------------
-var show_answer=function(topic, answer){
-    var aa=["",""]; if(answer.toString().includes("@CODE@")) aa=answer.split("@CODE@");
+var show_answer=function(qq,topic, answer){
+    var aa=answer.split("@CODE@"); if(aa.length==1) aa=["text",answer];
+    if(aa[0]!="questions") vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-question >"+qq+"<div>");
     switch(aa[0]){
+        case "questions":               $vm.questions_list(vm_contents,aa[1],topic);        break;
+        case "text":                    $vm.text(vm_contents,aa[1],topic);               break;
         case "youtube":                 $vm.youtube(vm_contents,aa[1],topic);               break;
         case "recent":                  $vm.recent(vm_contents,aa[1],topic);                break;
         case "multi":                   $vm.multi(vm_contents,aa[1],topic);                 break;
@@ -148,13 +127,12 @@ var show_answer=function(topic, answer){
         case "table":                   $vm.table(vm_contents,aa[1],topic);                 break;
         case "train":                   $vm.train(vm_contents,aa[1],topic);                 break;
         case "login":                   $vm.login(vm_contents,aa[1],topic);                 break;
-        case "questions":               $vm.questions_list(vm_contents,aa[1],topic);        break;
         case "web":                     $vm.web_contents(vm_contents,aa[1],topic);          break;
         case "abc":
         case "abc2":                    $vm.abc_notation(vm_contents,aa[1],aa[0]);          break;
         case "woolcock_profile_req":    $vm.woolcock_profile_req(vm_contents,topic);        break;
         case "woolcock_profile_res":    $vm.woolcock_profile_res(vm_contents,aa[1],topic);  break;
-        case "w_people_profile":        $vm.w_people_profile(vm_contents,aa[1]);        break;
+        case "w_people_profile":        $vm.w_people_profile(vm_contents,aa[1]);            break;
         case "today_weather_req":       $vm.today_weather_req(vm_contents,topic);           break;
         case "today_weather_res":       $vm.today_weather_res(vm_contents,aa[1],topic);     break;
         default:
@@ -194,6 +172,43 @@ var show_answer=function(topic, answer){
             }
         }
     })
+}
+//------------------------------------------------
+$vm.multi=function(vm_contents,ans,topic){
+    var q0=document.getElementById('vm_ask').value;
+    var aa=JSON.parse(ans);
+    var txt="";
+    txt+=aa[0][0].toFixed(5)+"&nbsp &nbsp <u>"+aa[1][0]+"</u><br>";
+    txt+=aa[0][1].toFixed(5)+"&nbsp &nbsp <u>"+aa[1][1]+"</u><br>";
+    txt+=aa[0][2].toFixed(5)+"&nbsp &nbsp <u>"+aa[1][2]+"</u><br>";
+    txt+="<br>";
+    txt+="<u>Ask Wikipedia</u>"
+    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer>"+txt+"<div>");
+    var us=vm_contents.lastElementChild.querySelectorAll('u');
+    us.forEach((el,i) => {
+        el.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if(i<3){
+                document.getElementById('vm_ask').value=el.textContent;
+                vm_qq={};
+                query();
+            }
+            else{
+                $vm.wiki_query(q0).then( (data)=>{
+                    if(data!=""){
+                        show_answer("Generic",data);
+                    }
+                    else{ 
+                        show_sorry(q0);
+                    }
+                }).catch(error => { console.log(error)});
+            }
+        });
+    });
+    
+    document.getElementById('vm_ask').value='';
+    scroll();
 }
 //------------------------------------------------
 var show_sorry=function(q){
