@@ -71,9 +71,7 @@ var query=function(qq,tt){
     if(qs!=undefined) i=qs.indexOf(q);
     var req={cmd:'qna',q:q,p:p,i:i}
     $vm.request(req).then((res)=>{
-        var qq=q;
-        var answer=res.answer;
-        show_answer(qq,p,answer);
+        show_answer(q,p,res.answer.toString());
         /*
         if(answer.startsWith("questions@CODE@")!=true) vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-question >"+qq+"<div>");
         if(res.score>0.8 || res.score==-1){
@@ -381,8 +379,8 @@ var re_caculate_height=function(){
     var e2=document.getElementById("vm_ask");
     //console.log(e1.offsetTop);
     //console.log(e2.offsetTop);
-    vm_scroll.style.height=(e2.offsetTop-e1.offsetTop)+"px";
-    vm_nav.style.height=(e2.offsetTop-e1.offsetTop)+"px";
+    vm_scroll.style.height=(e2.offsetTop-e1.offsetTop-2)+"px";
+    vm_nav.style.height=(e2.offsetTop-e1.offsetTop-2)+"px";
 }
 //------------------------------------------------
 window.addEventListener("resize", function() {

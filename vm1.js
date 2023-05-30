@@ -154,7 +154,7 @@ $vm.web_contents=function(vm_contents,param,topic){
 //--------------------------------------------
 $vm.questions_list=function(vm_contents,param,topic){
     var p=JSON.parse(param);
-    p[1].sort();
+    //p[1].sort();
     var questions="";
     var I=0;
     if(p[0]=="Virtual Zhiming") I=7;
@@ -166,7 +166,7 @@ $vm.questions_list=function(vm_contents,param,topic){
     }
     var ccc=vm_nav;
     if (window.innerWidth <900) ccc=vm_contents;
-    ccc.insertAdjacentHTML('beforeend',"<div class=vm-answer><div class=vm-questions><ul style='padding-left:16px;margin-top:0px' topic='"+topic+"'>"+questions+"</ul></div></div>");
+    ccc.insertAdjacentHTML('beforeend',"<div class=vm-answer><div class=vm-questions><ul _style='padding-left:16px;margin-top:0px' topic='"+topic+"'>"+questions+"</ul></div></div>");
     var us=ccc.lastElementChild.querySelectorAll('li');
     us.forEach(el => {
         el.addEventListener('click', (e) => {

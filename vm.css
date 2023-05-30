@@ -34,7 +34,6 @@ html,body,input,textarea{
     padding:30px 10px 10px 10px;
 }
 #vm_nav{
-    height:500px;
     overflow: auto;
 }
 .vm-train textarea{
