@@ -412,23 +412,29 @@ $vm.playlist=function(vm_contents,src,qq){
     var audio_list={};
     if(audio_str!=null) audio_list=JSON.parse(audio_str);
 
+    var ul="";
+    var playlist = [];
+    var namelist = [];
+    for(p in audio_list){
+        playlist.push(audio_list[p]);
+        namelist.push(p);
+        ul+="<u>"+p+"</u>";
+    }
+    
     var txt=`
     <label>ABC</label>
-    <audio controls style='width:100%;height:30px;'>
+    <audio crossorigin="anonymous" controls style='width:100%;height:30px;'>
     </audio>
+    <ul>`
+    +ul+
+    `</ul>
     `;
     vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer>"+txt+"<div>");
     
     var div=vm_contents.lastElementChild;
     var LB=div.querySelector('label');
     var audioPlayer=div.querySelector('audio');
-    var playlist = [];
-    var namelist = [];
     var currentSongIndex = 0;
-    for(p in audio_list){
-        playlist.push(audio_list[p]);
-        namelist.push(p);
-    }
 
     audioPlayer.addEventListener('ended', function() {
         currentSongIndex++;
