@@ -110,12 +110,13 @@ var show_answer=function(qq,topic, answer){
     var aa=answer.split("@CODE@"); if(aa.length==1) aa=["text",answer];
     if(aa[0]!="questions") vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-question >"+qq+"<div>");
     switch(aa[0]){
+        case "playlist":                $vm.playlist(vm_contents,aa[1],topic);        break;
         case "questions":               $vm.questions_list(vm_contents,aa[1],topic);        break;
         case "text":                    $vm.text(vm_contents,aa[1],topic);               break;
         case "youtube":                 $vm.youtube(vm_contents,aa[1],topic);               break;
         case "recent":                  $vm.recent(vm_contents,aa[1],topic);                break;
         case "multi":                   $vm.multi(vm_contents,aa[1],topic);                 break;
-        case "audio":                   $vm.audio(vm_contents,aa[1],topic);                 break;
+        case "audio":                   $vm.audio(vm_contents,aa[1],qq);                 break;
         case "audio163":                $vm.audio163(vm_contents,aa[1],topic);              break;
         case "img":                     $vm.img(vm_contents,aa[1],topic);                   break;
         case "imgdata":                 $vm.imgdata(vm_contents,aa[1],topic);               break;

@@ -386,13 +386,81 @@ $vm.imgdata=function(vm_contents,src,topic){
     scroll();
 }
 //------------------------------------------------
-$vm.audio=function(vm_contents,src,topic){
+$vm.audio=function(vm_contents,src,qq){
+    var audio_str=localStorage.getItem("zhiming.au.audio_playlist");
+    var audio_list={};
+    if(audio_str!=null) audio_list=JSON.parse(audio_str);
+    if(audio_list[qq]==undefined){
+        audio_list[qq]=src;
+        audio_str=JSON.stringify(audio_list);
+        localStorage.setItem("zhiming.au.audio_playlist",audio_str);
+    }
+    console.log(audio_list);
+
     var txt=`
     <audio controls style='width:100%;height:30px;margin-top:-30px'>
         <source src="`+src+`" type="audio/mpeg">
     </audio>
     `;
     vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer>"+txt+"<div>");
+    document.getElementById('vm_ask').value='';
+    scroll();
+}
+//------------------------------------------------
+$vm.playlist=function(vm_contents,src,qq){
+    var audio_str=localStorage.getItem("zhiming.au.audio_playlist");
+    var audio_list={};
+    if(audio_str!=null) audio_list=JSON.parse(audio_str);
+
+    var txt=`
+    <label>ABC</label>
+    <audio controls style='width:100%;height:30px;'>
+    </audio>
+    `;
+    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer>"+txt+"<div>");
+    
+    var div=vm_contents.lastElementChild;
+    var LB=div.querySelector('label');
+    var audioPlayer=div.querySelector('audio');
+    var playlist = [];
+    var namelist = [];
+    var currentSongIndex = 0;
+    for(p in audio_list){
+        playlist.push(audio_list[p]);
+        namelist.push(p);
+    }
+
+    audioPlayer.addEventListener('ended', function() {
+        currentSongIndex++;
+        if (currentSongIndex >= playlist.length) {
+            currentSongIndex = 0; 
+        }
+        LB.textContent=namelist[currentSongIndex].replace('(Audio)','');
+        audioPlayer.src = playlist[currentSongIndex];
+        audioPlayer.play();
+    });
+    
+    /*
+    LB.textContent=namelist[currentSongIndex].replace('(Audio)','');
+    audioPlayer.src = playlist[currentSongIndex];
+    audioPlayer.play();
+    */
+    
+    
+    
+    //navigator.wakeLock.release();
+    navigator.wakeLock.request('screen').then(() => {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const source = audioContext.createMediaElementSource(audioPlayer);
+        source.connect(audioContext.destination);
+        LB.textContent=namelist[currentSongIndex].replace('(Audio)','');
+        audioPlayer.src = playlist[currentSongIndex];
+        audioPlayer.play();
+    }).catch((error) => {
+        console.error('Failed to acquire wake lock:', error);
+    });
+    
+
     document.getElementById('vm_ask').value='';
     scroll();
 }
