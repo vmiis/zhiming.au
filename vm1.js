@@ -418,20 +418,35 @@ $vm.playlist=function(vm_contents,src,qq){
     for(p in audio_list){
         playlist.push(audio_list[p]);
         namelist.push(p);
-        ul+="<u>"+p+"</u>";
+        ul+="<li><u>"+p+"</u></li>";
     }
     
     var txt=`
     <label>ABC</label>
     <audio crossorigin="anonymous" controls style='width:100%;height:30px;'>
     </audio>
-    <ul>`
+    <ul>Remove`
     +ul+
     `</ul>
     `;
     vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer>"+txt+"<div>");
     
     var div=vm_contents.lastElementChild;
+    var eUL=div.querySelector('ul');
+    var us=div.querySelectorAll('li');
+    us.forEach(a=>{
+        a.addEventListener('click', function() {
+            var t=a.querySelector('u').textContent;
+            alert(t)
+            alert(audio_list[t])                
+            if(audio_list[t]!=undefined){
+                delete audio_list[t];
+                var str=JSON.stringify(audio_list);
+                localStorage.setItem("zhiming.au.audio_playlist",str);
+                eUL.removeChild(a);
+            }
+        });
+    })
     var LB=div.querySelector('label');
     var audioPlayer=div.querySelector('audio');
     var currentSongIndex = 0;
@@ -452,9 +467,7 @@ $vm.playlist=function(vm_contents,src,qq){
     audioPlayer.play();
     */
     
-    
-    
-    //navigator.wakeLock.release();
+    try{ navigator.wakeLock.release(); }catch(e){}
     navigator.wakeLock.request('screen').then(() => {
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
         const source = audioContext.createMediaElementSource(audioPlayer);
