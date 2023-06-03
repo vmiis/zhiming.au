@@ -460,14 +460,12 @@ $vm.playlist=function(vm_contents,src,qq){
         audioPlayer.src = playlist[currentSongIndex];
         audioPlayer.play();
     });
-    
     /*
     LB.textContent=namelist[currentSongIndex].replace('(Audio)','');
     audioPlayer.src = playlist[currentSongIndex];
     audioPlayer.play();
     */
-    
-    try{ navigator.wakeLock.release(); }catch(e){}
+    //try{ navigator.wakeLock.release(); }catch(e){}
     navigator.wakeLock.request('screen').then(() => {
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
         const source = audioContext.createMediaElementSource(audioPlayer);

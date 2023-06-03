@@ -113,6 +113,7 @@ var show_answer=function(qq,topic, answer){
         case "playlist":                $vm.playlist(vm_contents,aa[1],topic);        break;
         case "questions":               $vm.questions_list(vm_contents,aa[1],topic);        break;
         case "text":                    $vm.text(vm_contents,aa[1],topic);               break;
+        case "bilibili":                $vm.bilibili(vm_contents,aa[1],topic);               break;
         case "youtube":                 $vm.youtube(vm_contents,aa[1],topic);               break;
         case "recent":                  $vm.recent(vm_contents,aa[1],topic);                break;
         case "multi":                   $vm.multi(vm_contents,aa[1],topic);                 break;
@@ -182,7 +183,7 @@ $vm.multi=function(vm_contents,ans,topic){
     txt+=aa[0][2].toFixed(5)+"&nbsp &nbsp <u>"+aa[1][2]+"</u><br>";
     txt+="<br>";
     txt+="<u>Ask Wikipedia</u>"
-    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer>"+txt+"<div>");
+    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div style='margin-top:-20px'>"+txt+"</div><div>");
     var us=vm_contents.lastElementChild.querySelectorAll('u');
     us.forEach((el,i) => {
         el.addEventListener('click', (e) => {
@@ -519,6 +520,14 @@ $vm.audio163=function(vm_contents,id,topic){
     var src="//music.163.com/outchain/player?type=2&amp;id="+id+"&amp;height=32"
     var txt="<iframe _sandbox='allow-same-origin allow-scripts' loading='lazy' src="+src+" width='100%' height=52 frameborder='no' broder='0' marginwidth='0' marginheight='0'></iframe>"
     vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div style='margin: -30px -12px 0 -16px;' >"+txt+"</div><div>");
+    document.getElementById('vm_ask').value='';
+    scroll();
+}
+//------------------------------------------------
+$vm.bilibili=function(vm_contents,id,topic){
+    var src="https:////player.bilibili.com/player.html?"+id;
+    var txt="<iframe src="+src+" width='100%' height=393px scrolling='no' border='0' frameborder='no' framespacing='0' allowfullscreen='true'></iframe>"
+    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div>"+txt+"</div><div>");
     document.getElementById('vm_ask').value='';
     scroll();
 }
