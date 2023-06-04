@@ -106,7 +106,7 @@ $vm.text=function(vm_contents,answer,topic){
     scroll();
 }
 //------------------------------------------------
-var show_answer=function(qq,topic, answer){
+var show_answer=function(qq, topic, answer){
     var aa=answer.split("@CODE@"); if(aa.length==1) aa=["text",answer];
     if(aa[0]!="questions") vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-question >"+qq+"<div>");
     switch(aa[0]){
@@ -178,9 +178,9 @@ $vm.multi=function(vm_contents,ans,topic){
     var q0=document.getElementById('vm_ask').value;
     var aa=JSON.parse(ans);
     var txt="";
-    txt+=aa[0][0].toFixed(5)+"&nbsp &nbsp <u>"+aa[1][0]+"</u><br>";
-    txt+=aa[0][1].toFixed(5)+"&nbsp &nbsp <u>"+aa[1][1]+"</u><br>";
-    txt+=aa[0][2].toFixed(5)+"&nbsp &nbsp <u>"+aa[1][2]+"</u><br>";
+    txt+=aa[0][0].toFixed(3)+"&nbsp &nbsp <u>"+aa[1][0]+"</u><br>";
+    //txt+=aa[0][1].toFixed(5)+"&nbsp &nbsp <u>"+aa[1][1]+"</u><br>";
+    //txt+=aa[0][2].toFixed(5)+"&nbsp &nbsp <u>"+aa[1][2]+"</u><br>";
     txt+="<br>";
     txt+="<u>Ask Wikipedia</u>"
     vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div style='margin-top:-20px'>"+txt+"</div><div>");
@@ -189,18 +189,18 @@ $vm.multi=function(vm_contents,ans,topic){
         el.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            if(i<3){
+            if(i==0){
                 document.getElementById('vm_ask').value=el.textContent;
                 vm_qq={};
                 query();
             }
-            else{
+            else if(i==1){
                 $vm.wiki_query(q0).then( (data)=>{
                     if(data!=""){
-                        show_answer("Generic",data);
+                        show_answer(q0, "Generic",data);
                     }
                     else{ 
-                        show_sorry(q0);
+                        show_sorry("","", q0);
                     }
                 }).catch(error => { console.log(error)});
             }
