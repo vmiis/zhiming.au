@@ -11,7 +11,7 @@ $vm.today_weather_req=function(vm_contents,topic){
         var q="What is today's weather?"+"|"+input.value;
         //var topic=vm_topic.value;
         var req={cmd:'qna',q:q,p:tp}
-        $vm.request(req).then((res)=>{ show_answer(tp,res.answer); })
+        $vm.request(req).then((res)=>{ show_answer("",tp,res.answer); })
         .catch(error => { console.log(error);});
     }
     submit.addEventListener('click',function(e){ qq(topic); })
@@ -30,7 +30,7 @@ $vm.today_weather_res=function(vm_contents,answer,topic){
     text+=data.forecast.forecastday[0].day.condition.text+"<br>";
     text+="Max: "+data.forecast.forecastday[0].day.maxtemp_c+"<br>";
     text+="Min: "+data.forecast.forecastday[0].day.mintemp_c+"<br>";
-    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer>"+text+"<div>");
+    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div style='margin-top:-20px'>"+text+"</div></div>");
     const vmDivs = document.querySelectorAll('div.vm-today_weather_req');
     vmDivs.forEach(vmDiv => vmDiv.remove());    
     $vm.today_weather_req(vm_contents,topic);
@@ -49,7 +49,7 @@ $vm.woolcock_profile_req=function(vm_contents,topic){
         var q="Woolcock staff profile"+"|"+input.value;
         var req={cmd:'qna',q:q,p:topic}
         $vm.request(req).then((res)=>{
-            show_answer(topic,res.answer);
+            show_answer("",topic,res.answer);
         })
         .catch(error => { console.log(error);});
     }
@@ -70,7 +70,7 @@ $vm.woolcock_profile_res=function(vm_contents,answer,topic){
         text+="Office Location: "+data[i].officeLocation+"<br>";
         text+="<br>"
     }
-    if(data.length!=0) vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer>"+text+"<div>");
+    if(data.length!=0) vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div style='margin-top:-20px'>"+text+"</div></div>");
     const vmDivs = document.querySelectorAll('div.vm-wps');
     vmDivs.forEach(vmDiv => vmDiv.remove());    
     $vm.woolcock_profile_req(vm_contents,topic);
