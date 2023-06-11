@@ -453,7 +453,7 @@ $vm.playlist=function(vm_contents,src,qq){
 $vm.questions_list=function(vm_contents,param,topic){
     var p=JSON.parse(param);
     var list=p[1];
-    var questions="<table>";
+    var questions="<b>["+topic+"]</b><br><table>";
     var i=0;
     list.forEach((a,I)=>{
         if(a.length>0){
@@ -482,18 +482,10 @@ $vm.questions_list=function(vm_contents,param,topic){
     scroll();
 }
 //------------------------------------------------
-$vm.multi=function(vm_contents,ans,topic){
+$vm.multi=function(vm_contents,ans,q){
     var q0=document.getElementById('vm_ask').value;
     var aa=JSON.parse(ans);
-    /*
-    var txt="";
-    aa.forEach(a=>{
-        txt+=a[0].toFixed(3)+"&nbsp &nbsp <u>"+a[1]+"</u><br>";
-    })
-    txt+="<br>";
-    txt+="<u>Ask Wikipedia</u>"
-    */
-    var txt="<table class='vm-multi'>";
+    var txt="<b>["+q+"]</b><br><table class='vm-multi'>";
     var i=0;
     aa.forEach((a,I)=>{
         if(a.length>0){
@@ -502,9 +494,10 @@ $vm.multi=function(vm_contents,ans,topic){
     })
     txt+="<tr><td></td><td></td><td><u>Ask Wikipedia</u></td></tr>";
     txt+="</table>"
-
-    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div style='margin-top:-20px'>"+txt+"</div><div>");
-    var us=vm_contents.lastElementChild.querySelectorAll('u');
+    var ccc=vm_nav;
+    if (window.innerWidth <900) ccc=vm_contents;
+    ccc.insertAdjacentHTML('beforeend',"<div class=vm-answer><div style='margin-top:-20px'>"+txt+"</div><div>");
+    var us=ccc.lastElementChild.querySelectorAll('u');
     us.forEach((el,i) => {
         el.addEventListener('click', (e) => {
             e.preventDefault();

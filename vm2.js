@@ -119,7 +119,7 @@ $vm.text=function(vm_contents,answer,q0){
 //------------------------------------------------
 var show_answer=function(qq, topic, answer){
     var aa=answer.split("@CODE@"); if(aa.length==1) aa=["text",answer];
-    if(aa[0]!="questions" && qq!="") vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-question >"+qq+"<div>");
+    if(aa[0]!="questions" && aa[0]!="multi" && qq!="") vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-question >"+qq+"<div>");
     switch(aa[0]){
         case "playlist":                $vm.playlist(vm_contents,aa[1],topic);        break;
         case "questions":               $vm.questions_list(vm_contents,aa[1],topic);        break;
@@ -127,7 +127,7 @@ var show_answer=function(qq, topic, answer){
         case "bilibili":                $vm.bilibili(vm_contents,aa[1],topic);               break;
         case "youtube":                 $vm.youtube(vm_contents,aa[1],topic);               break;
         case "recent":                  $vm.recent(vm_contents,aa[1],topic);                break;
-        case "multi":                   $vm.multi(vm_contents,aa[1],topic);                 break;
+        case "multi":                   $vm.multi(vm_contents,aa[1],qq);                 break;
         case "audio":                   $vm.audio(vm_contents,aa[1],qq);                 break;
         case "audio163":                $vm.audio163(vm_contents,aa[1],topic);              break;
         case "img":                     $vm.img(vm_contents,aa[1],topic);                   break;
@@ -335,15 +335,9 @@ var init2=function(){
     //---------------------------------------------
     var a=window.location.href.split('?'); 
     if(a.length==2){
-        var qt=a[1].split('@')
-        if(qt.length==2){
-            var q=decodeURIComponent(qt[0]);
-            var t=decodeURIComponent(qt[1]);
-            if(q=="") q=t;
-            query(q,t);
-        }
-        else if(qt.length==1){
-            var q=decodeURIComponent(qt[0]);
+        var qt=a[1].split('@').pop();
+        if(qt.length>0){
+            var q=decodeURIComponent(qt);
             query(q);
         }
     }
