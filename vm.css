@@ -120,6 +120,16 @@ html,body,input,textarea{
 .vm-questions u:hover{
     color:#79f3a2;
 }
+.vm-questions table td{
+    vertical-align: top;
+}
+.vm-questions table td:first-child{
+    padding:0 10px 0 0;
+}
+.vm-multi td{
+    vertical-align: top;
+    padding:0 10px 0 0;
+}
 .vm-answer{
     padding:6px 3px 25px 0px; 
 }

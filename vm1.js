@@ -152,38 +152,6 @@ $vm.web_contents=function(vm_contents,param,topic){
     });
 }
 //--------------------------------------------
-$vm.questions_list=function(vm_contents,param,topic){
-    var p=JSON.parse(param);
-    //p[1].sort();
-    var questions="";
-    var I=0;
-    if(p[0]=="Virtual Zhiming") I=7;
-    for(var i=I;i<p[1].length;i++){
-        var line=p[1][i];
-        if(line.length>1){
-            questions+="<li><u>"+line+"</u></li>";
-        }
-    }
-    var ccc=vm_nav;
-    if (window.innerWidth <900) ccc=vm_contents;
-    ccc.insertAdjacentHTML('beforeend',"<div class=vm-answer><div class=vm-questions><ul _style='padding-left:16px;margin-top:0px' topic='"+topic+"'>"+questions+"</ul></div></div>");
-    var us=ccc.lastElementChild.querySelectorAll('li');
-    us.forEach(el => {
-        el.addEventListener('click', (e) => {
-            var topic=el.parentNode.getAttribute('topic');
-            e.preventDefault();
-            e.stopPropagation();
-            document.getElementById('vm_ask').value=el.textContent;
-            vm_qq={};
-            vm_qq[el.textContent]=topic;
-            query();
-        });
-    });
-    document.getElementById('vm_ask').value='';
-    vm_nav.scrollTop = vm_nav.scrollHeight;
-    scroll();
-}
-//------------------------------------------------
 $vm.login=function(vm_contents,tList,topic){
     var list=eval(tList);
     var text="";
@@ -478,6 +446,87 @@ $vm.playlist=function(vm_contents,src,qq){
     });
     
 
+    document.getElementById('vm_ask').value='';
+    scroll();
+}
+//------------------------------------------------
+$vm.questions_list=function(vm_contents,param,topic){
+    var p=JSON.parse(param);
+    var list=p[1];
+    var questions="<table>";
+    var i=0;
+    list.forEach((a,I)=>{
+        if(a.length>0){
+            if(p[0]=="[Virtual Zhiming]" && I<7){}
+            else {i++; questions+="<tr><td>"+i+"</td><td><u>"+a+"</u></td></tr>";}
+        }
+    })
+    questions+="</table>"
+    var ccc=vm_nav;
+    if (window.innerWidth <900) ccc=vm_contents;
+    ccc.insertAdjacentHTML('beforeend',"<div class=vm-answer><div class=vm-questions>"+questions+"</div></div>");
+    var us=ccc.lastElementChild.querySelectorAll('u');
+    us.forEach(el => {
+        el.addEventListener('click', (e) => {
+            var topic=el.parentNode.getAttribute('topic');
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('vm_ask').value=el.textContent;
+            vm_qq={};
+            vm_qq[el.textContent]=topic;
+            query();
+        });
+    });
+    document.getElementById('vm_ask').value='';
+    vm_nav.scrollTop = vm_nav.scrollHeight;
+    scroll();
+}
+//------------------------------------------------
+$vm.multi=function(vm_contents,ans,topic){
+    var q0=document.getElementById('vm_ask').value;
+    var aa=JSON.parse(ans);
+    /*
+    var txt="";
+    aa.forEach(a=>{
+        txt+=a[0].toFixed(3)+"&nbsp &nbsp <u>"+a[1]+"</u><br>";
+    })
+    txt+="<br>";
+    txt+="<u>Ask Wikipedia</u>"
+    */
+    var txt="<table class='vm-multi'>";
+    var i=0;
+    aa.forEach((a,I)=>{
+        if(a.length>0){
+            i++; txt+="<tr><td>"+i+"</td><td>"+a[0].toFixed(3)+"</td><td><u>"+a[1]+"</u></td></tr>";
+        }
+    })
+    txt+="<tr><td></td><td></td><td><u>Ask Wikipedia</u></td></tr>";
+    txt+="</table>"
+
+    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div style='margin-top:-20px'>"+txt+"</div><div>");
+    var us=vm_contents.lastElementChild.querySelectorAll('u');
+    us.forEach((el,i) => {
+        el.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if(i<aa.length){
+                document.getElementById('vm_ask').value=el.textContent;
+                vm_qq={};
+                query();
+            }
+            else if(i==aa.length){
+                $vm.wiki_query(q0).then( (data)=>{
+                    if(data!=""){
+                        show_answer(q0, "Generic",data);
+                    }
+                    else{ 
+                        show_sorry("","", q0);
+                    }
+                }).catch(error => { console.log(error)});
+            }
+        });
+    });
+    
     document.getElementById('vm_ask').value='';
     scroll();
 }

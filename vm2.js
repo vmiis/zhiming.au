@@ -185,43 +185,6 @@ var show_answer=function(qq, topic, answer){
     })
 }
 //------------------------------------------------
-$vm.multi=function(vm_contents,ans,topic){
-    var q0=document.getElementById('vm_ask').value;
-    var aa=JSON.parse(ans);
-    var txt="";
-    aa.forEach(a=>{
-        txt+=a[0].toFixed(3)+"&nbsp &nbsp <u>"+a[1]+"</u><br>";
-    })
-    txt+="<br>";
-    txt+="<u>Ask Wikipedia</u>"
-    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div style='margin-top:-20px'>"+txt+"</div><div>");
-    var us=vm_contents.lastElementChild.querySelectorAll('u');
-    us.forEach((el,i) => {
-        el.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            if(i<aa.length){
-                document.getElementById('vm_ask').value=el.textContent;
-                vm_qq={};
-                query();
-            }
-            else if(i==aa.length){
-                $vm.wiki_query(q0).then( (data)=>{
-                    if(data!=""){
-                        show_answer(q0, "Generic",data);
-                    }
-                    else{ 
-                        show_sorry("","", q0);
-                    }
-                }).catch(error => { console.log(error)});
-            }
-        });
-    });
-    
-    document.getElementById('vm_ask').value='';
-    scroll();
-}
-//------------------------------------------------
 var show_sorry=function(q){
     var answer="Sorry, I am not confident to provide correct information.";
     const chineseRegex = /[\u4e00-\u9fa5]/; 
