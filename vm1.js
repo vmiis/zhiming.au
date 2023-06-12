@@ -82,6 +82,7 @@ $vm.w_people_profile=function(vm_contents,answer,topic){
     var html="<img style='height: 150px; width: auto; float: left; margin-right:10px;' src=https://woolcock.org.au"+data[3]+"></img>"+data[0]+"<br>"+data[1]+"<br>"+data[2]+"<br>";
     var answer="<div class=vm-answer><div style='min-height:150px'>"+html+"</div></div></div>";
     vm_contents.insertAdjacentHTML('beforeend',answer);
+    vm_ask.value="";
     scroll();
 }
 //------------------------------------------------
@@ -453,7 +454,7 @@ $vm.playlist=function(vm_contents,src,qq){
 $vm.questions_list=function(vm_contents,param,topic){
     var p=JSON.parse(param);
     var list=p[1];
-    var questions="<b>["+topic+"]</b><br><table>";
+    var questions="<b>"+topic+"</b><hr><table>";
     var i=0;
     list.forEach((a,I)=>{
         if(a.length>0){
@@ -485,7 +486,7 @@ $vm.questions_list=function(vm_contents,param,topic){
 $vm.multi=function(vm_contents,ans,q){
     var q0=document.getElementById('vm_ask').value;
     var aa=JSON.parse(ans);
-    var txt="<b>["+q+"]</b><br><table class='vm-multi'>";
+    var txt="<b>["+q+"]</b><hr><table class='vm-multi'>";
     var i=0;
     aa.forEach((a,I)=>{
         if(a.length>0){
@@ -521,6 +522,7 @@ $vm.multi=function(vm_contents,ans,q){
     });
     
     document.getElementById('vm_ask').value='';
+    vm_nav.scrollTop = vm_nav.scrollHeight;
     scroll();
 }
 //------------------------------------------------

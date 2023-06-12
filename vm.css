@@ -36,6 +36,9 @@ html,body,input,textarea{
 #vm_nav{
     overflow: auto;
 }
+.vm-train input{
+    height:20px;
+}
 .vm-train textarea{
     margin-top:2px;
     height:50px;

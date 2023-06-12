@@ -122,7 +122,7 @@ var show_answer=function(qq, topic, answer){
     if(aa[0]!="questions" && aa[0]!="multi" && qq!="") vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-question >"+qq+"<div>");
     switch(aa[0]){
         case "playlist":                $vm.playlist(vm_contents,aa[1],topic);        break;
-        case "questions":               $vm.questions_list(vm_contents,aa[1],topic);        break;
+        case "questions":               $vm.questions_list(vm_contents,aa[1],qq);        break;
         case "text":                    $vm.text(vm_contents,aa[1],qq);               break;
         case "bilibili":                $vm.bilibili(vm_contents,aa[1],topic);               break;
         case "youtube":                 $vm.youtube(vm_contents,aa[1],topic);               break;
