@@ -476,8 +476,11 @@ $vm.open_popup=function(){    document.getElementById('vm_popup_p').style.top="5
 $vm.close_popup=function(){    document.getElementById('vm_popup_p').style.top="100000px";}
 document.getElementById('vm_close_popup').addEventListener('click',function(){    $vm.close_popup(); })
 //------------------------------------------------
-$vm.youtube=function(vm_contents,id,topic){
-    var src="https://www.youtube.com/embed/"+id+"/?autoplay=1&rel=0&enablejsapi=1";
+$vm.youtube=function(vm_contents,param,topic){
+    var ss=param.split('|');
+    var id=ss[0];
+    var par=""; if(ss.length==2) par=ss[1];
+    var src="https://www.youtube.com/embed/"+id+"/?autoplay=1&rel=0&enablejsapi=1"+par;
     var txt="<iframe src="+src+" width='100%' height=393px frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>"
     vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div>"+txt+"</div><div>");
     document.getElementById('vm_ask').value='';
