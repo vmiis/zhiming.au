@@ -70,6 +70,8 @@ var query=function(qq,tt){
     var qs=$vm.ai_list[t];
     if(qs!=undefined) i=qs.indexOf(q);
     var req={cmd:'qna',q:q,p:p,i:i}
+    //if(q.substring(0,2)=="a=") req={cmd:'qna-path', path: q.substring(2)}; 
+    //console.log(req);
     $vm.request(req).then((res)=>{
         if(res.answer.toString()=="noanswer"){
             var q0=res.question;
@@ -335,7 +337,7 @@ var init2=function(){
     //---------------------------------------------
     var a=window.location.href.split('?'); 
     if(a.length==2){
-        var qt=a[1].split('@').pop();
+        var qt=a[1];//.split('@').pop();
         if(qt.length>0){
             var q=decodeURIComponent(qt);
             query(q);
