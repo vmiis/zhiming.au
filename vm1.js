@@ -188,13 +188,15 @@ $vm.table=function(vm_contents,tConfig,topic){
     vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div></div><div>");
     var div=vm_contents.lastElementChild.querySelector('div');
     div.style["margin-top"]="-20px";
-    new Tabulator(div, {
+    var table=new Tabulator(div, {
         columns:config[0],
         data:config[1], 
-        layout:"fitColumns" 
+        layout:"fitColumns"
+    });
+    table.on("renderComplete", function(data){
+        scroll();
     });
     document.getElementById('vm_ask').value='';
-    scroll();
 }
 //------------------------------------------------
 $vm.data_to_grid_01=function(field,header,data){
@@ -285,7 +287,7 @@ $vm.grid=function(vm_contents,A,topic){
     vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div class=vm-grid></div><div>");
     var div=vm_contents.lastElementChild.querySelector('div');
     var data=[]
-    var bar="<input placeholder=keyword style='width:180px; border:1px solid #666; height:20px; padding-left:6px' /> <button>Searh</button> <label style='margin-left:30px'></label><br>";
+    var bar="<input placeholder=keyword style='width:180px; border:1px solid #666; height:20px; padding-left:6px' /> <button>Search</button> <label style='margin-left:30px'></label><br>";
     div.innerHTML=bar+"<table>"+$vm.data_to_grid_01(field,header,data)+"</table>";
     var inputE=div.querySelector('input');
     var qq=function(){
@@ -328,6 +330,45 @@ $vm.grid=function(vm_contents,A,topic){
     qq();
     document.getElementById('vm_ask').value='';
     scroll();
+}
+//------------------------------------------------
+$vm.gridjson=function(vm_contents,jdata){
+    var data=JSON.parse(jdata);
+    console.log(data)
+    var txt="<tr><th></th>";
+    data.header.forEach( (hh)=>{
+        txt+="<th>"+hh.split('|').pop()+"</th>"
+    })
+    txt+="</tr>";
+    var d="";
+    data.rows.forEach((row,i)=>{
+        d+="<tr><td><u I="+i+">View</u></td>";
+        data.header.forEach((hh)=>{
+            var id=hh.split('|')[0];
+            d+="<td>"+row.cols[id]+"</td>"
+        })
+        d+="</tr>";
+    })
+    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div class=vm-grid></div><div>");
+    var div=vm_contents.lastElementChild.querySelector('div');
+    div.innerHTML="<table>"+txt+d+"</table>";
+    var us=div.querySelectorAll('u');
+    us.forEach(el => {
+        el.addEventListener('click', (e) => { 
+            e.preventDefault(); e.stopPropagation(); var I=el.getAttribute('I'); 
+            //var json={}
+            //console.log(data.rows[I].cols);
+            document.getElementById('vm_popup').innerHTML="<div id='vm_json_renderer'></div>";
+            new JsonViewer({
+                value: data.rows[I].cols,
+                theme:'light',
+                displayDataTypes:false
+            }).render('#vm_json_renderer')
+            $vm.open_popup();
+         });
+    })
+   
+
 }
 //------------------------------------------------
 $vm.img=function(vm_contents,src,topic){

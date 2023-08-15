@@ -123,6 +123,8 @@ var show_answer=function(qq, topic, answer){
     var aa=answer.split("@CODE@"); if(aa.length==1) aa=["text",answer];
     if(aa[0]!="questions" && aa[0]!="multi" && qq!="") vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-question >"+qq+"<div>");
     switch(aa[0]){
+        case "gridjson":                $vm.gridjson(vm_contents, aa[1]);        break;
+        case "json":                    $vm.json(vm_contents,aa[1],topic);        break;
         case "playlist":                $vm.playlist(vm_contents,aa[1],topic);        break;
         case "questions":               $vm.questions_list(vm_contents,aa[1],qq);        break;
         case "text":                    $vm.text(vm_contents,aa[1],qq);               break;
@@ -157,6 +159,9 @@ var show_answer=function(qq, topic, answer){
             document.getElementById('vm_ask').value='';
             scroll();
     }
+    
+    document.getElementById('vm_ask').value=''; scroll();
+    
     var div=vm_contents.lastElementChild;
     div.addEventListener('click', (event) => {
         event.preventDefault();

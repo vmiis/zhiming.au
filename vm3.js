@@ -40,6 +40,22 @@ $vm.get_text=function(txt,s1,s2){
     return txt3;
 }
 //--------------------------------------------
+$vm.json=function(vm_contents,answer,q0){
+    var json=JSON.parse(answer);
+    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div style='padding-left:6px;margin-top:-20px'>123</div><div>");
+    
+    var div=vm_contents.lastElementChild.querySelector('div');
+    div.innerHTML=div.innerHTML+"abc";
+
+    new JsonViewer({
+        value: json,
+        theme:'dark'
+    }).render(div)
+    
+    document.getElementById('vm_ask').value='';
+    scroll();
+}
+//--------------------------------------------
 $vm.api_address='https://api.zhiming.au'; if(window.location.hostname=='127.0.0.1' || window.location.hostname=='localhost') $vm.api_address='http://localhost:8001';
 init();
 //--------------------------------------------
