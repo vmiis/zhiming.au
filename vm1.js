@@ -249,7 +249,10 @@ $vm.grid_render=function(db,table,query,header,field){
                         document.getElementById('vm_popup').innerHTML="<div id='vm_json_renderer'></div>";
                         new JsonViewer({
                             value: d[i].Data,
-                            theme:'light'
+                            theme:'light',
+                            displayDataTypes:false,
+                            maxDisplayLength:100,
+                            collapseStringsAfterLength:100
                         }).render('#vm_json_renderer')
                         $vm.open_popup();
                     });
@@ -362,7 +365,9 @@ $vm.gridjson=function(vm_contents,jdata){
             new JsonViewer({
                 value: data.rows[I].cols,
                 theme:'light',
-                displayDataTypes:false
+                displayDataTypes:false,
+                maxDisplayLength:100,
+                collapseStringsAfterLength:100
             }).render('#vm_json_renderer')
             $vm.open_popup();
          });
@@ -500,7 +505,12 @@ $vm.questions_list=function(vm_contents,param,topic){
     list.forEach((a,I)=>{
         if(a.length>0){
             if(p[0]=="[Virtual Zhiming]" && I<7){}
-            else {i++; questions+="<tr><td>"+i+"</td><td><u>"+a+"</u></td></tr>";}
+            else {
+                i++; 
+                var uid=a.split('~')[0].trim();
+                var text=a.split('~').pop().trim();
+                questions+="<tr><td>"+i+"</td><td><u uid=\""+uid+"\">"+text+"</u></td></tr>";
+            }
         }
     })
     questions+="</table>"
@@ -513,7 +523,8 @@ $vm.questions_list=function(vm_contents,param,topic){
             var topic=el.parentNode.getAttribute('topic');
             e.preventDefault();
             e.stopPropagation();
-            document.getElementById('vm_ask').value=el.textContent;
+            //document.getElementById('vm_ask').value=el.textContent;
+            document.getElementById('vm_ask').value=el.getAttribute('uid');
             vm_qq={};
             vm_qq[el.textContent]=topic;
             query();
