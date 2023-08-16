@@ -372,8 +372,55 @@ $vm.gridjson=function(vm_contents,jdata){
             $vm.open_popup();
          });
     })
-   
-
+}
+//------------------------------------------------
+$vm.gridjson_search=function(vm_contents,jdata){
+    var data=JSON.parse(jdata);
+    console.log(data)
+    var bar="<input placeholder='"+data.bar_search+"' style='width:180px; border:1px solid #666; height:20px; padding-left:6px' /> <button>Searh</button> <label style='margin-left:30px'>"+data.bar_label+"</label><br>";
+    var txt=bar+"<tr><th></th>";
+    data.header.forEach( (hh)=>{
+        txt+="<th>"+hh.split('|').pop()+"</th>"
+    })
+    txt+="</tr>";
+    var d="";
+    data.rows.forEach((row,i)=>{
+        d+="<tr><td><u I="+i+">View</u></td>";
+        data.header.forEach((hh)=>{
+            var id=hh.split('|')[0];
+            d+="<td>"+row.cols[id]+"</td>"
+        })
+        d+="</tr>";
+    })
+    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div class=vm-grid></div><div>");
+    var div=vm_contents.lastElementChild.querySelector('div');
+    div.innerHTML="<table>"+txt+d+"</table>";
+    var us=div.querySelectorAll('u');
+    us.forEach(el => {
+        el.addEventListener('click', (e) => { 
+            e.preventDefault(); e.stopPropagation(); var I=el.getAttribute('I'); 
+            //var json={}
+            //console.log(data.rows[I].cols);
+            document.getElementById('vm_popup').innerHTML="<div id='vm_json_renderer'></div>";
+            new JsonViewer({
+                value: data.rows[I].cols,
+                theme:'light',
+                displayDataTypes:false,
+                maxDisplayLength:100,
+                collapseStringsAfterLength:100
+            }).render('#vm_json_renderer')
+            $vm.open_popup();
+         });
+    })
+    var inputE=div.querySelector('input');
+    var qq=function(){
+        document.getElementById('vm_ask').value=data.this_question+"|"+ inputE.value;
+        //vm_qq={};
+        //vm_qq[el.textContent]=topic;
+        query();
+    }
+    div.querySelector('button').addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); qq(); });
+    div.querySelector('input').addEventListener("keyup", function(e){ if (e.keyCode === 13) {  qq();  }  })
 }
 //------------------------------------------------
 $vm.img=function(vm_contents,src,topic){

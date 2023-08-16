@@ -124,6 +124,7 @@ var show_answer=function(qq, topic, answer){
     if(aa[0]!="questions" && aa[0]!="multi" && qq!="") vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-question >"+qq+"<div>");
     switch(aa[0]){
         case "gridjson":                $vm.gridjson(vm_contents, aa[1]);        break;
+        case "gridjson_search":         $vm.gridjson_search(vm_contents, aa[1]);        break;
         case "json":                    $vm.json(vm_contents,aa[1],topic);        break;
         case "playlist":                $vm.playlist(vm_contents,aa[1],topic);        break;
         case "questions":               $vm.questions_list(vm_contents,aa[1],qq);        break;
