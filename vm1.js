@@ -210,7 +210,10 @@ $vm.data_to_grid_01=function(field,header,data){
         d+="<tr><td><u>View</u></td><td>"+dd.UID+"</td>";
         field.forEach((hh)=>{
             if(hh=="UID") d+="<td>"+dd.UID+"</td>"
-            else d+="<td>"+dd.Data[hh]+"</td>"
+            else{
+                var v=dd.Data[hh]; if(v==undefined) v="";
+                d+="<td>"+v+"</td>"
+            }
         })
         d+="<td>"+dd.Submit_date.split('T')[0] +"</td><td>"+dd.Submitted_by+"</td></tr>";
     })
@@ -348,7 +351,8 @@ $vm.gridjson=function(vm_contents,jdata){
         d+="<tr><td><u I="+i+">View</u></td>";
         data.header.forEach((hh)=>{
             var id=hh.split('|')[0];
-            d+="<td>"+row.cols[id]+"</td>"
+            var v=row[id]; if(v==undefined) v="";
+            d+="<td>"+v+"</td>"
         })
         d+="</tr>";
     })
@@ -363,7 +367,7 @@ $vm.gridjson=function(vm_contents,jdata){
             //console.log(data.rows[I].cols);
             document.getElementById('vm_popup').innerHTML="<div id='vm_json_renderer'></div>";
             new JsonViewer({
-                value: data.rows[I].cols,
+                value: data.rows[I],
                 theme:'light',
                 displayDataTypes:false,
                 maxDisplayLength:100,
@@ -372,6 +376,29 @@ $vm.gridjson=function(vm_contents,jdata){
             $vm.open_popup();
          });
     })
+}
+//------------------------------------------------
+$vm.gridjson_result=function(vm_contents,jdata){
+    var data=JSON.parse(jdata);
+    console.log(data)
+    var txt="<tr>";
+    data.header.forEach( (hh)=>{
+        txt+="<th>"+hh.split('|').pop()+"</th>"
+    })
+    txt+="</tr>";
+    var d="";
+    data.rows.forEach((row,i)=>{
+        d+="<tr>";
+        data.header.forEach((hh)=>{
+            var id=hh.split('|')[0];
+            var v=row[id]; if(v==undefined) v="";
+            d+="<td>"+v+"</td>"
+        })
+        d+="</tr>";
+    })
+    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div class=vm-grid></div><div>");
+    var div=vm_contents.lastElementChild.querySelector('div');
+    div.innerHTML="<table>"+txt+d+"</table>";
 }
 //------------------------------------------------
 $vm.gridjson_search=function(vm_contents,jdata){
@@ -388,7 +415,8 @@ $vm.gridjson_search=function(vm_contents,jdata){
         d+="<tr><td><u I="+i+">View</u></td>";
         data.header.forEach((hh)=>{
             var id=hh.split('|')[0];
-            d+="<td>"+row.cols[id]+"</td>"
+            var v=row[id]; if(v==undefined) v="";
+            d+="<td>"+v+"</td>"
         })
         d+="</tr>";
     })
@@ -403,7 +431,7 @@ $vm.gridjson_search=function(vm_contents,jdata){
             //console.log(data.rows[I].cols);
             document.getElementById('vm_popup').innerHTML="<div id='vm_json_renderer'></div>";
             new JsonViewer({
-                value: data.rows[I].cols,
+                value: data.rows[I],
                 theme:'light',
                 displayDataTypes:false,
                 maxDisplayLength:100,
