@@ -121,7 +121,7 @@ $vm.text=function(vm_contents,answer,q0){
 //------------------------------------------------
 var show_answer=function(qq, topic, answer){
     var aa=answer.split("@CODE@"); if(aa.length==1) aa=["text",answer];
-    if(aa[0]!="questions" && aa[0]!="multi" && qq!="") vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-question >"+qq+"<div>");
+    if(aa[0]!="questions" && aa[0]!="multi" && qq!="") vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-question >"+qq.split('|')[0]+"<div>");
     switch(aa[0]){
         case "gridjson_result":         $vm.gridjson_result(vm_contents, aa[1]);        break;
         case "gridjson":                $vm.gridjson(vm_contents, aa[1]);        break;

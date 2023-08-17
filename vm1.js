@@ -442,7 +442,9 @@ $vm.gridjson_search=function(vm_contents,jdata){
     })
     var inputE=div.querySelector('input');
     var qq=function(){
-        document.getElementById('vm_ask').value=data.this_question+"|"+ inputE.value;
+        var dd=data.this_question;
+        if(inputE.value!="") dd+="|"+inputE.value;
+        document.getElementById('vm_ask').value=dd;
         //vm_qq={};
         //vm_qq[el.textContent]=topic;
         query();
