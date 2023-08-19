@@ -74,7 +74,7 @@ var query=function(qq,tt){
     //console.log(req);
     $vm.request(req).then((res)=>{
         if(res.answer.toString()=="noanswer"){
-            var q0=res.question;
+            var q0=res.question.split('~').trim();
             $vm.wiki_query(q0).then( (data)=>{
                 if(data!=""){
                     show_answer(q0, "Generic",data);
@@ -121,77 +121,84 @@ $vm.text=function(vm_contents,answer,q0){
 //------------------------------------------------
 var show_answer=function(qq, topic, answer){
     var aa=answer.split("@CODE@"); if(aa.length==1) aa=["text",answer];
-    if(aa[0]!="questions" && aa[0]!="multi" && qq!="") vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-question >"+qq.split('|')[0]+"<div>");
-    switch(aa[0]){
-        case "gridjson_result":         $vm.gridjson_result(vm_contents, aa[1]);        break;
-        case "gridjson":                $vm.gridjson(vm_contents, aa[1]);        break;
-        case "gridjson_search":         $vm.gridjson_search(vm_contents, aa[1]);        break;
-        case "json":                    $vm.json(vm_contents,aa[1],topic);        break;
-        case "playlist":                $vm.playlist(vm_contents,aa[1],topic);        break;
-        case "questions":               $vm.questions_list(vm_contents,aa[1],qq);        break;
-        case "text":                    $vm.text(vm_contents,aa[1],qq);               break;
-        case "bilibili":                $vm.bilibili(vm_contents,aa[1],topic);               break;
-        case "youtube":                 $vm.youtube(vm_contents,aa[1],topic);               break;
-        case "recent":                  $vm.recent(vm_contents,aa[1],topic);                break;
-        case "multi":                   $vm.multi(vm_contents,aa[1],qq);                 break;
-        case "audio":                   $vm.audio(vm_contents,aa[1],qq);                 break;
-        case "audio163":                $vm.audio163(vm_contents,aa[1],topic);              break;
-        case "img":                     $vm.img(vm_contents,aa[1],topic);                   break;
-        case "imgdata":                 $vm.imgdata(vm_contents,aa[1],topic);               break;
-        case "grid":                    $vm.grid(vm_contents,aa[1],topic);                  break;
-        case "grid01":                  $vm.grid01(vm_contents,aa[1],topic);                break;
-        case "chart":                   $vm.chart(vm_contents,aa[1],topic);                 break;
-        case "table":                   $vm.table(vm_contents,aa[1],topic);                 break;
-        case "train":                   $vm.train(vm_contents,aa[1],topic);                 break;
-        case "login":                   $vm.login(vm_contents,aa[1],topic);                 break;
-        case "web":                     $vm.web_contents(vm_contents,aa[1],topic);          break;
-        case "abc":
-        case "abc2":                    $vm.abc_notation(vm_contents,aa[1],aa[0]);          break;
-        case "woolcock_profile_req":    $vm.woolcock_profile_req(vm_contents,topic);        break;
-        case "woolcock_profile_res":    $vm.woolcock_profile_res(vm_contents,aa[1],topic);  break;
-        case "w_people_profile":        $vm.w_people_profile(vm_contents,aa[1]);            break;
-        case "today_weather_req":       $vm.today_weather_req(vm_contents,topic);           break;
-        case "today_weather_res":       $vm.today_weather_res(vm_contents,aa[1],topic);     break;
-        default:
-            vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer topic='"+topic+"'><div style='padding-left:6px;margin-top:-20px'>"+answer+"</div><div>");
-            var div=vm_contents.lastElementChild.querySelector('div[vm]');
-            if(div!=null){
-                $vm.div_render(div);
-            }
-            document.getElementById('vm_ask').value='';
-            scroll();
-    }
-    
-    document.getElementById('vm_ask').value=''; scroll();
-    
-    var div=vm_contents.lastElementChild;
-    div.addEventListener('click', (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        if (event.ctrlKey) {
-            if(div.style.position==""){
-                //console.log(111)
-                div.style.position="fixed";
-                div.style.top=0;
-                div.style.left=0;
-                div.style.padding=0;
-                div.style.width="100%";
-                div.style.height="100%";
-                div.style.background="#242528";
-            }
-            else{
-                //console.log(222)
-                div.style.position='';
-                /*
-                div.style.top=0;
-                div.style.left=0;
-                div.style.width="100%";
-                div.style.height="100%";
-                div.style.background='';
-                */
-            }
+    var done=-1;
+    if(done==-1){
+        switch(aa[0]){
+            case "grid_vm":                 $vm.grid_vm(vm_contents,aa[1],qq);                      break;
+            default:                        done=0;
         }
-    })
+    }
+    if(done==0){
+        if(aa[0]!="questions" && aa[0]!="multi" && qq!="") vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-question >"+qq.split('|')[0]+"<div>");
+        switch(aa[0]){
+            case "gridjson_result":         $vm.gridjson_result(vm_contents, aa[1]);        break;
+            case "gridjson":                $vm.gridjson(vm_contents, aa[1]);        break;
+            case "gridjson_search":         $vm.gridjson_search(vm_contents, aa[1]);        break;
+            case "json":                    $vm.json(vm_contents,aa[1],topic);        break;
+            case "playlist":                $vm.playlist(vm_contents,aa[1],topic);        break;
+            case "questions":               $vm.questions_list(vm_contents,aa[1],qq);        break;
+            case "text":                    $vm.text(vm_contents,aa[1],qq);               break;
+            case "bilibili":                $vm.bilibili(vm_contents,aa[1],topic);               break;
+            case "youtube":                 $vm.youtube(vm_contents,aa[1],topic);               break;
+            case "recent":                  $vm.recent(vm_contents,aa[1],topic);                break;
+            case "multi":                   $vm.multi(vm_contents,aa[1],qq);                 break;
+            case "audio":                   $vm.audio(vm_contents,aa[1],qq);                 break;
+            case "audio163":                $vm.audio163(vm_contents,aa[1],topic);              break;
+            case "img":                     $vm.img(vm_contents,aa[1],topic);                   break;
+            case "imgdata":                 $vm.imgdata(vm_contents,aa[1],topic);               break;
+            case "grid":                    $vm.grid(vm_contents,aa[1],topic);                  break;
+            case "grid01":                  $vm.grid01(vm_contents,aa[1],topic);                break;
+            case "chart":                   $vm.chart(vm_contents,aa[1],topic);                 break;
+            case "table":                   $vm.table(vm_contents,aa[1],topic);                 break;
+            case "train":                   $vm.train(vm_contents,aa[1],topic);                 break;
+            case "login":                   $vm.login(vm_contents,aa[1],topic);                 break;
+            case "web":                     $vm.web_contents(vm_contents,aa[1],topic);          break;
+            case "abc":
+            case "abc2":                    $vm.abc_notation(vm_contents,aa[1],aa[0]);          break;
+            case "woolcock_profile_req":    $vm.woolcock_profile_req(vm_contents,topic);        break;
+            case "woolcock_profile_res":    $vm.woolcock_profile_res(vm_contents,aa[1],topic);  break;
+            case "w_people_profile":        $vm.w_people_profile(vm_contents,aa[1]);            break;
+            case "today_weather_req":       $vm.today_weather_req(vm_contents,topic);           break;
+            case "today_weather_res":       $vm.today_weather_res(vm_contents,aa[1],topic);     break;
+            default:
+                vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer topic='"+topic+"'><div style='padding-left:6px;margin-top:-20px'>"+answer+"</div><div>");
+                var div=vm_contents.lastElementChild.querySelector('div[vm]');
+                if(div!=null){
+                    $vm.div_render(div);
+                }
+                document.getElementById('vm_ask').value='';
+                scroll();
+        }
+        document.getElementById('vm_ask').value=''; scroll();
+        var div=vm_contents.lastElementChild;
+        div.addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            if (event.ctrlKey) {
+                if(div.style.position==""){
+                    //console.log(111)
+                    div.style.position="fixed";
+                    div.style.top=0;
+                    div.style.left=0;
+                    div.style.padding=0;
+                    div.style.width="100%";
+                    div.style.height="100%";
+                    div.style.background="#242528";
+                }
+                else{
+                    //console.log(222)
+                    div.style.position='';
+                    /*
+                    div.style.top=0;
+                    div.style.left=0;
+                    div.style.width="100%";
+                    div.style.height="100%";
+                    div.style.background='';
+                    */
+                }
+            }
+        })
+    }
 }
 //------------------------------------------------
 var show_sorry=function(q){
@@ -367,7 +374,8 @@ window.addEventListener("resize", function() {
 });
 //------------------------------------------------
 $vm.ai_list={};
-var init=function(){  
+var init=function(){
+    $vm._id=1;  
     re_caculate_height();
     set_autolist_topic();
     set_autolist_question();

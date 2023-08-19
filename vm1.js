@@ -200,22 +200,19 @@ $vm.table=function(vm_contents,tConfig,topic){
 }
 //------------------------------------------------
 $vm.data_to_grid_01=function(field,header,data){
-    var txt="<tr><th></th><th>ID</th>";
+    var txt="<tr><th></th>";
     header.forEach((hh)=>{
         txt+="<th>"+hh+"</th>"
     })
-    txt+="<th>Submit date</th><th>Submitted by</th></tr>";
+    txt+="</tr>";
     var d="";
     data.forEach((dd)=>{
-        d+="<tr><td><u>View</u></td><td>"+dd.UID+"</td>";
+        d+="<tr><td><u>View</u></td>";
         field.forEach((hh)=>{
-            if(hh=="UID") d+="<td>"+dd.UID+"</td>"
-            else{
-                var v=dd.Data[hh]; if(v==undefined) v="";
-                d+="<td>"+v+"</td>"
-            }
+            var v=dd[hh]; if(v==undefined) v="";
+            d+="<td>"+v+"</td>"
         })
-        d+="<td>"+dd.Submit_date.split('T')[0] +"</td><td>"+dd.Submitted_by+"</td></tr>";
+        d+="</tr>"
     })
     return (txt+d)
 }
@@ -281,6 +278,67 @@ $vm.grid01=function(vm_contents,A,topic){
     var header=[];  fds.forEach((item,i)=>{header.push(item.split('|').pop())});
     var query=JSON.parse(ss[3]);
     $vm.grid_render(db,table,query,header,field);
+}
+//------------------------------------------------
+$vm.grid_render_vm=function(data){
+    var field=[];   data.fields.split(',').forEach((item,i)=>{field.push(item.split('|')[0])});
+    var header=[];  data.fields.split(',').forEach((item,i)=>{header.push(item.split('|').pop())});
+    var div;
+    if(data.id==0){
+        vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-question >"+data.question+"<div>")
+        vm_contents.insertAdjacentHTML('beforeend',"<div id="+$vm._id+++" class=vm-answer><div class=vm-grid></div><div>");
+        div=vm_contents.lastElementChild.querySelector('div');
+        var bar="<input placeholder='"+data.info_for_search+"' style='width:180px; border:1px solid #666; height:20px; padding-left:6px' /> <button>Searh</button> <label style='margin-left:30px'></label><br>";
+        if(data.error==undefined) div.innerHTML=bar+"<table>"+$vm.data_to_grid_01(field,header,data.rows)+"</table>";
+        else div.innerHTML=bar+"<table>"+data.error+"</table>";
+        
+        div.querySelector('button').addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); qq(); });
+        div.querySelector('input').addEventListener("keyup", function(e){ if (e.keyCode === 13) {  qq();  }  })
+    }
+    else{
+        div=document.getElementById(data.id);
+        var table=div.querySelector('table')
+        if(data.error==undefined) table.innerHTML=$vm.data_to_grid_01(field,header,data.rows);
+        else table.innerHTML=data.error;
+    }
+    var inputE=div.querySelector('input');
+    div.querySelector('label').innerText=data.label;
+    var us=div.querySelectorAll('u');
+    us.forEach((el,i) => {
+        el.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            var options = {
+                collapsed: true,
+                rootCollapsable: false,
+            };
+            document.getElementById('vm_popup').innerHTML="<div id='vm_json_renderer'></div>";
+            new JsonViewer({
+                value: data.rows[i],
+                theme:'light',
+                displayDataTypes:false,
+                maxDisplayLength:100,
+                collapseStringsAfterLength:100
+            }).render('#vm_json_renderer')
+            $vm.open_popup();
+        });
+    });
+    var qq=function(){
+        var dd=data.question;
+        var d_id=div.parentNode.getAttribute('id');
+        dd+="|"+inputE.value+"|"+d_id;
+        document.getElementById('vm_ask').value=dd;
+        query();
+    }
+    document.getElementById('vm_ask').value='';
+    if(data.id==0) scroll();
+};
+//------------------------------------------------
+$vm.grid_vm=function(vm_contents,A,q){
+    var data=JSON.parse(A);
+console.log(data);    
+    $vm.grid_render_vm(data);
 }
 //------------------------------------------------
 $vm.grid=function(vm_contents,A,topic){
