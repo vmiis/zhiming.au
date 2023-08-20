@@ -169,36 +169,36 @@ var show_answer=function(qq, topic, answer){
                 document.getElementById('vm_ask').value='';
                 scroll();
         }
-        document.getElementById('vm_ask').value=''; scroll();
-        var div=vm_contents.lastElementChild;
-        div.addEventListener('click', (event) => {
-            event.preventDefault();
-            event.stopPropagation();
-            if (event.ctrlKey) {
-                if(div.style.position==""){
-                    //console.log(111)
-                    div.style.position="fixed";
-                    div.style.top=0;
-                    div.style.left=0;
-                    div.style.padding=0;
-                    div.style.width="100%";
-                    div.style.height="100%";
-                    div.style.background="#242528";
-                }
-                else{
-                    //console.log(222)
-                    div.style.position='';
-                    /*
-                    div.style.top=0;
-                    div.style.left=0;
-                    div.style.width="100%";
-                    div.style.height="100%";
-                    div.style.background='';
-                    */
-                }
-            }
-        })
     }
+    document.getElementById('vm_ask').value=''; scroll();
+    var div=vm_contents.lastElementChild;
+    div.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        if (event.ctrlKey) {
+            if(div.style.position==""){
+                //console.log(111)
+                div.style.position="fixed";
+                div.style.top=0;
+                div.style.left=0;
+                div.style.padding=0;
+                div.style.width="100%";
+                div.style.height="100%";
+                div.style.background="#242528";
+            }
+            else{
+                //console.log(222)
+                div.style.position='';
+                /*
+                div.style.top=0;
+                div.style.left=0;
+                div.style.width="100%";
+                div.style.height="100%";
+                div.style.background='';
+                */
+            }
+        }
+    })
 }
 //------------------------------------------------
 var show_sorry=function(q){
