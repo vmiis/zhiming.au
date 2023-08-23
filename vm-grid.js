@@ -8,7 +8,13 @@ $vm.data_to_grid_vm=function(data,fn){
             }
         })
         var n_all=all;
-        if(fn==3) n_all=[all[0],all[1],all[2]];    
+        if(fn==3){
+            n_all=[];
+            //n_all=[all[0],all[1],all[2]];
+            for(var i=0;i<3 && i<all.length;i++){
+                n_all.push(all[i]);
+            }
+        }
         var af=n_all.join(',');
         a_fields=data.fields.replace('_all_',af);
     }   
@@ -26,6 +32,18 @@ $vm.data_to_grid_vm=function(data,fn){
         field.forEach((hh)=>{
             var v=dd[hh]; if(v==undefined) v="";
             d+="<td>"+v+"</td>"
+            /*
+            if(data.format!=undefined && data.format[hh]!=undefined){
+                if(data.format[hh].type=='img'){
+                    var url=data.format[hh].url;
+                    var v=dd[hh][url];
+                    d+="<td><img src='"+v+"' /></td>";
+                    //d+="<td>"+v+"</td>"
+                }
+            }
+            else{
+            }
+            */
         })
         d+="</tr>"
     })

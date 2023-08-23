@@ -605,7 +605,10 @@ $vm.questions_list=function(vm_contents,param,topic){
         });
     });
     document.getElementById('vm_ask').value='';
-    vm_nav.scrollTop = vm_nav.scrollHeight;
+    if($vm.first_query_nav==1){
+        $vm.first_query_nav=0;
+    }
+    else vm_nav.scrollTop = vm_nav.scrollHeight;
     scroll();
 }
 //------------------------------------------------

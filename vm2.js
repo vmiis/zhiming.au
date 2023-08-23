@@ -354,6 +354,7 @@ var init2=function(){
         var qt=a[1];//.split('@').pop();
         if(qt.length>0){
             var q=decodeURIComponent(qt);
+            $vm.first_query_nav=1;
             query(q);
         }
     }
