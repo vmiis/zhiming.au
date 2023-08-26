@@ -25,9 +25,10 @@ $vm.update_ai_list=function(cb){
 }
 //------------------------------------------------
 $vm.dsiplay_ai_list=function(){
+    const chineseRegex = /[\u4e00-\u9fa5]/; 
     var txt="";
     for(key in $vm.ai_list){
-        txt+="<u>["+key+"]</u><br>"
+        txt+="<u>"+key+"</u><br>";
     }
     var div=document.getElementById("vm_nav");
     div.innerHTML=txt;
@@ -36,10 +37,10 @@ $vm.dsiplay_ai_list=function(){
         el.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            window.open(window.location.href.split('nav.html')[0]+"?"+el.textContent);
+            if(chineseRegex.test(el.textContent)) window.open(window.location.href.split('nav.html')[0]+"?"+"【"+el.textContent+"】");
+            else window.open(window.location.href.split('nav.html')[0]+"?"+"["+el.textContent+"]");
         });
     });
-
 }
 //------------------------------------------------
 $vm.update_ai_list($vm.dsiplay_ai_list);
