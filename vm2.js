@@ -119,6 +119,38 @@ $vm.text=function(vm_contents,answer,q0){
     scroll();
 }
 //------------------------------------------------
+$vm.buffer=function(data){
+    var jd=JSON.parse(data);
+    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div style='padding-left:6px;margin-top:-20px'>"+jd.name+"</div><div>");
+    document.getElementById('vm_ask').value='';
+    scroll();
+
+    const binaryData = atob(jd.buffer);
+    const uint8Array = new Uint8Array(binaryData.length);
+    for (let i = 0; i < binaryData.length; i++) {
+      uint8Array[i] = binaryData.charCodeAt(i);
+    }
+    var type="";
+    switch(jd.type){
+        case "docx": type='application/vnd.openxmlformats-officedocument.wordprocessingml.document'; break;
+        case "pdf": type='application/pdf'; break;
+        case "msi": type='application/x-msi'; break;
+    }
+    const aBlob = new Blob([uint8Array], { type: type});
+    const aUrl = URL.createObjectURL(aBlob)
+    
+    if(jd.type=="msi"){
+        var link=document.createElement('a');
+        link.href=aUrl;
+        link.download=jd.name;
+        console.log(jd.name)
+        link.click();
+    }
+    else{
+        window.open(aUrl, '_blank');                
+    }    
+}
+//------------------------------------------------
 var show_answer=function(qq, topic, answer){
     var aa=answer.split("@CODE@"); if(aa.length==1) aa=["text",answer];
     var done=-1;
@@ -131,6 +163,8 @@ var show_answer=function(qq, topic, answer){
     if(done==0){
         if(aa[0]!="questions" && aa[0]!="multi" && qq!="") vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-question >"+qq.split('|')[0]+"<div>");
         switch(aa[0]){
+            //case "pdffile":                 $vm.open_file("pdf",aa[1]);                             break;
+            case "buffer":                  $vm.buffer(aa[1]);                             break;
             case "gridjson_result":         $vm.gridjson_result(vm_contents, aa[1]);        break;
             case "gridjson":                $vm.gridjson(vm_contents, aa[1]);        break;
             case "gridjson_search":         $vm.gridjson_search(vm_contents, aa[1]);        break;
@@ -173,7 +207,7 @@ var show_answer=function(qq, topic, answer){
     document.getElementById('vm_ask').value=''; scroll();
     var div=vm_contents.lastElementChild;
     div.addEventListener('click', (event) => {
-        event.preventDefault();
+        //event.preventDefault();
         event.stopPropagation();
         if (event.ctrlKey) {
             if(div.style.position==""){
