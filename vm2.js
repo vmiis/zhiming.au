@@ -157,11 +157,16 @@ var show_answer=function(qq, topic, answer){
     if(done==-1){
         switch(aa[0]){
             case "grid_vm":                 $vm.grid_vm(vm_contents,aa[1],qq);                      break;
+            case "grid_mongo":              $vm.grid_mongo(vm_contents,aa[1]);                      break;
+            case "grid_dynamics":           $vm.grid_dynamics(vm_contents,aa[1]);                   break;
+            case "grid_export":             $vm.grid_export(vm_contents,aa[1]);                     break;
             default:                        done=0;
         }
     }
     if(done==0){
-        if(aa[0]!="questions" && aa[0]!="multi" && qq!="") vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-question >"+qq.split('|')[0]+"<div>");
+        if(aa[0]=="questions" || aa[0]=="multi" || qq=="") {}
+        else vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-question >"+qq.split('|')[0]+"<div>");
+        //if(aa[0]!="questions" && aa[0]!="multi" && qq!="") vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-question >"+qq.split('|')[0]+"<div>");
         switch(aa[0]){
             //case "pdffile":                 $vm.open_file("pdf",aa[1]);                             break;
             case "buffer":                  $vm.buffer(aa[1]);                             break;
@@ -411,6 +416,7 @@ window.addEventListener("resize", function() {
 $vm.ai_list={};
 var init=function(){
     $vm._id=1;  
+    $vm.g_object={}
     re_caculate_height();
     set_autolist_topic();
     set_autolist_question();

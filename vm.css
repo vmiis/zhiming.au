@@ -211,6 +211,7 @@ html,body,input,textarea{
 }
 .vm-grid{
     margin-top:-20px;
+    overflow: auto;
 }
 
 .vm-grid table{
