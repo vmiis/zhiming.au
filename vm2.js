@@ -133,6 +133,7 @@ $vm.buffer=function(data){
     var type="";
     switch(jd.type){
         case "docx": type='application/vnd.openxmlformats-officedocument.wordprocessingml.document'; break;
+        case "xlsx": type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'; break;
         case "pdf": type='application/pdf'; break;
         case "msi": type='application/x-msi'; break;
     }
@@ -149,6 +150,74 @@ $vm.buffer=function(data){
     else{
         window.open(aUrl, '_blank');                
     }    
+}
+//------------------------------------------------
+$vm.json_to_table=function(jdata){
+    var txt="";
+    var J=jdata[0].length;
+    for(var i=0;i<jdata.length;i++){
+        txt+="<tr>"
+        if(i==0) txt+="<th></th>";
+        else txt+="<td>"+i+"</td>"
+        for(var j=0;j<J;j++){
+            if(i==0) txt+="<th>"+jdata[i][j]+"</th>";
+            else{
+                var c="";
+                if(j<jdata[i].length) c=jdata[i][j];
+                if(c==undefined) c="";
+                txt+="<td>"+c+"</td>";
+            }
+        }
+        txt+="</tr>";
+    }
+    return txt
+}
+//-------------------------------
+$vm.buffer_excel=function(data){
+    var jd=JSON.parse(data);
+    var txt="";
+    var workbook = XLSX.read(jd.buffer, {type:"base64"});
+    workbook.SheetNames.forEach(function(sheetName) {
+        //console.log(sheetName)
+        if(sheetName==jd.sheet){
+            var jdata=XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {header:1});
+            txt=$vm.json_to_table(jdata);
+            //console.log(answer)
+        }
+    })
+    var tb="<div class=vm-grid><table>"+txt+"</table></div>"
+    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer ><div style='padding-left:6px;margin-top:-20px'>"+tb+"</div><div>");
+    document.getElementById('vm_ask').value='';
+    scroll();
+
+    /*
+    const binaryData = atob(jd.buffer);
+    const uint8Array = new Uint8Array(binaryData.length);
+    for (let i = 0; i < binaryData.length; i++) {
+      uint8Array[i] = binaryData.charCodeAt(i);
+    }
+    
+    var type="";
+    switch(jd.type){
+        case "docx": type='application/vnd.openxmlformats-officedocument.wordprocessingml.document'; break;
+        case "xlsx": type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'; break;
+        case "pdf": type='application/pdf'; break;
+        case "msi": type='application/x-msi'; break;
+    }
+    const aBlob = new Blob([uint8Array], { type: type});
+    const aUrl = URL.createObjectURL(aBlob)
+    
+    if(jd.type=="msi"){
+        var link=document.createElement('a');
+        link.href=aUrl;
+        link.download=jd.name;
+        console.log(jd.name)
+        link.click();
+    }
+    else{
+        window.open(aUrl, '_blank');                
+    } 
+    */   
 }
 //------------------------------------------------
 var show_answer=function(qq, topic, answer){
@@ -169,14 +238,15 @@ var show_answer=function(qq, topic, answer){
         //if(aa[0]!="questions" && aa[0]!="multi" && qq!="") vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-question >"+qq.split('|')[0]+"<div>");
         switch(aa[0]){
             //case "pdffile":                 $vm.open_file("pdf",aa[1]);                             break;
-            case "buffer":                  $vm.buffer(aa[1]);                             break;
+            case "buffer":                  $vm.buffer(aa[1]);                              break;
+            case "buffer_excel":            $vm.buffer_excel(aa[1]);                        break;
             case "gridjson_result":         $vm.gridjson_result(vm_contents, aa[1]);        break;
-            case "gridjson":                $vm.gridjson(vm_contents, aa[1]);        break;
+            case "gridjson":                $vm.gridjson(vm_contents, aa[1]);               break;
             case "gridjson_search":         $vm.gridjson_search(vm_contents, aa[1]);        break;
-            case "json":                    $vm.json(vm_contents,aa[1],topic);        break;
-            case "playlist":                $vm.playlist(vm_contents,aa[1],topic);        break;
-            case "questions":               $vm.questions_list(vm_contents,aa[1],qq);        break;
-            case "text":                    $vm.text(vm_contents,aa[1],qq);               break;
+            case "json":                    $vm.json(vm_contents,aa[1],topic);              break;
+            case "playlist":                $vm.playlist(vm_contents,aa[1],topic);          break;
+            case "questions":               $vm.questions_list(vm_contents,aa[1],qq);       break;
+            case "text":                    $vm.text(vm_contents,aa[1],qq);                 break;
             case "bilibili":                $vm.bilibili(vm_contents,aa[1],topic);               break;
             case "youtube":                 $vm.youtube(vm_contents,aa[1],topic);               break;
             case "recent":                  $vm.recent(vm_contents,aa[1],topic);                break;
@@ -216,7 +286,6 @@ var show_answer=function(qq, topic, answer){
         event.stopPropagation();
         if (event.ctrlKey) {
             if(div.style.position==""){
-                //console.log(111)
                 div.style.position="fixed";
                 div.style.top=0;
                 div.style.left=0;
@@ -224,17 +293,11 @@ var show_answer=function(qq, topic, answer){
                 div.style.width="100%";
                 div.style.height="100%";
                 div.style.background="#242528";
+                try{div.querySelector('div.vm-grid').style['max-height']=window.innerHeight+'px';}catch(e){}
             }
             else{
-                //console.log(222)
                 div.style.position='';
-                /*
-                div.style.top=0;
-                div.style.left=0;
-                div.style.width="100%";
-                div.style.height="100%";
-                div.style.background='';
-                */
+                try{div.querySelector('div.vm-grid').style['max-height']='600px';}catch(e){}
             }
         }
     })

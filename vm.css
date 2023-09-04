@@ -212,8 +212,8 @@ html,body,input,textarea{
 .vm-grid{
     margin-top:-20px;
     overflow: auto;
+    max-height:600px;
 }
-
 .vm-grid table{
     border: 1px solid #888;
     width: 100%;
@@ -296,7 +296,8 @@ html,body,input,textarea{
 }
 */
 ::-webkit-scrollbar {
-    width: 12px;
+    width: 10px;
+    height: 10px;
 }
 ::-webkit-scrollbar-thumb {
     background-color: #555;
