@@ -27,8 +27,13 @@ $vm.update_ai_list=function(cb){
 $vm.dsiplay_ai_list=function(){
     const chineseRegex = /[\u4e00-\u9fa5]/; 
     var txt="";
+    var keys=[];
     for(key in $vm.ai_list){
-        txt+="<u>"+key+"</u><br>";
+        keys.push(key.toLowerCase());
+    }
+    keys.sort();
+    for(var i=0;i<keys.length;i++){
+        txt+="<u>"+keys[i]+"</u><br>";
     }
     var div=document.getElementById("vm_nav");
     div.innerHTML=txt;
