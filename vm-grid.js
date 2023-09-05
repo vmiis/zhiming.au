@@ -1,3 +1,41 @@
+$vm.data_to_grid_vm_table=function(data){
+    var a_fields=data.fields;
+    /*
+    var all=[];
+    data.rows.forEach((dd)=>{
+        for(p in dd){
+            if(all.indexOf(p)==-1 && data.fields.indexOf(p)==-1) all.push(p);
+        }
+    })
+    */
+    //var n_all=all;
+    //var af=n_all.join(',');
+    var field=[];   a_fields.split(',').forEach((item,i)=>{field.push(item.split('|')[0])});
+    var header=[];  a_fields.split(',').forEach((item,i)=>{header.push(item.split('|').pop())});
+    var formats=data.formats;
+    var txt="<tr>";
+    header.forEach((hh)=>{
+        txt+="<th>"+hh+"</th>"
+    })
+    txt+="</tr>";
+    var d="";
+    data.rows.forEach((dd)=>{
+        d+="<tr>";
+        field.forEach((hh,i)=>{
+            var v=dd[hh]; if(v==undefined) v="";
+            if(formats!=undefined && i<formats.length && formats[i]!=undefined){
+                if(formats[i].type='img'){
+                    v="<div style='height:auto;width:"+formats[i].w+"px' ><img src='"+v+"' style='width: 100%; height: auto;' /><div>";
+                    d+="<td style='padding:0'>"+v+"</td>"
+                }
+            }
+            else d+="<td>"+v+"</td>"
+        })
+        d+="</tr>"
+    })
+    return (txt+d)
+}
+//------------------------------------------------
 $vm.data_to_grid_vm=function(data,fn){
     var a_fields=data.fields;
     if(fn==3 || fn==100){
@@ -331,6 +369,20 @@ $vm.grid_dynamics=function(vm_contents,A){
     //--------------------------
     document.getElementById('vm_ask').value='';
     if(data.id==0) scroll();
+};
+//------------------------------------------------
+$vm.grid_vm_table=function(vm_contents,A){
+    var data=JSON.parse(A);
+    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-question >"+data.question+"<div>")
+    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div style='overflow:auto' class=vm-grid ></div><div>");
+    var div=vm_contents.lastElementChild.querySelector('div');
+    if(data.error==undefined) div.innerHTML="<table>"+$vm.data_to_grid_vm_table(data)+"</table>";
+    else div.innerHTML="<table>"+data.error+"</table>";
+    //--------------------------
+    if($vm.g_object[data.id]==undefined) $vm.g_object[data.id]={}; $vm.g_object[data.id].data=data;
+    //--------------------------
+    document.getElementById('vm_ask').value='';
+    scroll();
 };
 //------------------------------------------------
 $vm.grid_export=function(vm_contents,jdata){

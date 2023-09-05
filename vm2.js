@@ -229,6 +229,7 @@ var show_answer=function(qq, topic, answer){
             case "grid_mongo":              $vm.grid_mongo(vm_contents,aa[1]);                      break;
             case "grid_dynamics":           $vm.grid_dynamics(vm_contents,aa[1]);                   break;
             case "grid_export":             $vm.grid_export(vm_contents,aa[1]);                     break;
+            case "grid_vm_table":           $vm.grid_vm_table(vm_contents,aa[1]);                   break;
             default:                        done=0;
         }
     }
