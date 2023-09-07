@@ -36,6 +36,11 @@ html,body,input,textarea{
 #vm_nav{
     overflow: auto;
 }
+.vm_tags{
+    overflow: auto;
+    height:100%;
+    column-count: 2;
+}
 .vm-train input{
     height:20px;
 }
