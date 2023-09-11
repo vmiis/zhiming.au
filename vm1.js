@@ -30,7 +30,7 @@ $vm.today_weather_res=function(vm_contents,answer,topic){
     text+=data.forecast.forecastday[0].day.condition.text+"<br>";
     text+="Max: "+data.forecast.forecastday[0].day.maxtemp_c+"<br>";
     text+="Min: "+data.forecast.forecastday[0].day.mintemp_c+"<br>";
-    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div style='margin-top:-20px'>"+text+"</div></div>");
+    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div style='_margin-top:-20px'>"+text+"</div></div>");
     const vmDivs = document.querySelectorAll('div.vm-today_weather_req');
     vmDivs.forEach(vmDiv => vmDiv.remove());    
     $vm.today_weather_req(vm_contents,topic);
@@ -70,7 +70,7 @@ $vm.woolcock_profile_res=function(vm_contents,answer,topic){
         text+="Office Location: "+data[i].officeLocation+"<br>";
         text+="<br>"
     }
-    if(data.length!=0) vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div style='margin-top:-20px'>"+text+"</div></div>");
+    if(data.length!=0) vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div style='_margin-top:-20px'>"+text+"</div></div>");
     const vmDivs = document.querySelectorAll('div.vm-wps');
     vmDivs.forEach(vmDiv => vmDiv.remove());    
     $vm.woolcock_profile_req(vm_contents,topic);
@@ -159,7 +159,7 @@ $vm.login=function(vm_contents,tList,topic){
     for(var i=0;i<list.length;i++){
         text+="<u>"+list[i]+"</u><br>"
     }
-    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div style='padding-left:6px;margin-top:-20px'>"+text+"</div><div>");
+    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div style='padding-left:6px;_margin-top:-20px'>"+text+"</div><div>");
     var us=vm_contents.lastElementChild.querySelectorAll('u');
     us.forEach(el => {
         el.addEventListener('click', (e) => {
@@ -176,7 +176,7 @@ $vm.chart=function(vm_contents,tConfig,topic){
     var config=JSON.parse(tConfig);
     vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div><canvas></canvas></div><div>");
     var div=vm_contents.lastElementChild.querySelector('div');
-    div.style["margin-top"]="-20px";
+    //div.style["margin-top"]="-20px";
     var canvas=div.querySelector('canvas');
     new Chart(canvas,config);
     document.getElementById('vm_ask').value='';
@@ -187,7 +187,7 @@ $vm.table=function(vm_contents,tConfig,topic){
     var config=JSON.parse(tConfig);
     vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div></div><div>");
     var div=vm_contents.lastElementChild.querySelector('div');
-    div.style["margin-top"]="-20px";
+    //div.style["margin-top"]="-20px";
     var table=new Tabulator(div, {
         columns:config[0],
         data:config[1], 
@@ -454,7 +454,7 @@ $vm.img=function(vm_contents,src,topic){
     var srcs=src.split('|');
     var txt="";
     for(var i=0;i<srcs.length;i++){
-        txt+="<img rel='noopener noreferrer' style='margin-top:-20px;width: 100%; height: auto;' src="+srcs[i]+"></img>"
+        txt+="<img rel='noopener noreferrer' style='_margin-top:-20px;width: 100%; height: auto;' src="+srcs[i]+"></img>"
     }
     vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div>"+txt+"</div><div>");
     document.getElementById('vm_ask').value='';
@@ -469,7 +469,7 @@ $vm.imgdata=function(vm_contents,src,topic){
         txt+="<img rel='noopener noreferrer' style='margin-top:-20px;width: 100%; height: auto;' src="+srcs[i]+"></img>"
     }
     */
-   var txt="<img rel='noopener noreferrer' style='margin-top:-20px;width: 100%; height: auto;' src="+src+"></img>"
+   var txt="<img rel='noopener noreferrer' style='_margin-top:-20px;width: 100%; height: auto;' src="+src+"></img>"
     vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div>"+txt+"</div><div>");
     document.getElementById('vm_ask').value='';
     scroll();
@@ -487,7 +487,7 @@ $vm.audio=function(vm_contents,src,qq){
     console.log(audio_list);
 
     var txt=`
-    <audio controls style='width:100%;height:30px;margin-top:-30px'>
+    <audio controls style='width:100%;height:30px; _margin-top:-30px'>
         <source src="`+src+`" type="audio/mpeg">
     </audio>
     `;
@@ -626,7 +626,7 @@ $vm.multi=function(vm_contents,ans,q){
     txt+="</table>"
     var ccc=vm_nav;
     if (window.innerWidth <900) ccc=vm_contents;
-    ccc.insertAdjacentHTML('beforeend',"<div class=vm-answer><div style='margin-top:-20px'>"+txt+"</div><div>");
+    ccc.insertAdjacentHTML('beforeend',"<div class=vm-answer><div style='_margin-top:-20px'>"+txt+"</div><div>");
     var us=ccc.lastElementChild.querySelectorAll('u');
     us.forEach((el,i) => {
         el.addEventListener('click', (e) => {

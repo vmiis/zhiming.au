@@ -1,3 +1,6 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+}
 html{
     overflow:hidden;
 }
@@ -139,13 +142,13 @@ html,body,input,textarea{
     padding:0 10px 0 0;
 }
 .vm-answer{
-    padding:6px 3px 25px 0px; 
+    padding:6px 0px 25px 0px; 
 }
 .vm-answer u{
     cursor:pointer;
 }
 .vm-questions{
-    margin-top:-20px;
+    _margin-top:-20px;
     _column-count: 2;
     padding:0px 3px 0px 0px; 
 }
@@ -168,12 +171,12 @@ html,body,input,textarea{
     padding: 1px;
 }
 .vm-items{
-    margin-top:-20px;
+    _margin-top:-20px;
     padding:0px 3px 0px 0px; 
 }
 .vm-answer-div{
-    margin-top:-20px;
-    padding:0px 3px 0px 0px; 
+    _margin-top:-20px;
+    padding:0px 3px 0px 0px;
 }
 .vm-bottom-bar{
     font-size:80%; 
@@ -200,6 +203,7 @@ html,body,input,textarea{
     break-inside: avoid-column;
     display:inline-block;
 }
+/*
 .vm-question::before{
     width:30px;
     color:cyan;
@@ -214,8 +218,9 @@ html,body,input,textarea{
     margin-left:-24px;
     margin-right:12px;
 }
+*/
 .vm-grid{
-    margin-top:-20px;
+    _margin-top:-20px;
     overflow: auto;
     max-height:600px;
 }

@@ -107,8 +107,9 @@ var query=function(qq,tt){
     .catch(error => { console.log(error);});
 }
 //------------------------------------------------
+$vm.query=query;
 $vm.text=function(vm_contents,answer,q0){
-    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div style='padding-left:6px;margin-top:-20px'>"+answer+"</div><div>");
+    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div style='padding-left:6px;_margin-top:-20px'>"+answer+"</div><div>");
     /*
     var div=vm_contents.lastElementChild.querySelector('div[vm]');
     if(div!=null){
@@ -121,7 +122,7 @@ $vm.text=function(vm_contents,answer,q0){
 //------------------------------------------------
 $vm.buffer=function(data){
     var jd=JSON.parse(data);
-    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div style='padding-left:6px;margin-top:-20px'>"+jd.name+"</div><div>");
+    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div style='padding-left:6px;_margin-top:-20px'>"+jd.name+"</div><div>");
     document.getElementById('vm_ask').value='';
     scroll();
 
@@ -186,7 +187,7 @@ $vm.buffer_excel=function(data){
         }
     })
     var tb="<div class=vm-grid><table>"+txt+"</table></div>"
-    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer ><div style='padding-left:6px;margin-top:-20px'>"+tb+"</div><div>");
+    vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer ><div style='padding-left:6px;_margin-top:-20px'>"+tb+"</div><div>");
     document.getElementById('vm_ask').value='';
     scroll();
 
@@ -230,6 +231,8 @@ var show_answer=function(qq, topic, answer){
             case "grid_dynamics":           $vm.grid_dynamics(vm_contents,aa[1]);                   break;
             case "grid_export":             $vm.grid_export(vm_contents,aa[1]);                     break;
             case "grid_vm_table":           $vm.grid_vm_table(vm_contents,aa[1]);                   break;
+            case "grid_vm_search_page":     $vm.grid_vm_search_page(vm_contents,aa[1]);             break;
+            case "module":                  $vm.module(vm_contents,aa[1]);                          break;
             default:                        done=0;
         }
     }
@@ -271,7 +274,7 @@ var show_answer=function(qq, topic, answer){
             case "today_weather_req":       $vm.today_weather_req(vm_contents,topic);           break;
             case "today_weather_res":       $vm.today_weather_res(vm_contents,aa[1],topic);     break;
             default:
-                vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer topic='"+topic+"'><div style='padding-left:6px;margin-top:-20px'>"+answer+"</div><div>");
+                vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer topic='"+topic+"'><div style='padding-left:6px;_margin-top:-20px'>"+answer+"</div><div>");
                 var div=vm_contents.lastElementChild.querySelector('div[vm]');
                 if(div!=null){
                     $vm.div_render(div);
@@ -279,29 +282,29 @@ var show_answer=function(qq, topic, answer){
                 document.getElementById('vm_ask').value='';
                 scroll();
         }
+        var div=vm_contents.lastElementChild;
+        div.addEventListener('click', (event) => {
+            //event.preventDefault();
+            event.stopPropagation();
+            if (event.ctrlKey) {
+                if(div.style.position==""){
+                    div.style.position="fixed";
+                    div.style.top=0;
+                    div.style.left=0;
+                    div.style.padding=0;
+                    div.style.width="100%";
+                    div.style.height="100%";
+                    div.style.background="#242528";
+                    try{div.querySelector('div.vm-grid').style['max-height']=window.innerHeight+'px';}catch(e){}
+                }
+                else{
+                    div.style.position='';
+                    try{div.querySelector('div.vm-grid').style['max-height']='600px';}catch(e){}
+                }
+            }
+        })
     }
-    document.getElementById('vm_ask').value=''; scroll();
-    var div=vm_contents.lastElementChild;
-    div.addEventListener('click', (event) => {
-        //event.preventDefault();
-        event.stopPropagation();
-        if (event.ctrlKey) {
-            if(div.style.position==""){
-                div.style.position="fixed";
-                div.style.top=0;
-                div.style.left=0;
-                div.style.padding=0;
-                div.style.width="100%";
-                div.style.height="100%";
-                div.style.background="#242528";
-                try{div.querySelector('div.vm-grid').style['max-height']=window.innerHeight+'px';}catch(e){}
-            }
-            else{
-                div.style.position='';
-                try{div.querySelector('div.vm-grid').style['max-height']='600px';}catch(e){}
-            }
-        }
-    })
+    document.getElementById('vm_ask').value=''; //scroll();
 }
 //------------------------------------------------
 var show_sorry=function(q){
