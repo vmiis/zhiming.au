@@ -108,6 +108,7 @@ var query=function(qq,tt){
 }
 //------------------------------------------------
 $vm.query=query;
+$vm.ask=query;
 $vm.text=function(vm_contents,answer,q0){
     vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div style='padding-left:6px;_margin-top:-20px'>"+answer+"</div><div>");
     /*

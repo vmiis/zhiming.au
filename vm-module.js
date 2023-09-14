@@ -97,7 +97,7 @@ $vm.module=function(vm_contents,A){
             vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-question >"+data.question+"</div>")
             vm_contents.insertAdjacentHTML('beforeend',"<div class=vm-answer><div id="+data.id+"></div>");
             div=vm_contents.lastElementChild.querySelector('div');
-            var txt=module.replace(/_ID/g, data.id).replace('_QUESTION',data.question);
+            var txt=module.replace(/_vmID/g, data.id).replace(/_vmQUESTION/g,data.question);
             div.innerHTML=txt;
             var script=div.querySelectorAll('script');
             script.forEach(s=>{
@@ -160,17 +160,20 @@ $vm.module_data_action=function(m_id,table){
             if(t=="edit"){
                 var data=$vm.g_object[m_id].data;
                 var record=data.rows[i];
+                /*
                 var F=document.getElementById("vm_F_"+m_id);
                 F.reset();
                 $vm.deserialize(record,F)
                 var fm=document.getElementById("vm_form_"+m_id);
                 fm.setAttribute('_id',d);
                 fm.style.top="10px";
+                */
+                $vm.g_object[m_id].open_form_with_data(d,record);
             }
             if(t=="delete"){
                 const userConfirmed = window.confirm('Are you sure you want to delete the record (ID='+u+')?');
                 if (userConfirmed) {
-                    if($vm.g_object[m_id].delete_request!=undefined) $vm.g_object[m_id].delete_request(d);
+                    $vm.g_object[m_id].delete_request(d);
                 } 
                 else {
                 }                
@@ -179,17 +182,36 @@ $vm.module_data_action=function(m_id,table){
     });
 }
 //------------------------------------------------
+$vm.form_field_names=function(fm,fn){
+    if(fn!=3) fn=1000;
+    var controlNames = [];
+    // Loop through form controls and store their names
+    for (var i = 0; i < fm.elements.length && i<fn; i++) {
+        var element = fm.elements[i];
+        if (element.name) {
+            if(controlNames.indexOf(element.name)==-1){
+                controlNames.push(element.name);
+            }
+        }
+    }
+    return controlNames.join(',');
+}
+//------------------------------------------------
+$vm.serialize=function(form){
+    const formData = new FormData(form);
+    const formValues = {}; formData.forEach((value, key) => { formValues[key] = value; });
+    return formValues;
+}
+//------------------------------------------------
 $vm.deserialize=function(record,form){
 	if(record==undefined) return;
-    console.log(form.elements["Gender"]);
-    console.log(form.elements["Gender"].type);
 	for(p in record){
         var value=record[p];
         var el=form.elements[p];
-        console.log(p+"  "+record[p]);
+        //console.log(p+"  "+record[p]);
         //console.log(form.elements[p].type);
         var type=""; if(el!=undefined) type=el.type;
-        console.log(type)
+        //console.log(type)
         switch(type){
             case 'checkbox':
                 if(value=='off' || value=='0' || value=='' || value==undefined ) el.checked=false;
@@ -209,7 +231,6 @@ $vm.deserialize=function(record,form){
             case 'time':
             case 'tel':
             case 'textarea':
-            
             case 'select-one':
                 el.value=value;
                 break;
@@ -219,7 +240,7 @@ $vm.deserialize=function(record,form){
                         for(var i=0;i<el.length;i++){
                             var a=el[i];
                             var ttp=a.type;
-                            console.log(ttp)
+                            //console.log(ttp)
                             if(ttp=='radio'){ 
                                 if(a.getAttribute('value')==value){
                                     a.checked=true; 
@@ -231,13 +252,13 @@ $vm.deserialize=function(record,form){
                         var type1=el.getAttribute('nodeName');
                         console.log(type1)
                         switch(type1){
-                            case "SELECT":
+                            //case "SELECT":
                                 //$vm.add_value_to_select($el,value);
                                 //$el.val(value);
-                                break;
-                            case "TEXTAREA":
+                                //break;
+                            //case "TEXTAREA":
                                 //$el.val(value); 
-                                break;
+                                //break;
                             default: 
                                 console.log(type+"---"+type1)				
                                 //$el.val(value); 
