@@ -29,7 +29,7 @@
                 </div>
                 <div style="padding:0 10px 0 30px;">
                     <div class=vm-wrap-quest >
-                        <input id=vm_ask list=vm_autolist_question placeholder="Ask me a question.  (e.g. Who are you?)" autocomplete="off"></input>
+                        <input spellcheck="true" autocorrect="on" id=vm_ask list=vm_autolist_question placeholder="Ask me a question.  (e.g. Who are you?)" autocomplete="off"></input>
                         <datalist id="vm_autolist_question"></datalist>
                         <svg style='margin-right:10px' id=vm_submit stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-1" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                     </div>
@@ -52,6 +52,9 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/abcjs/6.2.2/abcjs-basic-min.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@textea/json-viewer@3"></script>
         <script lang="javascript" src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
+        <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+        <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+
     </body>
 </html>
 
