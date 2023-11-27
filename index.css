@@ -42,7 +42,7 @@ html,body,input,textarea{
 .vm_tags{
     overflow: auto;
     height:100%;
-    column-count: 2;
+    column-count: 3;
 }
 .vm-train input{
     height:20px;
