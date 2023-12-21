@@ -141,6 +141,14 @@ html,body,input,textarea{
     vertical-align: top;
     padding:0 10px 0 0;
 }
+.vm-q_list td{
+    vertical-align: top;
+    padding:0 10px 0 0;
+}
+.vm-q_list td:first-child{
+    font-size: 70%;
+    padding-top:5px;
+}
 .vm-answer{
     padding:6px 0px 25px 0px; 
 }
