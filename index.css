@@ -173,6 +173,9 @@ html,body,input,textarea{
         grid-column-gap: 0px;
         grid-row-gap: 0px;
     }
+    .vm_hide{
+        display:none;
+    }
 }
 .vm-input{
     border: 1px solid #888;
