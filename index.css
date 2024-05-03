@@ -160,6 +160,12 @@ html,body,input,textarea{
     _column-count: 2;
     padding:0px 3px 0px 0px; 
 }
+.vm-panel{
+    padding-top:6px;
+}
+.vm-panel u{
+    margin-right:10px;
+}
 @media screen and (max-width: 900px) {
     .vm-questions{
         column-count: 1;
