@@ -14,7 +14,6 @@
             </div>
             <div class="vm-right">
                 <div class="vm-top-bar"><u style='display:none' id=vm_topics>Show all topics</u> <u style='display:none' id="vm_train_me">Training me</u> <u style="display:none" id="btn_test">Test</u>
-                    <u id="vm_home">Home</u>
                     <u id="vm_sign_in">Sign In</u><label id="vm_sign_name">Name</label><u id="vm_sign_out">Sign Out</u>
                 </div>
                 <div id="vm_scroll">
@@ -54,9 +53,37 @@
                 </div>
                 <div style="padding:0 10px 0 30px;">
                     <div class=vm-wrap-quest >
-                        <input spellcheck="true" autocorrect="on" id=vm_ask list=vm_autolist_question placeholder="Ask me a question (e.g. Who are you?) or find folders (e.g. \Woolcock IT)" autocomplete="off"></input>
+                        <div style="width: 32px; height: 32px; color:#aaa" title="Back">
+                            <svg id="vm_back" style='cursor:pointer' 
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                        </div>
+                        <div style="color:#aaa" title="Home">
+                            <svg  id="vm_home" style='cursor:pointer'
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M12 5L3 14H6V19H18V14H21L12 5ZM14 14V17H10V14H7.828L12 9.828L16.172 14H14Z"
+                              fill="currentColor"
+                            />
+                          </svg>
+                          
+                        </div>
+                        <input style='padding-left:15px' spellcheck="true" autocorrect="on" id=vm_ask list=vm_autolist_question placeholder="Ask me a question (e.g. Who are you?) or find folders (e.g. \Woolcock IT)" autocomplete="off"></input>
                         <datalist id="vm_autolist_question"></datalist>
-                        <svg style='margin-right:10px' id=vm_submit stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-1" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                        <div title="Submit"><svg style='margin-right:10px;cursor:pointer' id=vm_submit stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-1" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg></div>
                     </div>
                     <div class="vm-wrap-topic" style="display:none">
                         <input id=vm_topic list=vm_autolist_topic placeholder="Type in topic-related keywords. (e.g. Vitural Zhiming)" autocomplete="off"></input>
