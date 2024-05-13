@@ -53,19 +53,6 @@
                 </div>
                 <div style="padding:0 10px 0 30px;">
                     <div class=vm-wrap-quest >
-                        <div style="width: 32px; height: 32px; color:#aaa" title="Back">
-                            <svg id="vm_back" style='cursor:pointer' 
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                            >
-                            <polyline points="15 18 9 12 15 6"></polyline>
-                        </svg>
-                        </div>
                         <div style="color:#aaa" title="Home">
                             <svg  id="vm_home" style='cursor:pointer'
                             width="24"
@@ -81,7 +68,21 @@
                           </svg>
                           
                         </div>
-                        <input style='padding-left:15px' spellcheck="true" autocorrect="on" id=vm_ask list=vm_autolist_question placeholder="Ask me a question (e.g. Who are you?) or find folders (e.g. \*Woolcock IT)" autocomplete="off"></input>
+                        <div style="width: 32px; height: 32px; color:#aaa" title="Back">
+                            <svg id="vm_back" style='cursor:pointer' 
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                        </div>
+                        <span id=vm_sname style="color:#aaa; margin-top:-3px;margin-left:6px; font-weight: bold;">a</span>
+                        <input style='padding-left:10px' spellcheck="true" autocorrect="on" id=vm_ask list=vm_autolist_question placeholder="Ask me a question (e.g. Who are you?) or find folders (e.g. \*Woolcock IT)" autocomplete="off"></input>
                         <datalist id="vm_autolist_question"></datalist>
                         <div title="Submit"><svg style='margin-right:10px;cursor:pointer' id=vm_submit stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-1" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg></div>
                     </div>
