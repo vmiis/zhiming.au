@@ -90,6 +90,7 @@ html,body,input,textarea{
 .vm-wrap-quest{
     max-width:700px; 
     _margin:auto;
+    padding-top:2px;
     padding-left:3px;
     display: flex;
     align-items: center;

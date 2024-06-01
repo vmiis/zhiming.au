@@ -62,9 +62,11 @@
                           </svg>
                           
                         </div>
-                        <div style="width: 32px; height: 32px; color:#aaa" title="Back">
+                        <div style="_width: 32px; _height: 32px; color:#aaa" title="Back">
                             <svg id="vm_back" style='cursor:pointer' 
                                 xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
                                 viewBox="0 0 24 24"
                                 fill="none"
                                 stroke="currentColor"
@@ -75,6 +77,27 @@
                             <polyline points="15 18 9 12 15 6"></polyline>
                         </svg>
                         </div>
+                        <div style="color:#aaa" title="Mic">
+                            <svg id="vm_mic" style='cursor:pointer' 
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="18"
+                            height="18"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="feather feather-mic mic-icon"
+                          >
+                            <path d="M12 1a5 5 0 0 1 5 5v6a5 5 0 0 1-10 0V6a5 5 0 0 1 5-5z" />
+                            <path d="M19 11v2a7 7 0 0 1-14 0v-2" />
+                            <line x1="12" y1="19" x2="12" y2="23" />
+                            <line x1="8" y1="23" x2="16" y2="23" />
+                          </svg>
+                        </div>
+
+
                         <span id=vm_sname style="color:#aaa; margin-top:-3px;margin-left:6px; font-weight: bold;">a</span>
                         <input style='padding-left:10px' spellcheck="true" autocorrect="on" id=vm_ask list=vm_autolist_question placeholder="Ask me a question or search using keywords." autocomplete="off"></input>
                         <datalist id="vm_autolist_question"></datalist>
