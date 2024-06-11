@@ -123,8 +123,9 @@ html,body,input,textarea{
 }
 .vm-question{
     color:#aaa;
-    padding:6px 3px 6px 6px; 
-    background-color:#373b44;
+    text-align: right;
+    padding:3px 6px 3px 6px; 
+    _background-color:#282b33;
 }
 .vm-questions u{
     cursor:pointer;

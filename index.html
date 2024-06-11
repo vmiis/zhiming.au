@@ -24,23 +24,6 @@
                                 You might get an answer from me before you ask Zhiming. Hello, I am Virtual Zhiming, a frontend AI serving as an assistant to backend Zhiming. 
                                 I am running on a very small cloud instance for experimental purposes, and my knowledge is quite limited when it comes to understanding natural 
                                 language. This means that I may not always comprehend things correctly. However, I am continuously learning and improving, and I hope to grow rapidly. <br><br>
-                                <!--
-                                <br>
-                                <br>
-                                <div class="vm_hide">
-                                    How to chat with me or browse the information?<br>
-                                    <div class='vm-grid'>
-                                        <table style="color:#ccc">
-                                            <tr><td>Who is the IT manager at Woolcock?</td><td>Ask a question</td></tr>
-                                            <tr><td>What is the square root of 2?</td><td>Ask a question</td></tr>
-                                            <tr><td>How far is our universe?</td><td>Ask a question</td></tr>
-                                            <tr><td>* Who is Sagar?</td><td>Search for all possible answers</td></tr>
-                                            <tr><td><a style="color:#ccc" target=_blank href=https://zhiming.au/?woolcock>https://zhiming.au/?woolcock</a></td><td>Quick link for Woolcock</td></tr>
-                                        </table>
-                                    </div>
-                                </div>
-                                <span id=info></span>
-                                <br><br-->
                             </div>
                         </div>
                     </div>
@@ -62,7 +45,7 @@
                           </svg>
                           
                         </div>
-                        <div style="_width: 32px; _height: 32px; color:#aaa" title="Back">
+                        <div style="color:#aaa" title="Back">
                             <svg id="vm_back" style='cursor:pointer' 
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="24"
@@ -97,6 +80,42 @@
                           </svg>
                         </div>
 
+                        <div title="Speaker">
+                            <svg
+                            version="1.1"
+                            id="vm_speaker"  style='cursor:pointer;color:red'
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                            viewBox="0 0 24 24"
+                            xml:space="preserve"
+                            width="24"
+                            height="24"
+                            fill="#aaa">
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g
+                                id="SVGRepo_tracerCarrier"
+                                stroke-linecap="round"
+                                stroke-linejoin="round">
+                            </g>
+                            <g id="SVGRepo_iconCarrier">
+                                <g>
+                                    <polygon
+                                        style="fill:#aaa;"
+                                        points="8,16 3,16 3,8 8,8 14,3 14,21 8,16"></polygon>
+                                    <path
+                                        style="fill:#aaa;"
+                                        d="M18.707,5.707c-0.195-0.195-0.512-0.195-0.707,0s-0.195,0.512,0,0.707C19.535,8.35,21,10.84,21,13.5 s-1.465,5.15-3.707,7.086c-0.195,0.195-0.195,0.512,0,0.707C17.744,21.451,17.872,21.5,18,21.5s0.256-0.049,0.354-0.146 C21.035,18.55,22,16.06,22,13.5S21.035,8.45,18.707,5.707z"></path>
+                                    <path
+                                        style="fill:#aaa;"
+                                        d="M16.707,8.707c-0.195-0.195-0.512-0.195-0.707,0s-0.195,0.512,0,0.707C17.563,11.68,18.5,12.79,18.5,14 s-0.937,2.32-2.5,3.586c-0.195,0.195-0.195,0.512,0,0.707C16.744,18.451,16.872,18.5,17,18.5s0.256-0.049,0.354-0.146 C19.368,16.98,20.5,15.1,20.5,14S19.368,10.98,16.707,8.707z"></path>
+                                    <path
+                                        style="fill:#aaa;"
+                                        d="M14.707,10.707c-0.195-0.195-0.512-0.195-0.707,0s-0.195,0.512,0,0.707C15.309,11.953,15.5,12.427,15.5,13 s-0.191,1.047-0.854,1.268c-0.195,0.195-0.195,0.512,0,0.707C14.744,15.451,14.872,15.5,15,15.5s0.256-0.049,0.354-0.146 C16.14,14.4,16.5,13.713,16.5,13S16.14,10.6,14.707,10.707z"></path>
+                                </g>
+                            </g>
+                        </svg>                  
+                    </div>
+
 
                         <span id=vm_sname style="color:#aaa; margin-top:-3px;margin-left:6px; font-weight: bold;">a</span>
                         <input style='padding-left:10px' spellcheck="true" autocorrect="on" id=vm_ask list=vm_autolist_question placeholder="Ask me a question or search using keywords." autocomplete="off"></input>
@@ -115,7 +134,7 @@
             <div id="vm_popup"></div>
             <div id="vm_popup_bar"><button id="vm_close_popup">Close</button></div>
         </div>
-        <div id="vm_debug" style="display:none; position: fixed; height: 500px; width: 400px;bottom: 0px;right: 30px;border: 1px solid #fff;padding:6px"></div>
+        <div id="vm_debug" style="display:none; text-wrap: nowrap; overflow-x: auto; position: fixed; height: 500px; width: 400px;bottom: 0px;right: 30px;border: 1px solid #fff;padding:6px"></div>
         <script src="index.js?v=1010"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
         <link href="https://unpkg.com/tabulator-tables@5.4.4/dist/css/tabulator.min.css" rel="stylesheet">
