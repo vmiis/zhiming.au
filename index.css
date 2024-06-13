@@ -94,7 +94,7 @@ html,body,input,textarea{
     padding-left:3px;
     display: flex;
     align-items: center;
-    border: 1px solid #fff; 
+    border: 1px solid #333; 
 }
 .vm-wrap-topic{
     max-width:700px; 
