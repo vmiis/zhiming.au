@@ -1,3 +1,16 @@
+@font-face {
+    font-family: "Virgil";
+    src: url("Virgil.woff2");
+    font-display: swap;
+}
+.vm-svg{
+    width: 100%; /* This can also be a fixed value or a percentage */
+    height: auto; /* Adjust height as needed */
+  }
+.vm-svg svg {
+    width: 100%;
+    height: 100%;
+}
 *, *::before, *::after {
     box-sizing: border-box;
 }
